@@ -22,6 +22,31 @@ def is_balanced(parentheses):
     return len(stack) == 0
 
 
-print(is_balanced('((()))'))  # => True
-print(is_balanced('(()'))  # => False
-print(is_balanced('())'))  # => False
+# print(is_balanced('((()))'))  # => True
+# print(is_balanced('(()'))  # => False
+# print(is_balanced('())'))  # => False
+
+PAIRINGS = {
+    '(': ')',
+    '{': '}',
+    '[': ']'
+}
+
+
+def gis_balanced(parentheses):
+    stack = []
+    for char in parentheses:
+        if char in PAIRINGS.keys():
+            stack.append(char)
+        else:
+            if len(stack) == 0:
+                return False
+            item = stack.pop()
+            if char != PAIRINGS[item]:
+                return False
+    return len(stack) == 0
+
+
+print(gis_balanced('[()]'))
+print(gis_balanced('[(){}]'))
+print(gis_balanced('[()]}'))
