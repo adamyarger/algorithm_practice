@@ -45,8 +45,6 @@ class UnorderedList(object):
             if cur.value == value:
                 if prev is None:
                     self.head = cur.next
-                elif cur.next is None:
-                    prev.next = None
                 else:
                     prev.next = cur.next
                 return
