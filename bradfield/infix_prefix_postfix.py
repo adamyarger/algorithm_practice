@@ -22,10 +22,7 @@ def infix_to_postfix(infix_expression):
     out = []
     infix_list = infix_expression.split()
 
-    print(infix_list)
-
     for char in infix_list:
-        # print(char)
         if char in CHARACTERS or char in DIGITS:
             out.append(char)
         elif char == LEFT_PAREN:
