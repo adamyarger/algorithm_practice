@@ -20,4 +20,24 @@ def kth_to_last(ll, k):
 
 ll = LinkedList([1, 2, 3, 4, 5])
 # should return 2nd to last item = 4
-print('answer ', kth_to_last(ll, 2).value)
+# print('answer ', kth_to_last(ll, 3).value)
+
+
+# OTHER WAY
+def _kth_to_last(ll, k):
+    runner = current = ll.head
+    # break up the loop into 2 parts
+    for _ in range(k):
+        if not runner:
+            return None
+        runner = runner.next
+
+    # this continues the loop till the end
+    while runner:
+        current = current.next
+        runner = runner.next
+
+    return current
+
+
+print('answer ', _kth_to_last(ll, 3).value)
