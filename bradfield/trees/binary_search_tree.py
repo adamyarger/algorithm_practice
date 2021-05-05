@@ -1,9 +1,12 @@
 class Node:
     def __init__(self, key):
         self.key = key
+        self.parent = None
         self.left = None
         self.right = None
-        self.parent = None
+
+    def __str__(self):
+        return str(self.key)
 
 
 class BinarySearchTree:
@@ -11,30 +14,37 @@ class BinarySearchTree:
         self.root = None
 
     def insert(self, key):
-        # - bubble down until next pointer is None
-        node = Node(key)
-        # if root hasnt been set then set root
+        new = Node(key)
         if self.root is None:
-            self.root = node
+            self.root = new
             return
 
-        cur = self.root
-        while cur:
-            if key < cur.key:
-                if cur.left:
-                    cur = cur.left
-                else:
-                    self.parent = cur
-                    cur.left = node
+        current = self.root
+        while current:
+            if current.key > key:
+                if current.left is None:
+                    current.left = new
+                    new.parent = current
+                    return
+                current = current.left
             else:
-                if cur.right:
-                    cur = cur.right
-                else:
-                    self.parent = cur
-                    cur.right = node
+                if current.right is None:
+                    current.right = new
+                    new.parent = current
+                    return
+                current = current.right
 
     def get_node(self, key):
-        pass
+        current = self.root
+        while current:
+            if current.key == key:
+                return current
+
+            if current.key > key:
+                current = current.left
+            else:
+                current = current.right
+        raise Exception("No such value in the tree")
 
 
 if __name__ == "__main__":
@@ -46,3 +56,4 @@ if __name__ == "__main__":
     bst.insert(12)
     bst.insert(11)
     bst.insert(14)
+    print(bst.get_node(11))
