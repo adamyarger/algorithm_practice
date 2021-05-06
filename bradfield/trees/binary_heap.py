@@ -54,6 +54,7 @@ class BinaryHeap(object):
     def percolate_down(self, i):
         # went wrong with the while loop (review)
         # i*2 represents the left child, so if no left child exists then no right child exists and were done
+        # if its equal its a left node, all left nodes have even indexes
         while i * 2 <= len(self):
             min_i = self.min_child(i)
             if self.items[min_i] < self.items[i]:
@@ -67,6 +68,15 @@ class BinaryHeap(object):
         right = left + 1
         return left if left < right else right
 
+    def build_heap(self, alist):
+        # the key here is that were starting at the half way index
+        # time complexity is O(n) compared to O(n log n) if we did it one at a time
+        i = len(alist) // 2
+        self.items = [0] + alist
+        while i > 0:
+            self.percolate_down(i)
+            i = i - 1
+
 
 if __name__ == '__main__':
     bh = BinaryHeap()
@@ -75,6 +85,7 @@ if __name__ == '__main__':
     bh.insert(11)
     bh.insert(18)
     bh.insert(9)
+    print(len(bh))
     print(bh)
     print(bh.delete_min())
     print(bh.delete_min())
