@@ -46,6 +46,25 @@ class BinarySearchTree:
                 current = current.right
         raise Exception("No such value in the tree")
 
+    def preorder(self, node):
+        if node:
+            print(node)
+            self.preorder(node.left)
+            self.preorder(node.right)
+
+    # inorder on a BST will reutrn a sorted list
+    def inorder(self, node):
+        if node:
+            self.inorder(node.left)
+            print(node)
+            self.inorder(node.right)
+
+    def postorder(self, node):
+        if node:
+            self.postorder(node.left)
+            self.postorder(node.right)
+            print(node)
+
 
 if __name__ == "__main__":
     bst = BinarySearchTree()
@@ -57,3 +76,8 @@ if __name__ == "__main__":
     bst.insert(11)
     bst.insert(14)
     print(bst.get_node(11))
+    bst.preorder(bst.root)
+    print('------------')
+    bst.inorder(bst.root)
+    print('------------')
+    bst.postorder(bst.root)
