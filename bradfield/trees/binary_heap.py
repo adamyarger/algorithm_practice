@@ -38,6 +38,35 @@ class BinaryHeap(object):
             # set i to the parent index
             i = i // 2
 
+    '''
+    * remove the min item in the heap (items[1])
+    * replace items[1] with the last item in the array (items[-1])
+    * percolate top item down until its smaller than both children
+    '''
+
+    def delete_min(self):
+        response = self.items[1]
+        self.items[1] = self.items[len(self)]
+        self.items.pop()
+        self.percolate_down(1)
+        return response
+
+    def percolate_down(self, i):
+        # went wrong with the while loop (review)
+        # i*2 represents the left child, so if no left child exists then no right child exists and were done
+        while i * 2 <= len(self):
+            min_i = self.min_child(i)
+            if self.items[min_i] < self.items[i]:
+                self.items[min_i], self.items[i] = \
+                    self.items[i], self.items[min_i]
+            i = min_i
+
+    # we only care about the min child, so just return that
+    def min_child(self, i):
+        left = i * 2
+        right = left + 1
+        return left if left < right else right
+
 
 if __name__ == '__main__':
     bh = BinaryHeap()
@@ -46,4 +75,7 @@ if __name__ == '__main__':
     bh.insert(11)
     bh.insert(18)
     bh.insert(9)
+    print(bh)
+    print(bh.delete_min())
+    print(bh.delete_min())
     print(bh)
