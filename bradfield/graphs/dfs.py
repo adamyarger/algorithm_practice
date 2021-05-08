@@ -12,27 +12,20 @@ simple_graph = {
 
 def depth_first_search(graph, start):
     visited = set()
-    # counter is keeping track of what iteration were on
-    # counter is an array so it keeps memory? Why is it an array?
-    counter = [0]
-    # when is the node discovered?
-    # when is the node popped from the call stack?
     traversal_times = defaultdict(dict)
+    count = [0]
 
-    def traverse(vertex):
-        visited.add(vertex)
-        counter[0] += 1
-        traversal_times[vertex]['discovery'] = counter[0]
+    def traverse(node):
+        visited.add(node)
+        count[0] += 1
+        traversal_times[node]['discovery'] = count[0]
 
-        # we use a for loop because a graph can be pointing to
-        # any number of other nodes unlike a binary tree which always has 2
-        for next_vertex in graph[vertex]:
-            if next_vertex not in visited:
-                traverse(next_vertex)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                traverse(neighbor)
 
-        # why is counter an array?
-        counter[0] += 1
-        traversal_times[vertex]['finish'] = counter[0]
+        count[0] += 1
+        traversal_times[node]['finish'] = count[0]
 
     traverse(start)
     return traversal_times
