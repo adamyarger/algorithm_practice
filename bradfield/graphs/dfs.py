@@ -1,3 +1,6 @@
+'''
+breadth_first_search uses a queue, traverse uses a stack
+'''
 from collections import defaultdict
 
 simple_graph = {
