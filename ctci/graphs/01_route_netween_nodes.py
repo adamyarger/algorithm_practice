@@ -1,7 +1,7 @@
 '''
 Route Between Nodes: Given a directed graph, design an algorithm to find out whether there is a route between two nodes.
 '''
-
+from collections import deque
 
 simple_graph = {
     'A': ['B', 'D'],
@@ -45,12 +45,39 @@ def is_route(graph, start, end, visited=None):
     return False
 
 
+def is_route_bfs(graph, start, end):
+    # check if match
+    # bfs uses a queue
+    # visited to prevent cycle loops
+    # bfs uses a while loop to iterate
+    # still need a for loop to look at neighbors
+    if start == end:
+        return True
+    visited = set()
+    q = deque([start])
+    while q:
+        node = q.popleft()
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                if neighbor == end:
+                    return True
+                else:
+                    q.append(neighbor)
+        visited.add(node)
+    return False
+
+
 # print(dfs(simple_graph, 'A', 'E'))  # True
 # print(dfs(simple_graph, 'A', 'B'))  # True
 # print(dfs(simple_graph, 'A', 'C'))  # True
 # print(dfs(simple_graph, 'A', 'R'))  # False
 
-print(is_route(simple_graph, 'A', 'E'))  # True
-print(is_route(simple_graph, 'A', 'B'))  # True
-print(is_route(simple_graph, 'A', 'C'))  # True
-print(is_route(simple_graph, 'A', 'R'))  # False
+
+# print(is_route(simple_graph, 'A', 'E'))  # True
+# print(is_route(simple_graph, 'A', 'B'))  # True
+# print(is_route(simple_graph, 'A', 'C'))  # True
+# print(is_route(simple_graph, 'A', 'R'))  # False
+print(is_route_bfs(simple_graph, 'A', 'E'))  # True
+print(is_route_bfs(simple_graph, 'A', 'B'))  # True
+print(is_route_bfs(simple_graph, 'A', 'C'))  # True
+print(is_route_bfs(simple_graph, 'A', 'R'))  # False
