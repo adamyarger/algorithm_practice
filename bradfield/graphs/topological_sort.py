@@ -28,8 +28,8 @@ def top_sort(graph, start):
         for neighbor in graph[node]:
             if neighbor not in visited:
                 visit(neighbor)
-            # ERROR HERE: visited needs to always be appended DO NOT PUT IN IF STATEMENT
-            visited.add(neighbor)
+                visited.add(neighbor)
+        # if were outside the for loop, then all its children have been visited
         stack.append(node)
 
     for key in graph.keys():
@@ -38,7 +38,6 @@ def top_sort(graph, start):
 
     out = []
     while stack:
-        # ERROR: did not invoke pop function
         out.append(stack.pop())
     return out
 
