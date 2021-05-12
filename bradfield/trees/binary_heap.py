@@ -1,5 +1,5 @@
 '''
-Binary Heaps are used for priority queues, whic come in handy when you
+Binary Heaps are used for priority queues, which come in handy when you
 put more value on certain items in queue than others.
 Binary Heaps use  O(log n) time compared to O(n log n) time with a sort function and an array
 
@@ -10,6 +10,7 @@ Binary Heaps use  O(log n) time compared to O(n log n) time with a sort function
 
 class BinaryHeap(object):
     def __init__(self):
+        # start with the first index of the array filled, this makes the index math easier
         self.items = [0]
 
     def __len__(self):
@@ -24,19 +25,23 @@ class BinaryHeap(object):
     '''
 
     def insert(self, k):
+        '''
+        append item to the items array, then perculate it up until the parent is smaller than the item
+        '''
         self.items.append(k)
         self.percolate_up()
 
     # If the newly added item is less than its parent, then we can swap the item with its parent.
     def percolate_up(self):
         i = len(self)
-        # index 0 cant be the parent since its just a filler item, so if we hit it its done thats the base case
-        while i // 2 > 0:
+        # we need to compare the parent, so once the parent index is 0 were at the top
+        while i//2 > 0:
             if self.items[i] < self.items[i//2]:
-                self.items[i], self.items[i//2] = \
+                self.items[i], self.items[i // 2] = \
                     self.items[i//2], self.items[i]
-            # set i to the parent index
-            i = i // 2
+                i = i//2
+            else:
+                break
 
     '''
     * remove the min item in the heap (items[1])
@@ -45,16 +50,23 @@ class BinaryHeap(object):
     '''
 
     def delete_min(self):
-        response = self.items[1]
+        '''
+        take the first item (its the min), then take the last item in the items array and put it in the
+        front of the items array then bubble it down until both children are smaller than it
+        - switch with the smallest child
+        '''
+        value = self.items[1]
+        # swap first item and last, then pop off last item
+        # why??? because removing the first item takes O(n) time, while swapping is O(1) and a pop is O(1)
+        # we already saved the min value so its fine to have a duplicate as the last item then pop it
         self.items[1] = self.items[len(self)]
         self.items.pop()
         self.percolate_down(1)
-        return response
+        return value
 
     def percolate_down(self, i):
-        # went wrong with the while loop (review)
-        # i*2 represents the left child, so if no left child exists then no right child exists and were done
-        # if its equal its a left node, all left nodes have even indexes
+        # keep looping as long as a child exists, that means as long as the left exists since it exists before the right does
+        # the right side check happens in min_child
         while i * 2 <= len(self):
             min_i = self.min_child(i)
             if self.items[min_i] < self.items[i]:
@@ -64,13 +76,21 @@ class BinaryHeap(object):
 
     # we only care about the min child, so just return that
     def min_child(self, i):
-        left = i * 2
-        right = left + 1
-        return left if left < right else right
+        '''
+        compare and return which chil is the smallest
+        '''
+        left = i*2
+        right = i*2+1
+        if right > len(self):
+            return left
+        return left if self.items[left] < self.items[right] else right
 
     def build_heap(self, alist):
+        '''
+        something about starting in the middle amkes this really efficiant
         # the key here is that were starting at the half way index
         # time complexity is O(n) compared to O(n log n) if we did it one at a time
+        '''
         i = len(alist) // 2
         self.items = [0] + alist
         while i > 0:
@@ -80,12 +100,12 @@ class BinaryHeap(object):
 
 if __name__ == '__main__':
     bh = BinaryHeap()
-    bh.insert(5)
     bh.insert(14)
+    bh.insert(5)
     bh.insert(11)
     bh.insert(18)
-    bh.insert(9)
-    print(len(bh))
+    bh.insert(1)
+    # print(len(bh))
     print(bh)
     print(bh.delete_min())
     print(bh.delete_min())
