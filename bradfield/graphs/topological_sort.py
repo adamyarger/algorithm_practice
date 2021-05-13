@@ -14,32 +14,30 @@ GRAPH = {
 
 def top_sort(graph, start):
     '''
-    - start from any node
-    - since we can satrt at any node, mean we need to keep track of visisted
-    - we use a stack, that means depth first search
-    - explore all nodes with either no children or no all children have been explored
-    - that will put the deepest children at the bottom of the stack, i.e. the last to get popped off
-    - DFS means all children get visited before their parents
+    - used for dependency graphs, e.g. you need this dependency installed before you can install this other one
+    - depth first search and add to a stack
+    - by adding to the stack with a depth first search, the items added first will be the leaves, then it will work back up the tree
+    - this leaves the items with no dependecies added last so then we can pop them off to create the sorted order
     '''
     visited = set()
     stack = []
 
     def visit(node):
+        visited.add(node)
         for neighbor in graph[node]:
             if neighbor not in visited:
                 visit(neighbor)
-                visited.add(neighbor)
-        # if were outside the for loop, then all its children have been visited
+                # if you put it in here some nodes are never added to visited i.e. node a
         stack.append(node)
 
     for key in graph.keys():
         if key not in visited:
             visit(key)
 
-    out = []
+    ordered = []
     while stack:
-        out.append(stack.pop())
-    return out
+        ordered.append(stack.pop())
+    return ordered
 
 
 print(top_sort(GRAPH, 'a'))
