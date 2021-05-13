@@ -26,7 +26,8 @@ class BinaryHeap(object):
 
     def insert(self, k):
         '''
-        append item to the items array, then perculate it up until the parent is smaller than the item
+        - append value
+        - percolate up until parent is less than value
         '''
         self.items.append(k)
         self.percolate_up()
@@ -34,14 +35,11 @@ class BinaryHeap(object):
     # If the newly added item is less than its parent, then we can swap the item with its parent.
     def percolate_up(self):
         i = len(self)
-        # we need to compare the parent, so once the parent index is 0 were at the top
         while i//2 > 0:
             if self.items[i] < self.items[i//2]:
-                self.items[i], self.items[i // 2] = \
+                self.items[i], self.items[i//2] = \
                     self.items[i//2], self.items[i]
-                i = i//2
-            else:
-                break
+            i = i//2
 
     '''
     * remove the min item in the heap (items[1])
@@ -56,9 +54,6 @@ class BinaryHeap(object):
         - switch with the smallest child
         '''
         value = self.items[1]
-        # swap first item and last, then pop off last item
-        # why??? because removing the first item takes O(n) time, while swapping is O(1) and a pop is O(1)
-        # we already saved the min value so its fine to have a duplicate as the last item then pop it
         self.items[1] = self.items[len(self)]
         self.items.pop()
         self.percolate_down(1)
@@ -67,11 +62,11 @@ class BinaryHeap(object):
     def percolate_down(self, i):
         # keep looping as long as a child exists, that means as long as the left exists since it exists before the right does
         # the right side check happens in min_child
-        while i * 2 <= len(self):
+        while i*2 <= len(self):
             min_i = self.min_child(i)
-            if self.items[min_i] < self.items[i]:
-                self.items[min_i], self.items[i] = \
-                    self.items[i], self.items[min_i]
+            if self.items[i] > self.items[min_i]:
+                self.items[i], self.items[min_i] = \
+                    self.items[min_i], self.items[i]
             i = min_i
 
     # we only care about the min child, so just return that
@@ -80,17 +75,14 @@ class BinaryHeap(object):
         compare and return which chil is the smallest
         '''
         left = i*2
-        right = i*2+1
+        right = left+1
         if right > len(self):
             return left
         return left if self.items[left] < self.items[right] else right
 
     def build_heap(self, alist):
-        '''
-        something about starting in the middle amkes this really efficiant
         # the key here is that were starting at the half way index
         # time complexity is O(n) compared to O(n log n) if we did it one at a time
-        '''
         i = len(alist) // 2
         self.items = [0] + alist
         while i > 0:
