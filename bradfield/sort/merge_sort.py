@@ -9,35 +9,43 @@ SMALLEST FIRST
 
 
 def _merge(arr, lo, mid, hi, aux):
+    '''
+    loop through the
+    '''
     size = hi - lo
-    i = lo
-    j = mid
+    # now we need to add left and right pointers
+    left = lo
+    right = mid
     for k in range(size):
-        if i == mid:  # if we hit to end of the left side
-            aux[k] = arr[j]
-            j += 1
-        elif j == hi:  # we hit the end of the right parittion, grab the left side value and incrment
-            aux[k] = arr[i]
-            i += 1
-        elif arr[j] < arr[i]:
-            aux[k] = arr[j]
-            j += 1
+        if left == mid:
+            aux[k] = arr[right]
+            right += 1
+        elif right == hi:
+            aux[k] = arr[left]
+            left += 1
+        elif arr[left] < arr[right]:
+            aux[k] = arr[left]
+            left += 1
         else:
-            aux[k] = arr[i]
-            i += 1
-    # what does this do?
+            aux[k] = arr[right]
+            right += 1
+    # lastly copy over the sorted aux porttion to the arr
+    # WRONG!!!
     arr[lo:hi] = aux[0:size]
 
 
 def _sort(arr, lo, hi, aux):
+    # this works as a postorder traversal
+    # break down the side until 1 then pop off the stack and merge
     size = hi - lo
-    # base case
+    # WRONG!!!
+    # you have to add the lo and hi and not use size, otherwise the mid will always be in the left partition
+    mid = (lo + hi) // 2
     if size <= 1:
         return
-    # we need to partition the array into 2... keep doing this till we hit 1 element
-    mid = (lo + hi) // 2
-    # break down each paritition until it hits the base case
+    # sort the left side
     _sort(arr, lo, mid, aux)
+    # sort the right side
     _sort(arr, mid, hi, aux)
     _merge(arr, lo, mid, hi, aux)
 
