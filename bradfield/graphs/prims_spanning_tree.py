@@ -72,6 +72,7 @@ example_graph = {
 out = dict(create_spanning_tree(example_graph, 'A'))
 print(out)
 
+# the set is the neighbors the current node should vist because their the smallest options
 # {'A': set(['B']),
 #  'B': set(['C', 'D']),
 #  'D': set(['E']),
