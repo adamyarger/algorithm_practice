@@ -21,32 +21,44 @@ from collections import deque
 
 
 def is_route(graph, start, end, visited=None):
+    '''
+    - depth first search, this mean use a stack
+    - keep track of visited
+    - this is similar to dijstras, without the priority queue
+    - since were returning true, we need to bubble up that answer when its found, since we could
+      be deep in the stack and still have to pop off until back to the top
+    '''
     if start == end:
         return True
     if visited is None:
         visited = set()
-    for node in graph[start]:
-        # check if its been visited, once were past the visited gate, we add it to visited
-        if node not in visited:
-            visited.add(node)
-            # if its a match or if one of its children was a matach, return true, this needs to bubble up
-            if node == end or is_route(graph, node, end, visited):
-                return True
-    # if we hit this point weve visited all the children, and none matched, so return false
+    # we need to visit neihtbors, in a graph that means a for loop
+    for neighbor in graph[start]:
+        if neighbor in visited:
+            continue
+
+        visited.add(neighbor)
+
+        if is_route(graph, neighbor, end, visited):
+            return True
     return False
 
 
 def is_route_bfs(graph, start, end):
-    # bfs uses a queue
+    '''
+    - bfs means queue (deque)
+    - needs visited
+    - popleft until nothing is left
+    '''
     visited = set()
     q = deque([start])
     while q:
         node = q.popleft()
-        if node not in visited:
-            visited.add(node)
-            if node == end:
-                return True
-            for neighbor in graph[node]:
+        visited.add(node)
+        if node == end:
+            return True
+        for neighbor in graph[node]:
+            if neighbor not in visited:
                 q.append(neighbor)
     return False
 
