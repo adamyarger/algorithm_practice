@@ -53,8 +53,7 @@ def create_spanning_tree(graph, starting_vertex):
             mst[frm].add(to)
             # visit neighbors
             for to_next, cost in graph[to].items():
-                if to_next not in visited:
-                    heapq.heappush(edges, (cost, to, to_next))
+                heapq.heappush(edges, (cost, to, to_next))
 
     return mst
 
