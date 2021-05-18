@@ -6,7 +6,7 @@
 '''
 
 
-def knapSack(total_weight, weight, value):
+def knap_sack(total_weight, weight, value):
     length = len(value)
     row_len = length + 1
     col_len = total_weight + 1
@@ -32,4 +32,4 @@ def knapSack(total_weight, weight, value):
 value = [1, 4, 5, 7]
 weight = [1, 3, 4, 5]
 total_weight = 7
-print(knapSack(total_weight, weight, value))
+print(knap_sack(total_weight, weight, value))
