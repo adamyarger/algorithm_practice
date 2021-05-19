@@ -41,3 +41,4 @@ def top_sort(graph, start):
 
 
 print(top_sort(GRAPH, 'a'))
+# ['b', 'd', 'a', 'c', 'e', 'f', 'g', 'h']
