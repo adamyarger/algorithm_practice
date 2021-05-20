@@ -14,32 +14,44 @@ matrix[row][col]
 
 
 def knap_sack(total_weight, weight, value):
-    length = len(value)
-    # add 1 for 0 padding on first col
-    row_len = length + 1
-    col_len = total_weight + 1
-    matrix = [[0] * col_len for item in range(row_len)]
+    '''
+    contraints: max weight is 7, want maximum value while under weight
 
-    # maybe change col and row to the values they represent? col is the weight
-    # row is the value $$
-    # also lookup where row and col are when creating a 2d array, how does pandas do it?
-    for row in range(row_len):
-        for col in range(col_len):
+    - this uses tabulation since were filling out a matrix then using our past results to calculate new results
+    - topdown vs bottom up == https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Binary_heap_bottomup_vs_topdown.svg/440px-Binary_heap_bottomup_vs_topdown.svg.png
+    - we know the whats true for a smaller bag is true for the bigger bag
+    - this way of dynamic programming is just running through different bag size scenarios with the same items each time
+    - row is always first
+
+
+    - you either picking the new value or your not picking it
+    - only use row to access the weight and value arrays, the other one is always too long
+    '''
+    row_len = total_weight + 1
+    col_len = len(value) + 1
+    matrix = [[None] * row_len for item in range(col_len)]
+    # [
+    #     [None, None, None, None, None, None, None, None],
+    #     [None, None, None, None, None, None, None, None],
+    #     [None, None, None, None, None, None, None, None],
+    #     [None, None, None, None, None, None, None, None],
+    #     [None, None, None, None, None, None, None, None]
+    # ]
+    for row in range(col_len):
+        for col in range(row_len):
             if row == 0 or col == 0:
                 matrix[row][col] = 0
-            # use -1 since were padding the matrix and the weight array is not
-            elif weight[row-1] <= col:
-                # this part is CONFUSING!!!
-                matrix[row][col] = max(
-                    value[row-1] + matrix[row-1][col-weight[row-1]],
-                    matrix[row-1][col]
-                )
+            # theres a match, choose the max of new value plus value up and back weight amount
+            elif col >= weight[row-1]:
+                # up and go back by the orws weight amount
+                new_value = matrix[row-1][col-weight[row-1]] + value[row-1]
+                top_value = matrix[row-1][col]
+                matrix[row][col] = max(new_value, top_value)
             else:
                 matrix[row][col] = matrix[row-1][col]
     return matrix[-1][-1]
 
-
-# Driver program to test above function
+    # Driver program to test above function
 value = [1, 4, 5, 7]
 weight = [1, 3, 4, 5]
 total_weight = 7
