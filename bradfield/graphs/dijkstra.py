@@ -1,3 +1,9 @@
+'''
+- shortest path in a graph between nodes
+- returns the shortest distance to each node, not the path
+- min heap with a breadth first search
+
+'''
 import heapq
 
 
