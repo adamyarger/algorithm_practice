@@ -23,6 +23,7 @@ class LRUCache:
     def __init__(self, size):
         self.size = size
         self.map = {}
+        # I think the head and tail act as buffers so that the list is never pointing to None
         self.head = Node(0, 0)
         self.tail = Node(0, 0)
         # this makes it circular, why?
