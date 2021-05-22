@@ -10,21 +10,21 @@ SMALLEST FIRST
 
 def _merge(arr, lo, mid, hi, aux):
     size = hi - lo
-    i = lo
-    j = mid
+    left = lo
+    right = mid
     for k in range(size):
-        if i == mid:  # if we hit to end of the left side
-            aux[k] = arr[j]
-            j += 1
-        elif j == hi:  # we hit the end of the right parittion, grab the left side value and incrment
-            aux[k] = arr[i]
-            i += 1
-        elif arr[j] < arr[i]:
-            aux[k] = arr[j]
-            j += 1
+        if left == mid:  # if we hit to end of the left side
+            aux[k] = arr[right]
+            right += 1
+        elif right == hi:  # we hit the end of the right parittion, grab the left side value and incrment
+            aux[k] = arr[left]
+            left += 1
+        elif arr[right] < arr[left]:
+            aux[k] = arr[right]
+            right += 1
         else:
-            aux[k] = arr[i]
-            i += 1
+            aux[k] = arr[left]
+            left += 1
     # what does this do?
     # copy over the aux array
     arr[lo:hi] = aux[0:size]
