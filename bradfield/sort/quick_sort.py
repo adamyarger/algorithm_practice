@@ -42,7 +42,7 @@ def partition(arr, lo, hi):
             right -= 1
 
         # base case happens when the left index passes over the right
-        if left >= right:
+        if left > right:
             break
         # else we need to swap left and right values and continue traversing
         arr[left], arr[right] = arr[right], arr[left]
