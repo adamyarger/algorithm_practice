@@ -23,11 +23,8 @@ class LRUCache:
     def __init__(self, size):
         self.size = size
         self.map = {}
-        # I think the head and tail act as buffers so that the list is never pointing to None
         self.head = Node(0, 0)
         self.tail = Node(0, 0)
-        # this makes it circular, why?
-        # is it so the node is always a middle node then you only have to use one function
         self.head.next = self.tail
         self.tail.prev = self.head
 
@@ -39,11 +36,8 @@ class LRUCache:
 
     def get(self, key):
         if key in self.map:
-            # the map has a reference to the node in he linked list
-            # we can just skip straight to it, no while loop needed
             item = self.map[key]
             self._remove(item)
-            # add is always the first element
             self._add(item)
             return item.value
         return -1
@@ -70,18 +64,11 @@ class LRUCache:
         WE NEVER REPLACE HEAD AND TAIL!!!
         THEY ARE JUST BUFFERS.
         '''
-        # new nodes prev will point here
-        print(self.tail.prev.key, self.head.key, self.tail.key)
         prev = self.tail.prev
-        # prevs next points to the new node
         prev.next = node
-        # the tail points to the new node which is the new head
         self.tail.prev = node
-        # new nodes prev is the old head
         node.prev = prev
-        # new nodes next is the tail
         node.next = self.tail
-        # add it to the map
         self.map[node.key] = node
 
 
