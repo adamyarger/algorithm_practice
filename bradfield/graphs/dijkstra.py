@@ -20,9 +20,8 @@ def calculate_distances(graph, starting_vertex):
     while len(pq) > 0:
         current_distance, current_node = heapq.heappop(pq)
 
-        # is this needed?
-        # if current_distance > distances[current_node]:
-        #     continue
+        if current_distance > distances[current_node]:
+            continue
 
         for neighbor, distance in graph[current_node].items():
             total_distance = current_distance + distance
