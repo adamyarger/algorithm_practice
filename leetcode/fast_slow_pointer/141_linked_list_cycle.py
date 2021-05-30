@@ -42,4 +42,12 @@ class ListNode:
 
 class Solution:
     def hasCycle(self, head: ListNode) -> bool:
-        pass
+        slow, fast = head, head
+        while fast is not None and fast.next is not None:
+            # skip 2 ahead, thats why we have to check current and next above
+            fast = fast.next.next
+            slow = slow.next
+            if slow == fast:
+                # if they ever cross a cycle exists
+                return True
+        return False
