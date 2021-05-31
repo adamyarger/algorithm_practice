@@ -44,10 +44,17 @@ class Solution:
     def hasCycle(self, head: ListNode) -> bool:
         slow, fast = head, head
         while fast is not None and fast.next is not None:
-            # skip 2 ahead, thats why we have to check current and next above
-            fast = fast.next.next
             slow = slow.next
-            if slow == fast:
-                # if they ever cross a cycle exists
+            fast = fast.next.next
+            if fast == slow:
                 return True
         return False
+
+
+_list = ListNode(1)
+_list.next = ListNode(2)
+_list.next.next = ListNode(1)
+_list.next.next.next = _list.next
+
+sol = Solution()
+print(sol.hasCycle(_list))
