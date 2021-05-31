@@ -13,26 +13,20 @@ Explanation: Maximum average is (12 - 5 - 6 + 50) / 4 = 51 / 4 = 12.75
 
 class Solution:
     def findMaxAverage(self, nums, k):
-        # we need to store the average for each one so we can compare them
-        average = []
-        _sum = 0.0
-        # start keeps track of the oldest item, whic will get removed next
-        # the newest item is automatically added by the for loop moving forward
+        avgs = []
+        # we need to know where the eindow starts, we know where it ends since the for loop takes care of that
         start = 0
-
-        for index in range(len(nums)):
-            _sum += nums[index]
-
-            # keep moving forward until our index is at the correct window size
-            # k - 1 is the index, in our case k-1 = 3 so we complete the if statemnt at index 3, our window is at size
-            if index >= k-1:
-                # weve hit the window size, add the average to the array
-                average.append(_sum / k)
-                # subtract the element leaving the window
+        # the sum is what changes each time we add and subtract new items
+        _sum = 0.0
+        # keep growing the window till its the correct size, then do add and subtract
+        for index, value in enumerate(nums):
+            # the index is at window size when it hits index k-1
+            _sum += value
+            if index >= (k-1):
+                avgs.append(_sum/k)
                 _sum -= nums[start]
-                # slide the window right by one
                 start += 1
-        return max(average)
+        return max(avgs)
 
 
 sol = Solution()
