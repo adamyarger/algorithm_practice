@@ -40,10 +40,41 @@ class MedianFinder:
     '''
 
     def __init__(self):
-        pass
+        # left is the max_heap
+        self.left = []
+        # right is the min heap
+        self.right = []
 
     def addNum(self, num: int) -> None:
-        pass
+        # why use the negative? if we prefix a minus then it turns into a max heap
+        # that also means we needs to compare the other heap with a minus in front of it
+
+        # we want more in the left, so if its empty add to it
+        # its a double negative since the left is all negative
+        if not self.left or -self.left[0] >= num:
+            heappush(self.left, -num)
+        else:
+            heappush(self.right, num)
+
+        # This is only triggered if a rebalancing is needed
+        # why +1???
+        # either the heaps are equal or left is larger by one
+        if len(self.left) > len(self.right) + 1:
+            heappush(self.right, -heappop(self.left))
+        elif len(self.left) < len(self.right):
+            heappush(self.left, -heappop(self.right))
 
     def findMedian(self) -> float:
-        pass
+        # we have an even number, pop from both add then divide by 2
+        if len(self.left) == len(self.right):
+            # dont pop, just peek
+            return (-self.left[0] + self.right[0]) / 2.0
+        return -self.left[0]
+
+
+finder = MedianFinder()
+finder.addNum(1)
+finder.addNum(2)
+print(finder.findMedian())  # -> 1.5
+finder.addNum(3)
+print(finder.findMedian())  # -> 2
