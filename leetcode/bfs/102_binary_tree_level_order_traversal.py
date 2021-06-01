@@ -39,24 +39,32 @@ class TreeNode:
 
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
-        result = []
-        # if theres nothing return an empty array
+        '''
+        if its empty return an empty array
+        - need a levels array to push to
+        - like all bfs, while queue has items iterate
+        - use the length of the queue to gather and extract the next level of nodes
+        - add left and right nodes to the queue if they exist
+
+        - visited is only for graphs
+        '''
+        levels = []
         if root is None:
-            return result
-
+            return levels
         queue = deque([root])
-        while queue:
-            # why does this work?
-            level_size = len(queue)
-            current_level = []
-            for _ in range(level_size):
-                current_node = queue.popleft()
-                # add node in current level
-                current_level.append(current_node.val)
 
-                if current_node.left:
-                    queue.append(current_node.left)
-                if current_node.right:
-                    queue.append(current_node.right)
-            result.append(current_level)
-        return result
+        while queue:
+            # normally id pop off right here, but we need to
+            # know the length of the queue for the looping
+            current_level = []
+            size = len(queue)
+            for _ in range(size):
+                node = queue.popleft()
+                current_level.append(node.val)
+
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            levels.append(current_level)
+        return levels
