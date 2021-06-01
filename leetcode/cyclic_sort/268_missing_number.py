@@ -1,7 +1,7 @@
 '''
 LeetCode 268 - Missing Number [easy]
 
-Given an array containing n distinct numbers taken from 0, 1, 2, …, n,
+Given an array containing n distinct numbers taken from 0, 1, 2, ..., n,
 find the one that is missing from the array.
 
 Example 1:
@@ -22,29 +22,28 @@ from typing import List
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
         '''
-        - needs to be zero based since were using indexes
-
-        - if the num value equals the arr length skip it for now
+        - cyclic sort, look for range of numbers and find the missing
+        - this is only truly efficient if the numbers can be used as indexes otherwise a cycle sort is O(n**2) since we have to scan each pass through
+        - if the item is not in position swap it with the index spot, otherwise ignore
+        - when everything is in place loop through and find the index of the biggest item
         '''
         start = 0
-
-        # why use this over a for loop?
-        while start < len(nums):
+        hi = len(nums)
+        while start < hi:
             num = nums[start]
-            # we ignore the num that is the same size as the array
-            # we ignore if the num equals the start, since that means
-            # its in the right place already
-            if num < len(nums) and num != start:
-                nums[start], nums[num] = nums[num], nums[start]
-            else:
-                # move it forward
+            # compare the index and the num
+            if num == start or num == hi:
                 start += 1
+            else:
+                nums[num], nums[start] = nums[start], nums[num]
 
-        # everything is in order now, find the index that
-        # does match its value and return it
-        for i in range(len(nums)):
-            if nums[i] != i:
+        for i in range(hi):
+            if nums[i] == hi:
                 return i
 
-        # fallback value returned
-        return len(nums)
+        # if everything is in place then the big number is missing
+        return hi
+
+
+sol = Solution()
+print(sol.missingNumber([3, 0, 1]))
