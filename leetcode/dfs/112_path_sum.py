@@ -34,6 +34,8 @@ class Solution:
             return False
 
         # base case
+        # subtraction gos on below, we dont need it here, but techincally searching for zero would work but its more work
+        # also need to check that its a leaf, other wise it could hit sum in the middle
         if root.val == sum and root.left is None and root.right is None:
             return True
 
