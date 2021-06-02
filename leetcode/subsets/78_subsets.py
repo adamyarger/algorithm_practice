@@ -31,11 +31,17 @@ from typing import List
 
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
+        '''
+        - start with an empty set
+        - copy all existsing items and add the new number to each
+        '''
         subsets = [[]]
-
+        # this one loops through the nums array
         for num in nums:
+            # this one loops through the substes array, each item is still an array (subset)
+            # must use range otherwise well get stuck in a loop
             for i in range(len(subsets)):
-                subsets.append(subsets[i] + [num])
+                subsets.append([num] + subsets[i])
         return subsets
 
 
