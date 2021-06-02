@@ -27,4 +27,44 @@ from typing import List
 
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
-        pass
+        '''
+        - sorted and distinct values
+        - order is rotated... means we need to find the starting point
+        - find the target values index, this is binary search with a twist
+
+        ideas:
+        keep track of prev and current, if current < prev we found the starting index
+        - could use modulus for indexes since it acts like a wrap around
+        - finding the change point could be linear, that wont work, need to start with binary search
+
+        idea 2
+        - compare left and right values to see whats bigger
+        '''
+        lo = 0
+        hi = len(nums) - 1
+        # keep searching as long as theres one item
+        while lo <= hi:
+            mid = (lo+hi) // 2
+            if nums[mid] == target:
+                return mid
+
+            # if mid is larger than the lo then the left side is in the correct order bu t has been shifted left
+            # its left rotated
+            if nums[mid] >= nums[lo]:
+                # make sure the target is still in the left sides range before binary searching
+                if nums[lo] <= target and target < nums[mid]:
+                    hi = mid - 1
+                else:
+                    lo = mid + 1
+            else:  # its right rotated
+                # check that the target is in the right side
+                if nums[mid] < target and target <= nums[hi]:
+                    lo = mid + 1
+                else:
+                    hi = mid - 1
+        return -1
+
+
+sol = Solution()
+arr = [4, 5, 6, 7, 0, 1, 2]
+print(sol.search(arr, 0))
