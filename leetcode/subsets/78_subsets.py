@@ -19,19 +19,25 @@ Output:
   [1, 2],
   []
 ]
+
+Whats tthe time and space complexity???
+
+O(2**N)
+
+N grows each iteration
 '''
 from typing import List
 
 
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        # start with an empty set
         subsets = [[]]
 
-        # loop through the original nums param
         for num in nums:
-            # This will grow as time progresses,
-            # we need to copy each on the existing subsets and add the new number to it
             for i in range(len(subsets)):
                 subsets.append(subsets[i] + [num])
         return subsets
+
+
+sol = Solution()
+print(sol.subsets([1, 2, 3]))
