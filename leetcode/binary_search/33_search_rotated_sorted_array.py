@@ -3,7 +3,8 @@
 
 There is an integer array nums sorted in ascending order (with distinct values).
 
-Prior to being passed to your function, nums is rotated at an unknown pivot index k (0 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+Prior to being passed to your function, nums is rotated at an unknown pivot index k (0 <= k < nums.length) such that the
+resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
 
 Given the array nums after the rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
 
@@ -28,37 +29,28 @@ from typing import List
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         '''
-        - sorted and distinct values
-        - order is rotated... means we need to find the starting point
-        - find the target values index, this is binary search with a twist
-
-        ideas:
-        keep track of prev and current, if current < prev we found the starting index
-        - could use modulus for indexes since it acts like a wrap around
-        - finding the change point could be linear, that wont work, need to start with binary search
-
-        idea 2
-        - compare left and right values to see whats bigger
+        - which way is it rotated?
+        - check if the target is in the non rotated part by checking the lo and mid or mid and hi
+        - this is a form of binary search, we need a base case, which is aas long as there one item left in the sub array were searching
         '''
         lo = 0
         hi = len(nums) - 1
-        # keep searching as long as theres one item
-        while lo <= hi:
-            mid = (lo+hi) // 2
+
+        # GOT THIS WRONG!!!
+        while hi >= lo:
+            mid = (lo + hi) // 2
             if nums[mid] == target:
                 return mid
-
-            # if mid is larger than the lo then the left side is in the correct order bu t has been shifted left
-            # its left rotated
-            if nums[mid] >= nums[lo]:
-                # make sure the target is still in the left sides range before binary searching
-                if nums[lo] <= target and target < nums[mid]:
+            # we need to find out which way its rotated
+            # left rotated mean everything from the mid to the lo are in sorted order
+            if nums[lo] <= nums[mid]:
+                if nums[lo] <= target and nums[mid] > target:
                     hi = mid - 1
                 else:
                     lo = mid + 1
-            else:  # its right rotated
-                # check that the target is in the right side
-                if nums[mid] < target and target <= nums[hi]:
+            else:
+                # its right rotated, the right side of properly sorted
+                if nums[mid] < target and nums[hi] >= target:
                     lo = mid + 1
                 else:
                     hi = mid - 1
