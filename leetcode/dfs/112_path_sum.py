@@ -28,18 +28,11 @@ class TreeNode:
 
 
 class Solution:
-    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
-        # if there is no root there is no sum
+    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
         if root is None:
             return False
 
-        # base case
-        # subtraction gos on below, we dont need it here, but techincally searching for zero would work but its more work
-        # also need to check that its a leaf, other wise it could hit sum in the middle
-        if root.val == sum and root.left is None and root.right is None:
+        if root.left is None and root.right is None and root.val == targetSum:
             return True
 
-        # keep searching, but we need to bubble up the results from the left node and the right node
-        # we subtract from the sum until the last leaf is equal to the sum
-        # if the last leaf equals whats left in the sum, then that route is the total sum
-        return self.hasPathSum(root.left, sum - root.val) or self.hasPathSum(root.right, sum - root.val)
+        return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
