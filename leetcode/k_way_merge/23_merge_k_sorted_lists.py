@@ -25,6 +25,10 @@ Example 3:
 
 Input: lists = [[]]
 Output: []
+
+Time Complexity: O(N log K) where N is the total number of elements in all the K input arrays.
+
+Space Complexity: O(K)
 '''
 from typing import List
 from heapq import *
