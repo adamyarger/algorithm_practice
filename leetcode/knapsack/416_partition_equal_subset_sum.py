@@ -15,6 +15,7 @@ Input: nums = [1,2,3,5]
 Output: false
 Explanation: The array cannot be partitioned into equal sum subsets.
 '''
+from typing import List
 
 
 class Solution:
