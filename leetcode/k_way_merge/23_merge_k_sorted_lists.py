@@ -40,8 +40,8 @@ class ListNode:
         self.next = next
 
 
-# inherit List node and add a less than magic method
 class ListNodeExtension(ListNode):
+    # we need this for the min heap to work
     def __lt__(self, other):
         return self.val < other.val
 
@@ -49,27 +49,24 @@ class ListNodeExtension(ListNode):
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         '''
-        - grab the first value from each list (which is also the min), push it into a min heap
-        - pop off each item in the heap and add it to the new linked list
+        - create amin heap
+        - loop through the arrays of linked list and grab the root of eachand put them in the min heap
+        - use a while loop to pop off roots, add them to a new linked list then add the roots next to the min heap
         '''
         ListNode.__lt__ = ListNodeExtension.__lt__
         min_heap = []
-        # this will only loop the array, so it grabs the head from each array
+
         for root in lists:
-            # make sure we havent gone through it all
             if root is not None:
                 heappush(min_heap, root)
 
-        # instantiate the new linked list that will be returned
-        # why do we need both head and tail?
+        # head will still equal that first dummy node, that mean when we do next it points to the first node we inserted
         head = dummy = ListNode(0)
         while min_heap:
-            # dummy is a dummy node
             dummy.next = heappop(min_heap)
             dummy = dummy.next
-            # we need to keep repeating until wevee gone through all the linked lists
-            # so we push the next level into the heap
-            if dummy.next:
+
+            if root.next is not None:
                 heappush(min_heap, dummy.next)
 
         return head.next
