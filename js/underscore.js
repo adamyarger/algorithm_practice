@@ -126,6 +126,15 @@ _.map = function (collection, fn) {
 // console.log(_.map([1, 2, 3], (el, index) => el * 2))
 
 /*********PLUCK**********/
+_.pluck = function (collection, target) {
+  return _.map(collection, (el) => {
+    return el.name
+  })
+}
+// var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
+// console.log(_.pluck(stooges, 'name'))
+// => ["moe", "larry", "curly"]
+
 /*********INVOKE*********/
 /*********REDUCE**********/
 /*********CONTAINS*********/
