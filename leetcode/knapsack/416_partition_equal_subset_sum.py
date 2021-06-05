@@ -14,6 +14,9 @@ Example 2:
 Input: nums = [1,2,3,5]
 Output: false
 Explanation: The array cannot be partitioned into equal sum subsets.
+
+
+- for each value we can pick it or not, this is the essence of 0/1 knapsack problem
 '''
 from typing import List
 
@@ -23,12 +26,15 @@ class TopDown:
     def canPartition(self, nums: List[int]) -> bool:
         s = sum(nums)
 
+        # This is all about comparing 2 values that are equal, that means it has to have an event sum since x*2 is always event
         if s % 2 != 0:
             return False
 
         # initialize a 2 dimensional matrix set -1 as the default value
         # clean this up and make it easier to read
-        matrix = [[-1 for _ in range(int(s/2)+1)] for _ in range(len(nums))]
+        # the value were looking for is sum/2
+        # 14//2 + 1 = 8... why the plus 1?
+        matrix = [[-1] * ((s//2)+1) for _ in range(len(nums))]
 
         if self.can_partition_recursive(matrix, nums, int(s/2), 0) == 1:
             return True
@@ -55,9 +61,79 @@ class TopDown:
 
 
 td = TopDown()
-print(td.canPartition([1, 5, 11, 5]))
+# print(td.canPartition([1, 5, 11, 5]))
+# print(td.canPartition([1, 6, 7]))
 
 
-# class Solution:
-#     def canPartition(self, nums: List[int]) -> bool:
-#         pass
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        s = sum(nums)
+
+        if s % 2 != 0:
+            return False
+
+        s = int(s / 2)
+        dp = [[False for x in range(s + 1)] for y in range(len(nums))]
+
+        # populate s = 0 columns
+        for i in range(0, len(nums)):
+            dp[i][0] = True
+
+        # form a subset only when the required sum is equal to its value
+        for j in range(1, s + 1):
+            dp[0][j] = nums[0] == j
+
+        # [
+        #     [True, True, False, False, False, False, False, False, False, False, False, False],
+        #     [True, False, False, False, False, False, False, False, False, False, False, False],
+        #     [True, False, False, False, False, False, False, False, False, False, False, False],
+        #     [True, False, False, False, False, False, False, False, False, False, False, False]
+        # ]
+
+        # process all subsets for all sums
+        for i in range(1, len(nums)):
+            for j in range(1, s + 1):
+                # if we can get the sum 'j' without the number at index 'i'
+                if dp[i - 1][j]:
+                    dp[i][j] = dp[i - 1][j]
+
+                # else if we can find a subset to get the remaining sum
+                elif j >= nums[i]:
+                    dp[i][j] = dp[i - 1][j - nums[i]]
+
+        print(dp)
+        # [
+        #     [True, True, False, False, False, False, False, False, False, False, False, False],
+        #     [True, True, False, False, False, True, True, False, False, False, False, False],
+        #     [True, True, False, False, False, True, True, False, False, False, False, True],
+        #     [True, True, False, False, False, True, True, False, False, False, True, True]
+        # ]
+
+        # the bottom-right corner will have our answer
+        return dp[len(nums) - 1][s]
+
+
+class Solution2(object):
+    def canFindSum(self, nums, target, ind, n, mem):
+        if target in mem:
+            return mem[target]
+        if target == 0:
+            mem[target] = True
+        else:
+            mem[target] = False
+            if target > 0:
+                for i in range(ind, n):
+                    if self.canFindSum(nums, target - nums[i], i+1, n, mem):
+                        mem[target] = True
+                        break
+        return mem[target]
+
+    def canPartition(self, nums):
+        s = sum(nums)
+        if s % 2 != 0:
+            return False
+        return self.canFindSum(nums, s/2, 0, len(nums), {})
+
+
+sol = Solution()
+print(sol.canPartition([1, 5, 11, 5]))
