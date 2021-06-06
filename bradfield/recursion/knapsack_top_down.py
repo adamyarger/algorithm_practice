@@ -17,27 +17,20 @@ def brute_knapsack(profits, weights, capacity):
 
 
 def brute_knapsack_recursive(profits, weights, capacity, currentIndex):
-    # were working from the top down
-    # we need a base case
-    if capacity <= 0 or currentIndex >= len(profits):
+    # first we need a base case
+    # there 2 one is that were moving up to new items
+    # the second is being over capacity
+    if currentIndex >= len(profits) or capacity <= 0:
         return 0
 
-    # were comparing profits with the item and without the item and choosing the more profitable
+    # test choosing it or not choosing it
+    # we can only choose it if the weight is within capacity
     profit1 = 0
-    # if the current item weight is less than the sacks capacity
-    # we choose it or we dont choose it
-    # we choose it or we dont choose it
-
-    # CHOOSE IT, but first check if we can choose it
     if weights[currentIndex] <= capacity:
+        # add the item and increase the total profits
         profit1 = profits[currentIndex] + brute_knapsack_recursive(
-            profits,
-            weights,
-            capacity - weights[currentIndex],
-            currentIndex + 1
-        )
+            profits, weights, capacity - weights[currentIndex], currentIndex + 1)
 
-    # DONT CHOOSE IT, dont worry well see what its like if we dont choose it as well
     profit2 = brute_knapsack_recursive(
         profits, weights, capacity, currentIndex + 1)
 
