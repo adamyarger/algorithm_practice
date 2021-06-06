@@ -28,7 +28,7 @@ def brute_knapsack_recursive(profits, weights, capacity, currentIndex):
     # we choose it or we dont choose it
     # we choose it or we dont choose it
 
-    # CHOOSE IT
+    # CHOOSE IT, but first check if we can choose it
     if weights[currentIndex] <= capacity:
         profit1 = profits[currentIndex] + brute_knapsack_recursive(
             profits,
@@ -37,7 +37,7 @@ def brute_knapsack_recursive(profits, weights, capacity, currentIndex):
             currentIndex + 1
         )
 
-    # DONT CHOOSE IT
+    # DONT CHOOSE IT, dont worry well see what its like if we dont choose it as well
     profit2 = brute_knapsack_recursive(
         profits, weights, capacity, currentIndex + 1)
 
