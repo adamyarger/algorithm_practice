@@ -1,4 +1,6 @@
 '''
+https://www.educative.io/courses/grokking-dynamic-programming-patterns-for-coding-interviews/RM1BDv71V60
+
 BRUTE FORCE
 - try all combinations of the given items, then choose the
   one with maximum profits and a weight that doesnt exceed to total.
