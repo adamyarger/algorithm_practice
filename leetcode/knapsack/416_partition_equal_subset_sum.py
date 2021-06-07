@@ -17,6 +17,8 @@ Explanation: The array cannot be partitioned into equal sum subsets.
 
 
 - for each value we can pick it or not, this is the essence of 0/1 knapsack problem
+
+https://www.educative.io/courses/grokking-dynamic-programming-patterns-for-coding-interviews/3jEPRo5PDvx
 '''
 from typing import List
 
