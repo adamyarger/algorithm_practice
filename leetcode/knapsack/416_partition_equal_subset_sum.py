@@ -23,6 +23,48 @@ https://www.educative.io/courses/grokking-dynamic-programming-patterns-for-codin
 from typing import List
 
 
+# brute
+class TopDown:
+    def canPartition(self, nums: List[int]) -> bool:
+        '''
+        - in order for both subsets to be equal, the sum total must be even, becuase were dealing with integers
+        - This problem essentially means find if a number combination adds up to a specfic number, that number is sum/2
+        -
+        '''
+        _sum = sum(nums)
+        if _sum % 2 != 0:
+            return False
+
+        return self.can_partition_recursive(nums, _sum/2, 0)
+
+    def can_partition_recursive(self, nums, sum, current_index):
+        '''
+        - choose or dont choose
+        - if we choose subtract the current number from the sum, were looking
+          to get to a sum of zero because that means weve found a subset that hits the target
+        - if we find any sum that hits the target it works, because we already checked that the total sum is even,
+          so if you find the sum in a subset it means the remainder subset have to add up to the saem
+        '''
+        if sum == 0:
+            return True
+
+        size = len(nums)
+        if current_index >= size or size == 0:
+            return False
+
+        if nums[current_index] <= sum:
+            # whenever recursion is returning a true or false, put the recursive call in the if check
+            if self.can_partition_recursive(nums, sum-nums[current_index], current_index+1):
+                return True
+
+        return self.can_partition_recursive(nums, sum, current_index+1)
+
+
+td = TopDown()
+# print(td.canPartition([1, 5, 11, 5]))
+print(td.canPartition([1, 6, 7]))
+
+
 # memoization
 class TopDown:
     def canPartition(self, nums: List[int]) -> bool:
