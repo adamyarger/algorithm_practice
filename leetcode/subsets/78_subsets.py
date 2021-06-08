@@ -56,6 +56,7 @@ class Solution:
 
         def backtrack(size, first=0, curr=[]):
             # were making all combination at the current level, so check if its done
+            # base case
             if len(curr) == size:
                 # when its at size, make a copy and append it to the output
                 output.append(curr[:])
