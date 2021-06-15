@@ -23,7 +23,7 @@ Note:
 The input prerequisites is a graph represented by a list of edges, not adjacency matrices. Read more about how a graph is represented.
 You may assume that there are no duplicate edges in the input prerequisites.
 '''
-from types import List
+from typing import List
 from collections import deque
 
 
@@ -67,4 +67,4 @@ class Solution:
 
 
 sol = Solution()
-print(sol.canFinish(4, [[0, 1], [3, 4], [1, 2], [2, 3]]))
+print(sol.canFinish(4, [[1, 0], [2, 1], [3, 0]]))
