@@ -27,6 +27,85 @@ from typing import List
 class TopDown:
     def canPartition(self, nums: List[int]) -> bool:
         '''
+        - since were trying to create 2 subsets of equal sum, the total sum needs to be even, we cant deal with fractions
+        - The target combination were looking for is sum/2, if we find it the it exists
+        - brute force were going to create veery combination possible of either choosing a number or nt choosing a number
+        - then we work our way up, if we find our target value by combining numbers together then we have a match
+        '''
+        if sum(nums) % 2 > 0:
+            return False
+
+        target = sum(nums) // 2
+
+        memo = [[None] * (target+1) for _ in range(len(nums))]
+        return self.can_partition_recursive(memo, nums, target, 0)
+
+    def can_partition_recursive(self, memo, nums, target, current_index):
+        if current_index >= len(nums) or nums[current_index] > target:
+            return False
+
+        if memo[current_index][target] is not None:
+            return memo[current_index][target]
+
+        if nums[current_index] == target:
+            return True
+
+        memo[current_index][target] = self.can_partition_recursive(memo, nums, target-nums[current_index], current_index + 1) \
+            or self.can_partition_recursive(memo, nums, target, current_index + 1)
+
+        return memo[current_index][target]
+
+
+td = TopDown()
+# print(td.canPartition([1, 5, 11, 5]))
+# print(td.canPartition([1, 6, 7]))
+
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        _sum = sum(nums)
+        if _sum % 2 != 0:
+            return False
+        target = _sum // 2
+
+        row_len = target + 1
+        col_len = len(nums) + 1
+
+        matrix = [[None] * row_len for _ in range(col_len)]
+
+        for row in range(col_len):
+            for col in range(row_len):
+                # up and back value amount
+                if row == 0 or col == 0:
+                    matrix[row][col] = True
+                elif matrix[row-1][col]:
+                    matrix[row][col] = matrix[row-1][col]
+                elif col >= nums[row-1]:
+                    matrix[row][col] = matrix[row-1][col-nums[row-1]]
+
+        return matrix[-1][-1]
+
+
+sol = Solution()
+print(sol.canPartition([1, 5, 11, 5]))
+print(td.canPartition([1, 2, 3, 7]))
+
+##############################
+##############################
+##############################
+##############################
+############ OLD #############
+##############################
+##############################
+##############################
+##############################
+##############################
+
+
+# brute
+class TopDown:
+    def canPartition(self, nums: List[int]) -> bool:
+        '''
         - in order for both subsets to be equal, the sum total must be even, becuase were dealing with integers
         - This problem essentially means find if a number combination adds up to a specfic number, that number is sum/2
         -
