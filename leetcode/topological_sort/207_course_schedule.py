@@ -71,5 +71,9 @@ class Solution:
         return len(sorted_list) == numCourses
 
 
+# the order is backwards at the end, but that doesnt really matter 
+# since were just detecting cycles
+# even in the dfs topological sort we first sort in reverse order then pop off to correct the order
+# maybe we always need to find the leaves then work up
 sol = Solution()
 print(sol.canFinish(4, [[1, 0], [2, 1], [3, 0]]))
