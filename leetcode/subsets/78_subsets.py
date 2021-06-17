@@ -72,10 +72,30 @@ class Solution:
         return output
 
 
+def subsets(nums: List[int]) -> List[List[int]]:
+    subsets = []
+
+    def recur(index, cur):
+        if index == len(nums):
+            # weve hit the base case
+            subsets.append(cur)
+            return
+
+        # keep the original
+        recur(index + 1, cur)
+        # add a new number to the original
+        # just like the iterative one, make a copy and add the new number
+        recur(index + 1, cur + [nums[index]])
+
+    recur(0, [])
+
+    return subsets
+
+
 sol = Solution()
 # print(sol.subsets([1, 2, 3]))
-print(sol.recurSubsets([1, 2, 3]))
-
+# print(sol.recurSubsets([1, 2, 3]))
+print(subsets([1, 2, 3]))
 '''
 ----- 0 -----
 ----- 1 -----
