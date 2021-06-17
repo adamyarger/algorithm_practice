@@ -31,47 +31,55 @@ Space Complexity: O(V + E) since we are storing all of the prerequisites for eac
 from typing import List
 from collections import deque
 
+# Try it with dfs and proper sorting order
+
 
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        # sorted list that holds all the courses in order, we check it at the end to make sure it matches the numCourses
-        sorted_list = []
+        '''
+        - this will end up being backwards in order, do the problem 2 to do it in order
+        - create an adjcency list (graph) of nodes with lists of prerequisites
+        - create dict of in degrees, this is actually outdegrees but whatever, how many postrequisites does each class have
+        - build the graph fill it up, also fill up the indegrees
+        - create sources, nodes with no indegrees, these will actually be leaves
+        - use bfs to add to sorted output array, decrement childs indegrees when one is added to sorted
+        - check that the array length is equal and return
+        '''
+        out = []
 
-        if numCourses <= 0:
-            return False
-
-        # keep track of the graph in an adjacency list, the node will point to all its children (requisites)
+        # req, pre
         graph = {node: [] for node in range(numCourses)}
-        # count incoming edges, need to know which ones are sources (0 incoming edges) and sinks (only incoming edges, no outgoing edges)
-        in_degree = {node: 0 for node in range(numCourses)}
+        out_degrees = {node: 0 for node in range(numCourses)}
 
-        # build the graph, fill in the in_degrees
-        for prerequisite in prerequisites:
-            parent, child = prerequisite[0], prerequisite[1]
-            graph[parent].append(child)
-            in_degree[child] += 1
+        # build the graph
+        for req, pre in prerequisites:
+            graph[pre].append(req)
+            out_degrees[req] += 1
 
-        # find all sources
+        # print(graph)
+        # print(out_degrees)
+
+        # create sources, grab the leaf nodes
         sources = deque()
-        for key in in_degree:
-            if in_degree[key] == 0:
-                sources.append(key)
+        for node in graph:
+            if out_degrees[node] == 0:
+                sources.append(node)
 
-        # topo sort (bfs)
+        # print(sources)
+
         while sources:
-            vertex = sources.popleft()
-            # add any sources to sorted list, doesnt matter which order because they have no dependecies
-            sorted_list.append(vertex)
-            for child in graph[vertex]:
-                # get the nodes child to decrement the indegrees, since we just poped off its parent (prerequisite)
-                in_degree[child] -= 1
-                if in_degree[child] == 0:
-                    sources.append(child)
+            node = sources.popleft()
+            out.append(node)
+            for neighbor in graph[node]:
+                out_degrees[neighbor] -= 1
+                if out_degrees[neighbor] == 0:
+                    sources.append(neighbor)
 
-        return len(sorted_list) == numCourses
+        # print(out)
+        return len(out) == numCourses
 
 
-# the order is backwards at the end, but that doesnt really matter 
+# the order is backwards at the end, but that doesnt really matter
 # since were just detecting cycles
 # even in the dfs topological sort we first sort in reverse order then pop off to correct the order
 # maybe we always need to find the leaves then work up
