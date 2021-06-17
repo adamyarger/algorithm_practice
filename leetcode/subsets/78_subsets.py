@@ -59,7 +59,8 @@ class Solution:
                 # backtrack on the next number option
                 backtrack(size, i+1, cur)
                 # this is called after recursion is done
-                # the pop is the backtracking
+                # the pop is the backtracking, we hit the size already at this point and its been added
+                # so we can take it off the cur and move back up
                 print(cur)
                 cur.pop()
 
