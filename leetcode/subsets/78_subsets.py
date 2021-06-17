@@ -33,9 +33,8 @@ from typing import List
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
         '''
-        - start witth an empty array like so: [[]]
-        - iterate through each number [1,2,3], make a copy of the existing subarrays, then add the new number to each in the copy
-        - be sure to use len and range for the loop, other wise well get stuf in a loop
+        - need every combination
+        - start with an empty set, on each iteration make a copy then add the new number to the copy then add it to the list of subsets
         '''
         subsets = [[]]
         for num in nums:
@@ -44,29 +43,30 @@ class Solution:
         return subsets
 
     def recurSubsets(self, nums: List[int]) -> List[List[int]]:
-        '''
-        - get all subset at each length
-        - subsets at 0 []
-        subsets at 1 [1][2][3]
-        subsets at 2 [1,2][2,3][1,3]
-        subsets at 3 [1,2,3]
-        '''
         output = []
         max_size = len(nums)
 
-        def backtrack(size, first=0, curr=[]):
-            # were making all combination at the current level, so check if its done
-            # base case
-            if len(curr) == size:
-                # when its at size, make a copy and append it to the output
-                output.append(curr[:])
+        def backtrack(size, first=0, cur=[]):
+            # make all combinations at the current level i.e. [1][2][3]
+            if len(cur) == size:
+                # its at size, make a copy and append it to subsets output
+                output.append(cur[:])
                 return
-            for i in range(first, max_size):
-                curr.append(nums[i])
-                backtrack(size, i + 1, curr)
-                curr.pop()
 
-        for size in range(max_size + 1):
+            # keep adding new numbers
+            for i in range(first, max_size):
+                cur.append(nums[i])
+                # backtrack on the next number option
+                backtrack(size, i+1, cur)
+                # this is called after recursion is done
+                # the pop is the backtracking
+                print(cur)
+                cur.pop()
+
+        # why add 1? we need to handle the empty subset, that means 4 different variations of size
+        # starts at size 0 then 1 then 2 then 3
+        for size in range(max_size+1):
+            print(f'----- {size} -----')
             backtrack(size)
         return output
 
@@ -74,3 +74,27 @@ class Solution:
 sol = Solution()
 # print(sol.subsets([1, 2, 3]))
 print(sol.recurSubsets([1, 2, 3]))
+
+'''
+----- 0 -----
+----- 1 -----
+[1]
+[2]
+[3]
+----- 2 -----
+[1, 2]
+[1, 3]
+[1]
+[2, 3]
+[2]
+[3]
+----- 3 -----
+[1, 2, 3]
+[1, 2]
+[1, 3]
+[1]
+[2, 3]
+[2]
+[3]
+[[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]]
+'''
