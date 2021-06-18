@@ -102,24 +102,41 @@ class Backtrack:
                 callback.unmake_move(a, k, _input)
 
 
-class Solution:
+class Subsets:
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        res = []
-        self.backtrack(nums, [], res)
-        return res
+        out = []
+        self.backtrack(nums, [], out)
+        return out
 
-    def backtrack(self, nums, path, res):
-        # append the results, this will start with an empty array
-        res.append(path)
-        # loop through each num
+    def backtrack(self, nums, cur, out):
+        out.append(cur)
         for i in range(len(nums)):
-            '''
-            canidates: nums[i+1:]... we just used i, so it is no longer a canidate
-            copy existing and add: path+[nums[i]]
-            res: keeps all finished subsets so far
-            '''
-            self.backtrack(nums[i+1:], path+[nums[i]], res)
+            # take the current num away from the next iterations canidates
+            # add the current num to the cur subset (copy and add the num)
+            self.backtrack(nums[i+1:], cur + [nums[i]], out)
 
 
-sol = Solution()
-print(sol.subsets([1, 2, 3]))
+# sol = Subsets()
+# print(sol.subsets([1, 2, 3]))
+
+class Permutations:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        out = []
+        self.backtrack(nums, [], out)
+        return out
+
+    def backtrack(self, nums, cur, out):
+        # base case, if no canidates left, weve hit the arr size
+        if len(nums) == 0:
+            out.append(cur)
+            return
+
+        # when cur and nums are combinaed we get all the numbers
+        # combine them together to shift the ordering
+        # take away from nums to get the subsets
+        for i in range(len(nums)):
+            self.backtrack(nums[:i] + nums[i+1:], cur + [nums[i]], out)
+
+
+perm = Permutations()
+print(perm.permute([1, 2, 3]))

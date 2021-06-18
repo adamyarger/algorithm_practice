@@ -53,7 +53,7 @@ class Solution:
                 output.append(cur[:])
                 return
 
-            # keep adding new numbers
+            # minimize candidates
             for i in range(first, max_size):
                 cur.append(nums[i])
                 # backtrack on the next number option
