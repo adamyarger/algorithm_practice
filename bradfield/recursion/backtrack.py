@@ -5,6 +5,8 @@
 - dfs is prefered over bfs due to space efficiency
 - bfs space is proportional to the width of a tree
 - dfs is proportioanl to the height of a tree
+
+https://leetcode.com/problems/subsets/discuss/429534/General-Backtracking-questions-solutions-in-Python-for-reference-%3A
 '''
 from typing import List
 
@@ -98,3 +100,26 @@ class Backtrack:
                     return
                 # if we havent found anything by now, we need to go back up a level
                 callback.unmake_move(a, k, _input)
+
+
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        self.backtrack(nums, [], res)
+        return res
+
+    def backtrack(self, nums, path, res):
+        # append the results, this will start with an empty array
+        res.append(path)
+        # loop through each num
+        for i in range(len(nums)):
+            '''
+            canidates: nums[i+1:]... we just used i, so it is no longer a canidate
+            copy existing and add: path+[nums[i]]
+            res: keeps all finished subsets so far
+            '''
+            self.backtrack(nums[i+1:], path+[nums[i]], res)
+
+
+sol = Solution()
+print(sol.subsets([1, 2, 3]))
