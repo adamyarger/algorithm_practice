@@ -59,6 +59,12 @@ class Solution:
             res.append(path)
             return
         for i in range(len(candidates)):
+            # candidates[i:] move the candidates forward, like subsets
+            # --> subsets moves this forward with i+1, we dont here so we can reuse to test repeats as many times as needed
+            # we can reused when we backtrack up again??
+            # path + [candidates[i]] test adding the new number to the path
+            # target - candidates[i] work towards base case
+            print(i, candidates[i:], path + [candidates[i]])
             self.backtrack(
                 candidates[i:], path + [candidates[i]], res, target - candidates[i])
 
