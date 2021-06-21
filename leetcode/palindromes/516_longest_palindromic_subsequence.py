@@ -27,28 +27,27 @@ class Solution:
         - does not need to be contigous, can delete certain chars
         - try all subsets, return value if is palindrome, then compare if its larger than the other branch
         '''
-        return self.recur(s, 0, len(s) - 1)
+        memo = [[-1] * len(s) for _ in range(len(s))]
+        return self.recur(memo, s, 0, len(s) - 1)
 
-    def recur(self, s, start, end):
-        # there nothing to check, size is 0
+    def recur(self, memo, s, start, end):
+        # weve hit the end, return 0 so nothing gets added
         if start > end:
             return 0
 
-        # its only 1 letter, that automatically a palindrome
         if start == end:
             return 1
 
-        # 2 letters match, that makes it size 2
-        if s[start] == s[end]:
-            # move towards the base case by moving both ends towards the middle
-            # we need symitry for palindromes
-            return 2 + self.recur(s, start + 1, end - 1)
+        if memo[start][end] == -1:
+            if s[start] == s[end]:
+                # since both on the outside match we can bring them both closer together to see if their is still symitry
+                memo[start][end] = 2 + self.recur(memo, s, start + 1, end - 1)
+            else:
+                sub1 = self.recur(memo, s, start + 1, end)
+                sub2 = self.recur(memo, s, start, end - 1)
+                memo[start][end] = max(sub1, sub2)
 
-        # try moving the left end towards the middle
-        sub1 = self.recur(s, start + 1, end)
-        # move the right towards the middle
-        sub2 = self.recur(s, start, end - 1)
-        return max(sub1, sub2)
+        return memo[start][end]
 
 
 sol = Solution()
