@@ -23,19 +23,10 @@ Space Complexity: O(N2 + N) == O(N2) because we used N2 for memoization array an
 
 class Solution:
     def longestPalindromeSubseq(self, s: str) -> int:
-        '''
-        - how do we check for palindromes?
-        - whats the base case?
-        - whats the repeating sub problems?
-
-        - does not need to be contigous, can delete certain chars
-        - try all subsets, return value if is palindrome, then compare if its larger than the other branch
-        '''
         memo = [[-1] * len(s) for _ in range(len(s))]
         return self.recur(memo, s, 0, len(s) - 1)
 
     def recur(self, memo, s, start, end):
-        # weve hit the end, return 0 so nothing gets added
         if start > end:
             return 0
 
@@ -44,13 +35,11 @@ class Solution:
 
         if memo[start][end] == -1:
             if s[start] == s[end]:
-                # since both on the outside match we can bring them both closer together to see if their is still symmetry
                 memo[start][end] = 2 + self.recur(memo, s, start + 1, end - 1)
             else:
                 sub1 = self.recur(memo, s, start + 1, end)
                 sub2 = self.recur(memo, s, start, end - 1)
                 memo[start][end] = max(sub1, sub2)
-
         return memo[start][end]
 
 
@@ -60,26 +49,42 @@ class Solution:
 
 class BU:
     def bottom_up(self, s: str) -> int:
+        '''
+        - the matrix is about start at and ends at points thats why theres a diagnol of 1's
+        - because its daying it starts at 4 and ends at 4, so the palindrom elength is 1
+        - we go through each size level and check for subsequences
+        - we look for the max when there not a match at start and end
+        - when its not matching its the max of left cell or bottom cell
+        - if matching its 2 + diagnol cell
+        '''
         size = len(s)
         memo = [[0] * size for _ in range(size)]
 
-        # every sequence with 1 letter is a palindrom eof size 1
-        for i in range(len(s)):
+        for i in range(size):
             memo[i][i] = 1
 
-        # range in reverse order
-        for start in range(size - 1, -1, -1):
-            # range in ascending order
-            for end in range(start + 1, size):
+        # we make it size-1 since that cell has already been dilled with a 1 value
+        for start in range(size-1, -1, -1):
+            for end in range(start+1, size):
                 if s[start] == s[end]:
-                    # start and end are the same letter add 2
+                    # start and end match, 2 + diagonal
                     memo[start][end] = 2 + memo[start + 1][end - 1]
                 else:
-                    # skip one letter either from the beginning or end
+                    # max value from bottom cell or left cell
                     memo[start][end] = max(
-                        memo[start + 1][end], memo[start][end - 1])
-        return memo[0][size - 1]
+                        memo[start+1][end], memo[start][end-1])
+        return memo[0][size-1]
 
 
 bu = BU()
 print(bu.bottom_up('bbbab'))
+
+'''
+[
+    [1, 2, 3, 3, 4], 
+    [0, 1, 2, 2, 3], 
+    [0, 0, 1, 1, 3], 
+    [0, 0, 0, 1, 1], 
+    [0, 0, 0, 0, 1]
+]
+'''
