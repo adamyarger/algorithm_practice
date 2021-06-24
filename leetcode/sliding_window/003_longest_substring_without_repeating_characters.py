@@ -10,29 +10,28 @@ Explanation: The answer is "abc", with the length of 3.
 
 
 class Solution(object):
-    def lengthOfLongestSubstring(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        '''
+        - its sliding window, so we need to keep track of start variable for the beginning of the window
+        - we need to track repeating, so well use a dict to keep track of the last time we saw a letter
+        - our output is max_length so well track the longest substring along the way
+        - should be linear in time
+        '''
         start = 0
+        past = {}
         max_length = 0
-        # char as key and its index as the value
-        used = {}
 
+        # we need the value and the index so we need enumerate
         for index, char in enumerate(s):
-            # char has been seen before, (we cant have repeating characters)
-            # char get over written when a new one is seen
-
-            # we saw a repeat, reset the window start
-            # what does this do start <= used[char]??? if our start is already ahead then just ignore it
-            if char in used and start <= used[char]:
-                start = used[char] + 1
+            # either the non repeating ends or it continues
+            if (char in past and start <= past[char]):
+                # we set the start to 1 ahead of the last repeated char
+                start = past[char] + 1
             else:
-                # is something we saw before bigger i.e. max_lngth... or have we found a bigger substring?
+                # repeating continues, but is it longer than the previous max length
                 max_length = max(max_length, index - start + 1)
-            # always add the newest seen char and its index
-            used[char] = index
+            # no matter what we update the past seen dict and replace the old value with the current
+            past[char] = index
         return max_length
 
 
