@@ -32,20 +32,20 @@ class Solution:
 
         # req, pre
         graph = {node: [] for node in range(numCourses)}
-        out_degrees = {node: 0 for node in range(numCourses)}
+        in_degrees = {node: 0 for node in range(numCourses)}
 
         # build the graph
         for req, pre in prerequisites:
             graph[pre].append(req)
-            out_degrees[req] += 1
+            in_degrees[req] += 1
 
         # print(graph)
-        # print(out_degrees)
+        # print(in_degrees)
 
         # create sources, grab the leaf nodes
         sources = deque()
         for node in graph:
-            if out_degrees[node] == 0:
+            if in_degrees[node] == 0:
                 sources.append(node)
 
         # print(sources)
@@ -54,8 +54,8 @@ class Solution:
             node = sources.popleft()
             out.append(node)
             for neighbor in graph[node]:
-                out_degrees[neighbor] -= 1
-                if out_degrees[neighbor] == 0:
+                in_degrees[neighbor] -= 1
+                if in_degrees[neighbor] == 0:
                     sources.append(neighbor)
 
         # print(out)
