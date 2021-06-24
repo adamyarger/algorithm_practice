@@ -37,45 +37,40 @@ from collections import deque
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         '''
-        - this will end up being backwards in order, do the problem 2 to do it in order
-        - create an adjcency list (graph) of nodes with lists of prerequisites
-        - create dict of in degrees, this is actually outdegrees but whatever, how many postrequisites does each class have
-        - build the graph fill it up, also fill up the indegrees
-        - create sources, nodes with no indegrees, these will actually be leaves
-        - use bfs to add to sorted output array, decrement childs indegrees when one is added to sorted
-        - check that the array length is equal and return
+        - find the source nodes = nodes with no incoming edges
+        - keep track of which ones have no incoming edges, add them to a dict
+        - bfs with while loop and sources stack add sources to out put array.
+        - when we pop off a sort find its dependecies and subtract one, if that dep now has no incoming edges add it ass a source
+        - return len of nums course == len topologically sorted array
+
+        - NEED TO MAKE adjacency list
+        - its 0 to n-1 that means its contigous order
         '''
+        # create an adjacency list
         out = []
-
-        # req, pre
         graph = {node: [] for node in range(numCourses)}
-        out_degrees = {node: 0 for node in range(numCourses)}
+        in_degrees = {node: 0 for node in range(numCourses)}
 
-        # build the graph
+        # create the adjacency list
         for req, pre in prerequisites:
             graph[pre].append(req)
-            out_degrees[req] += 1
+            in_degrees[req] += 1
 
-        # print(graph)
-        # print(out_degrees)
-
-        # create sources, grab the leaf nodes
+        # get the sources with no incoming edges
         sources = deque()
-        for node in graph:
-            if out_degrees[node] == 0:
+        for node in in_degrees:
+            if in_degrees[node] == 0:
                 sources.append(node)
 
-        # print(sources)
-
+        # bfs, pop of the queue
         while sources:
             node = sources.popleft()
             out.append(node)
-            for neighbor in graph[node]:
-                out_degrees[neighbor] -= 1
-                if out_degrees[neighbor] == 0:
-                    sources.append(neighbor)
+            for req in graph[node]:
+                in_degrees[req] -= 1
+                if in_degrees[req] == 0:
+                    sources.append(req)
 
-        # print(out)
         return len(out) == numCourses
 
 
