@@ -64,22 +64,25 @@ td = TopDown()
 
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
-        _sum = sum(nums)
-        if _sum % 2 != 0:
+        if sum(nums) % 2 > 0:
             return False
-        target = _sum // 2
-
+        target = sum(nums) // 2
         row_len = target + 1
-        col_len = len(nums) + 1
+        col_len = len(nums)
 
         matrix = [[None] * row_len for _ in range(col_len)]
 
         for row in range(col_len):
             for col in range(row_len):
-                # up and back value amount
-                if row == 0 or col == 0:
+                if col == 0:
+                    # why is it true?
                     matrix[row][col] = True
-                elif matrix[row-1][col]:
+                elif row == 0:
+                    # since were seeting the nex cell to true if the one above is true, we cant have both 0 col and row be true
+                    # else true would always be returned
+                    # we only need true on the extra col at the start of the row
+                    matrix[row][col] = False
+                elif matrix[row-1][col]:  # look above check if its true
                     matrix[row][col] = matrix[row-1][col]
                 elif col >= nums[row-1]:
                     matrix[row][col] = matrix[row-1][col-nums[row-1]]
@@ -89,7 +92,8 @@ class Solution:
 
 sol = Solution()
 print(sol.canPartition([14, 9, 8, 4, 3, 2]))
-print(td.canPartition([14, 9, 8, 4, 3, 2]))
+print(sol. canPartition([1, 2, 5]))
+# print(td.canPartition([14, 9, 8, 4, 3, 2]))
 
 ##############################
 ##############################
