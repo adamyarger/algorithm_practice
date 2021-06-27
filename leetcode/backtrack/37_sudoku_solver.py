@@ -36,11 +36,15 @@ from typing import List
 class Solution:
     def solveSudoku(self, board: List[List[str]]) -> None:
         '''
-        - when do we backtrack?
-        - this is known as an exact cover problem, many problems can be reduced to this.
-
-        backtrack
-        - what are the next candidates?
+        - find unassgned: loop through the grid and find the next empty space
+          if no more left return -1's
+        - solve: this is the backtrack function, grab the next row and col
+          check if its solved
+          loop through 1-9 to find a valid numbr for our current empty cell
+          fill it in check if solved --> this is the recursive call to self.solve()
+          backtrack by putting the . back if not solved
+        - check row check col check square
+        - square is different since we need to check a mini matrix of 3x3 use modulo
         '''
         self.board = board
         self.solve()
@@ -78,12 +82,43 @@ class Solution:
         # why use the modulo? keeps it restrained to guessing the square boxs row value
         boxrow = row - row % 3
         boxcol = col - col % 3
+        # check the row check the col check the square, if all are good we can fill the cell with that number
         if self.checkrow(row, ch) and self.checkcol(col, ch) and self.checksquare(boxrow, boxcol, ch):
             return True
         return False
 
     def checkrow(self, row, ch):
+        # can we find the number we want to use in the row?
         for col in range(9):
             if self.board[row][col] == ch:
                 return False
         return True
+
+    def checkcol(self, col, ch):
+        for row in range(9):
+            if self.board[row][col] == ch:
+                return False
+        return True
+
+    def checksquare(self, row, col, ch):
+        # why + 3?
+        # start at modulo given row end in 3 spaces
+        for r in range(row, row+3):
+            for c in range(col, col+3):
+                if self.board[r][c] == ch:
+                    return False
+        return True
+
+
+sol = Solution()
+board = [["5", "3", ".", ".", "7", ".", ".", ".", "."],
+         ["6", ".", ".", "1", "9", "5", ".", ".", "."],
+         [".", "9", "8", ".", ".", ".", ".", "6", "."],
+         ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
+         ["4", ".", ".", "8", ".", "3", ".", ".", "1"],
+         ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
+         [".", "6", ".", ".", ".", ".", "2", "8", "."],
+         [".", ".", ".", "4", "1", "9", ".", ".", "5"],
+         [".", ".", ".", ".", "8", ".", ".", "7", "9"]]
+sol.solveSudoku(board)
+print(board)
