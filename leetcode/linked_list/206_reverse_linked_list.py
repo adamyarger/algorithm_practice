@@ -39,12 +39,8 @@ class Solution:
         current = head
         _next = None
         while current is not None:
-            # store the current next, since it will
-            # get erased when we reverse the current node
             _next = current.next
-            # reverse the current node
             current.next = prev
-            # update current, this is like any other linked list traversal
+            prev = current
             current = _next
-        # prev will be the last item we handled, which is the new head
         return prev
