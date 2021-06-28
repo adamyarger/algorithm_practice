@@ -23,17 +23,41 @@ class Solution:
 
         - 2 choices go dow or go right
         '''
-        return self.recur(m, n, 0, 1, 1)
+        # when we use subtraction we need less variables
+        memo = [[0] * (n) for _ in range(m)]
+        return self.recur(memo, m-1, n-1)
 
-    def recur(self, m, n, count, cur_m, cur_n):
-        if cur_m > m or cur_n > n:
+    def recur(self, memo, m, n):
+        '''
+        - if base m is 0 or n is 0
+        - if win case return 1
+        - if memo[m][n] > 0 return
+
+        '''
+        if m < 0 or n < 0:
             return 0
+        if m == 0 and n == 0:
+            # why is this or??
+            return 1
+        if memo[m][n] > 0:
+            return memo[m][n]
 
-        if cur_m == m and cur_n == n:
-            return count + 1
-
-        return self.recur(m, n, count, cur_m+1, cur_n) + self.recur(m, n, count, cur_m, cur_n+1)
+        memo[m][n] = self.recur(memo, m-1, n) + self.recur(memo, m, n-1)
+        return memo[m][n]
 
 
 sol = Solution()
 print(sol.uniquePaths(3, 7))
+
+
+class BU:
+    def uniquePaths(self, m: int, n: int) -> int:
+        aux = [[1] * n for _ in range(m)]
+        for row in range(1, m):
+            for col in range(1, n):
+                aux[row][col] = aux[row][col-1] + aux[row-1][col]
+        return aux[-1][-1]
+
+
+bu = BU()
+print(bu.uniquePaths(3, 7))
