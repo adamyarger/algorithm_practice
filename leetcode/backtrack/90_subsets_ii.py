@@ -28,14 +28,11 @@ class Solution:
         return out
 
     def backtrack(self, nums, index, cur, out):
-        # need a different base case, other subsets was implied by the for loop
-        # no duplicate sets == same as subsets orignal but check for dups
         out.append(cur)
-        # only use nums from current index onwards --> aoiding repeats
         for i in range(index, len(nums)):
-            # nums[i] == nums[i-1] is why we needed to sort
-            # duplicate subsets only happen when there are duplicate nums
-            # only check at the ending size of the subset
+            # check for duplicates
+            # check if i > index else it will throw an error bcuase i-1 wouldnt exist
+            # needs to be at least 1 item behind to compare against
             if i > index and nums[i] == nums[i-1]:
                 continue
             self.backtrack(nums, i+1, cur + [nums[i]], out)
