@@ -17,4 +17,6 @@ if (!Array.prototype.flatten) {
 let arr = [1, 2, [3, 4, [5, 6, [7, [8, 9, 10]]]]]
 // console.log(flatten(arr))
 
+// rule of prototypes: the object before the .fn is the this value
+// i.e. the array is this
 console.log(arr.flatten())
