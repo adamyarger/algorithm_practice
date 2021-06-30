@@ -7,6 +7,10 @@ class Prom {
 
   constructor(action) {
     // bind the reject and resolve callbacks to the promise scope
+    // why does it need to be binded
+    // if we dont bind, this will be set to wherever the resolve and reject callbacks were invoked
+    // bind creates a new function and return it, it does not fire it
+    // call and apply will fire the method
     action(this.resolver.bind(this), this.reject.bind(this))
   }
 
@@ -14,14 +18,17 @@ class Prom {
     this.state = 'RESOLVED'
     this.value = value
     this.thenCallbacks.forEach((callback) => {
+      // console.log(this)
       callback(this.value)
     })
   }
 
   reject(value) {
     this.state = 'REJECTED'
+    // why set this? why not pass the value
     this.value = value
     this.errorCallbacks.forEach((callback) => {
+      // console.log(this)
       callback(this.value)
     })
   }
@@ -38,7 +45,7 @@ class Prom {
 }
 
 
-const promise = new Prom((resolve, reject) => {
+const promise = new Prom(function (resolve, reject) {
   setTimeout(() => {
     const rand = Math.ceil(Math.random(1 * 1 + 6) * 6)
     if (rand % 2) {
@@ -46,7 +53,7 @@ const promise = new Prom((resolve, reject) => {
     } else {
       reject('ERROR')
     }
-  }, 500);
+  }, 100);
 })
 
 promise.then((response) => {
