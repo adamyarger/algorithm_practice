@@ -2,7 +2,7 @@
 function deepClone(obj) {
   const out = {}
   for (key in obj) {
-    if (typeof obj[key] === 'object') {
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
       out[key] = deepClone(obj[key])
     } else {
       out[key] = obj[key]
@@ -19,7 +19,8 @@ const obj = {
     d: {
       f() {
         return 'f'
-      }
+      },
+      noop: null
     }
   }
 }
