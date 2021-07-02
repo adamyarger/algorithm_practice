@@ -15,8 +15,11 @@ function deepClone(obj) {
     for (let key in obj) {
       const cur = obj[key]
       const base = Array.isArray(cur) ? [] : {}
-      out[key] = Object.prototype.hasOwnProperty.call(out, key) && !isUnextendable(out[key])
-        ? out[key]
+      if (isCloneable(cur)) {
+        out[key] = recur(cur)
+      }
+      out[key] = Object.prototype.hasOwnProperty.call(obj, key) && !isUnextendable(obj[key])
+        ? obj[key]
         : base
     }
   }
