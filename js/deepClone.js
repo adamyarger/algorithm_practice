@@ -24,9 +24,10 @@ function deepClone(obj) {
             temp[index] = deepClone(item)
           })
 
-          result[key] = base[key]
+          result[key] = base
         } else {
-          result[key] = value
+          base[key] = deepClone(value)
+          result[key] = base
         }
       } else {
         result[key] = value
