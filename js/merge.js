@@ -42,7 +42,7 @@ function merge() {
           const base = Array.isArray(value) ? [] : {}
           result[key] = extend(
             true,
-            Object.prototype.hasOwnProperty(result, key) && !isUnextendable(result[key])
+            Object.prototype.hasOwnProperty.call(result, key) && !isUnextendable(result[key])
               ? result[key] // its a primitive value
               : base,
             value

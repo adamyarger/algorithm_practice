@@ -10,21 +10,33 @@
  * @returns 
  */
 function deepClone(obj) {
-  const out = {}
-  function recur(obj) {
-    for (let key in obj) {
-      const cur = obj[key]
-      const base = Array.isArray(cur) ? [] : {}
-      if (isCloneable(cur)) {
-        out[key] = recur(cur)
+  let result = {}
+
+  for (let key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      let value = obj[key]
+      if (isCloneable(value)) {
+        const base = Array.isArray(value) ? [] : {}
+
+        if (Array.isArray(value)) {
+          let temp = []
+          value.forEach((item, index) => {
+            temp[index] = deepClone(item)
+          })
+
+          result[key] = base[key]
+        } else {
+          result[key] = value
+        }
+      } else {
+        result[key] = value
       }
-      out[key] = Object.prototype.hasOwnProperty.call(obj, key) && !isUnextendable(obj[key])
-        ? obj[key]
-        : base
     }
   }
-  return recur(out, obj)
+
+  return result
 }
+
 
 function isCloneable(obj) {
   return Array.isArray(obj) || {}.toString.call(obj) == '[object Object]'
