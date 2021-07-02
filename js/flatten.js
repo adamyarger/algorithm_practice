@@ -1,15 +1,12 @@
 function flatten(arr) {
-  return arr.reduce((acc, next) => {
-    const isArray = Array.isArray(next)
-    return acc.concat(isArray ? flatten(next) : next)
+  return arr.reduce((acc, item) => {
+    const next = Array.isArray(item) ? flatten(item) : item
+    return acc.concat(next)
   }, [])
 }
 
-// make it available as an array method.
 if (!Array.prototype.flatten) {
   Array.prototype.flatten = function () {
-    // need to return this for chaining
-    console.log(this)
     return flatten(this)
   }
 }
