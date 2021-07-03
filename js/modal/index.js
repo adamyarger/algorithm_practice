@@ -18,7 +18,7 @@ function modal() {
     body.classList.add('modal-open')
   }
 
-  function addBackdrop(params) {
+  function addBackdrop() {
     const el = `<div class="modal-backdrop"></div>`
     const frag = document.createRange().createContextualFragment(el)
     document.querySelector('body').appendChild(frag)
@@ -29,11 +29,15 @@ function modal() {
   }
 
   function removeBackdrop(params) {
-
+    document.querySelector('.modal-backdrop').remove()
   }
 
   function removeBodyClass(params) {
 
+  }
+
+  function hideModal() {
+    document.querySelector('.modal').classList.remove('show')
   }
 
   function setOpenListeners() {
@@ -49,9 +53,11 @@ function modal() {
   }
 
   function setBackdropListener() {
-    document.querySelector('.modal-backdrop').addEventListener('mouseup', () => {
-      toggle
-    })
+    document.querySelector('.modal-backdrop').addEventListener('mouseup', toggle)
+  }
+
+  function removeBackdropListener() {
+    document.querySelector('.modal-backdrop').removeEventListener('mouseup', toggle)
   }
 
   function init(_modalClass) {
@@ -60,19 +66,31 @@ function modal() {
     setOpenListeners()
   }
 
+  function open() {
+    addBackdrop()
+    addBodyClass()
+    showModal()
+    // cant set till after its been mounted
+    setBackdropListener() // need to create and destory listeners
+  }
+
+  function close() {
+    removeBackdropListener() // needs to be first
+
+    removeBackdrop()
+    removeBodyClass()
+    hideModal()
+
+
+  }
+
   function toggle() {
     isOpen = !isOpen
 
     if (isOpen) {
-      addBackdrop()
-      addBodyClass()
-      showModal()
-
-      // cant set till after its been mounted
-      setBackdropListener() // need to create and destory listeners
+      open()
     } else {
-      document.querySelector('.modal').classList.remove('show')
-      document.querySelector('.modal-backdrop').remove()
+      close()
     }
   }
 
