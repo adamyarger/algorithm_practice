@@ -7,8 +7,9 @@
 function modal() {
   let isOpen = false
   let modalClass = ''
+  let _onClose;
 
-  function addBodyClass(params) {
+  function addBodyClass() {
     const body = document.querySelector('body')
     body.classList.add('modal-open')
   }
@@ -23,11 +24,11 @@ function modal() {
     document.querySelector('.modal').classList.add('show')
   }
 
-  function removeBackdrop(params) {
+  function removeBackdrop() {
     document.querySelector('.modal-backdrop').remove()
   }
 
-  function removeBodyClass(params) {
+  function removeBodyClass() {
     document.querySelector('body').classList.remove('modal-open')
   }
 
@@ -90,6 +91,10 @@ function modal() {
     removeBackdrop()
     removeBodyClass()
     hideModal()
+
+    if (typeof _onClose === 'function') {
+      _onClose()
+    }
   }
 
   function toggle() {
@@ -100,9 +105,18 @@ function modal() {
     }
   }
 
+  function onClose(fn) {
+    if (typeof fn === 'function') {
+      _onClose = fn.bind(this)
+    }
+  }
+
   return {
-    toggle: toggle,
-    init: init
+    toggle,
+    init,
+    close,
+    open,
+    onClose
   }
 }
 
@@ -110,7 +124,8 @@ const md = modal()
 
 md.init('main-modal')
 
-// event listener should be handled my the module modal
-// document.querySelector('.modal-toggle').addEventListener('mouseup', function () {
-//   md.toggle()
-// })
+md.onClose(() => {
+  const el = `<div>Offer Accepted</div>`
+  const frag = document.createRange().createContextualFragment(el)
+  document.querySelector('.container').appendChild(frag)
+})
