@@ -9,42 +9,30 @@
  * @param {*} obj 
  * @returns 
  */
-function deepClone(obj) {
-  let result = {}
+function deepClone(source) {
+  // If the source isn't an Object or Array, throw an error.
+  if (!(source instanceof Object) || source instanceof Date || source instanceof String) {
+    throw 'Only Objects or Arrays are supported.'
+  }
 
-  for (let key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      let value = obj[key]
-      if (isCloneable(value)) {
-        const base = Array.isArray(value) ? [] : {}
+  // Set the target data type before copying.
+  var target = source instanceof Array ? [] : {};
 
-        if (Array.isArray(value)) {
-          let temp = []
-          value.forEach((item, index) => {
-            temp[index] = deepClone(item)
-          })
+  for (let prop in source) {
+    // Make sure the property isn't on the protoype
+    if (source instanceof Object && !(source instanceof Array) && !(source.hasOwnProperty(prop))) {
+      continue;
+    }
 
-          result[key] = base
-        } else {
-          base[key] = deepClone(value)
-          result[key] = base
-        }
-      } else {
-        result[key] = value
-      }
+    // If the current property is an Array or Object, recursively clone it, else copy it's value
+    if (source[prop] instanceof Object && !(source[prop] instanceof Date) && !(source[prop] instanceof String)) {
+      target[prop] = deepClone(source[prop])
+    } else {
+      target[prop] = source[prop]
     }
   }
 
-  return result
-}
-
-
-function isCloneable(obj) {
-  return Array.isArray(obj) || {}.toString.call(obj) == '[object Object]'
-}
-
-function isUnextendable(val) {
-  return !val || (typeof val != 'object' && typeof val != 'function');
+  return target;
 }
 
 
@@ -64,7 +52,7 @@ const obj = {
 
 const clone = deepClone(obj)
 // clone.b.c = 'nice'
-// clone.b.arr.push('foo')
+clone.b.arr.push('foo')
 console.log(clone)
 console.log(obj)
 
