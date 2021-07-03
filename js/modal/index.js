@@ -8,11 +8,6 @@ function modal() {
   let isOpen = false
   let modalClass = ''
 
-  //listen to esc key
-  //handle backdrop click event to close
-
-
-
   function addBodyClass(params) {
     const body = document.querySelector('body')
     body.classList.add('modal-open')
@@ -33,7 +28,7 @@ function modal() {
   }
 
   function removeBodyClass(params) {
-
+    document.querySelector('body').classList.remove('modal-open')
   }
 
   function hideModal() {
@@ -60,34 +55,45 @@ function modal() {
     document.querySelector('.modal-backdrop').removeEventListener('mouseup', toggle)
   }
 
+  function closeOnEsc(event) {
+    if (event.key === 'Escape') {
+      close()
+    }
+  }
+
+  function onEsc() {
+    document.addEventListener('keyup', closeOnEsc)
+  }
+
+  function offEsc() {
+    document.removeEventListener('keyup', closeOnEsc)
+  }
+
   function init(_modalClass) {
     modalClass = _modalClass
-
     setOpenListeners()
   }
 
   function open() {
+    isOpen = true
     addBackdrop()
     addBodyClass()
     showModal()
-    // cant set till after its been mounted
     setBackdropListener() // need to create and destory listeners
+    onEsc()
   }
 
   function close() {
+    isOpen = false
     removeBackdropListener() // needs to be first
-
+    offEsc()
     removeBackdrop()
     removeBodyClass()
     hideModal()
-
-
   }
 
   function toggle() {
-    isOpen = !isOpen
-
-    if (isOpen) {
+    if (!isOpen) {
       open()
     } else {
       close()
