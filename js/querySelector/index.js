@@ -7,20 +7,24 @@
  */
 
 function qs(root, selector) {
+  if (typeof selector !== 'string') {
+    throw new Error('selector must be a string')
+  }
+
   let target = null
 
   const traverse = (el) => {
+    // children only contains nodes that are elements
     const children = el.children
 
     for (let i = 0; i < children.length; i++) {
       const node = children[i]
 
-      if (node.classList.contains(selector)) {
+      if (node.matches(selector)) {
         target = node
         return
-      } else {
-        traverse(node)
       }
+      traverse(node)
     }
   }
 
@@ -42,5 +46,5 @@ if (!HTMLDocument.prototype.qs) {
 
 // what is document a prototype of?
 // const found = qs(document.firstElementChild, 'hi')
-const found = document.qs('hi')
+const found = document.qs('div.hi')
 console.log(found)
