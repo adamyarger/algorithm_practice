@@ -11,24 +11,30 @@
  */
 function deepClone(source) {
   if (!isCloneable(source)) {
-    throw new Error('Only Objects or Arrays are supported.')
+    throw new Error('must be an object or array')
   }
 
-  var target = Array.isArray(source) ? [] : {}
+  const target = Array.isArray(source) ? [] : {}
 
-  for (let prop in source) {
-    if (source.hasOwnProperty(prop)) {
-      if (isCloneable(source[prop])) {
-        target[prop] = deepClone(source[prop])
+  for (const key in source) {
+    if (source.hasOwnProperty(key)) {
+      const value = source[key]
+      if (isCloneable(value)) {
+        target[key] = deepClone(source[key])
       } else {
-        target[prop] = source[prop]
+        target[key] = source[key]
       }
     }
   }
 
-  return target;
+  return target
 }
 
+/**
+ * primitives: Boolean, null, undefined String Number
+ * reference: Function Object Array
+ * is function being copied by reference?
+ */
 function isCloneable(val) {
   return Array.isArray(val) || Object.prototype.toString.call(val) === '[object Object]'
 }
@@ -51,8 +57,8 @@ const obj = {
 const clone = deepClone(obj)
 // clone.b.c = 'nice'
 clone.b.arr.push('foo')
-console.log(clone)
 console.log(obj)
+console.log(clone)
 
 // this doesnt work
 // clone.b.c = 'dude' => 
