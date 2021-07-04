@@ -28,5 +28,19 @@ function qs(root, selector) {
   return target
 }
 
-const found = qs(document.firstElementChild, 'hi')
+if (!HTMLElement.prototype.qs) {
+  HTMLElement.prototype.qs = function (selector) {
+    return qs(this, selector)
+  }
+}
+
+if (!HTMLDocument.prototype.qs) {
+  HTMLDocument.prototype.qs = function (selector) {
+    return qs(this, selector)
+  }
+}
+
+// what is document a prototype of?
+// const found = qs(document.firstElementChild, 'hi')
+const found = document.qs('hi')
 console.log(found)
