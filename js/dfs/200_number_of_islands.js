@@ -58,10 +58,13 @@ var numIslands = function (grid) {
   return count
 }
 
+//this function finds all connected 1's and cancels them out
+// then we add 1 to the count and look for more
 function dfs(grid, row, col) {
   if (row < 0 || col < 0 || row >= grid.length || col >= grid[0].length || grid[row][col] != '1') {
     return
   }
+  // we cancel out all the grid cells so the loop will skip over them next time
   grid[row][col] = '#'
   dfs(grid, row + 1, col)
   dfs(grid, row, col + 1)
