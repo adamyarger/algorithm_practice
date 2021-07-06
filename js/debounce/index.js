@@ -23,11 +23,62 @@ function debounce(func, wait, immediate) {
   };
 };
 
+/**
+ * init vars outside the function that will be returned
+ * return function
+ * if throttled set args and contex then return
+ * 
+ * set throttled
+ * apply fn
+ * 
+ * settimeout
+ * throttle false
+ * 
+ * 
+ * @param {*} fn 
+ * @param {*} wait 
+ */
+function throttle(fn, wait) {
+  let throttled = false
+  let args
+  let context
+
+  function wrapper() {
+    if (throttled) {
+      args = arguments
+      context = this
+      return
+    }
+
+    throttled = true
+    fn.apply(context, arguments)
+
+    setTimeout(() => {
+      throttled = false
+      if (args) {
+        wrapper.apply(context, args)
+        args = null
+        context = null
+      }
+    }, wait);
+  }
+
+  return wrapper
+}
+
+
+
 const myEfficientFn = debounce(function () {
-  const frag = document.createRange().createContextualFragment(`<p>Fire</p>`)
-  document.querySelector('.container').appendChild(frag)
+  const frag = document.createRange().createContextualFragment(`<p>debounce</p>`)
+  document.querySelector('.debounce').appendChild(frag)
 }, 300);
+
+const throttleCb = throttle(function () {
+  const frag = document.createRange().createContextualFragment(`<p>throttle</p>`)
+  document.querySelector('.throttle').appendChild(frag)
+}, 300)
 
 // must use a named function, anonymous functions cant be canceled
 // if we use a iife it declares a new function and fires it each time
 window.addEventListener('resize', myEfficientFn);
+window.addEventListener('resize', throttleCb)

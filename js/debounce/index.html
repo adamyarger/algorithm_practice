@@ -27,6 +27,19 @@
             width: 760px;
             margin-top: 2rem;
         }
+
+        .flex {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .throttle,
+        .debounce {
+            border: 2px solid #000;
+            min-width: 100px;
+            min-height: 100px;
+        }
     </style>
 </head>
 
@@ -34,6 +47,16 @@
     <!-- your content here... -->
     <div class="container">
         <h1>Resize this window</h1>
+
+        <div class="flex">
+            <div class="debounce">
+
+            </div>
+
+            <div class="throttle">
+
+            </div>
+        </div>
     </div>
     <script src="./index.js"></script>
 </body>
