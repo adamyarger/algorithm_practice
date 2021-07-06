@@ -58,4 +58,33 @@ function recur(memo, s, start, end) {
   return memo[start][end]
 }
 
-console.log(longestPalindromeSubseq('baccbb'))
+// console.log(longestPalindromeSubseq('baccbb'))
+
+/**
+ * the matrix covers half in a diagnol manner from bottom up
+ * the answer will be in the top right cell
+ * fill in all diaganol cells with 1 since it represents start at x end at x
+ * @param {*} s 
+ */
+function bottomUp(s) {
+  const len = s.length
+  const memo = Array(len).fill(0).map(() => Array(len).fill(0))
+
+  for (let i = 0; i < len; i++) {
+    memo[i][i] = 1
+  }
+
+  for (let start = len - 1; start >= 0; start--) {
+    for (let end = start + 1; end < len; end++) {
+      if (s[start] === s[end]) {
+        memo[start][end] = 2 + memo[start + 1][end - 1]
+      } else {
+        memo[start][end] = Math.max(memo[start + 1][end], memo[start][end - 1])
+      }
+    }
+  }
+
+  return memo[0][len - 1]
+}
+
+console.log(bottomUp('bbcb'))
