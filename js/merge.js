@@ -33,8 +33,6 @@ function merge() {
 
     // loop through the object now
     for (let key in extender) {
-      // for in allows getting properties not in the immidiate prototype, use hasOwnproperty to only grab the current objects properties
-      // why not just use extender.hasOwnProperty(key)?
       if (Object.prototype.hasOwnProperty.call(extender, key)) {
         let value = extender[key]
 
