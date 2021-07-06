@@ -18,9 +18,13 @@ function c(type, props) {
 
 /**
  * Allow tree structures, should be able to nest children
+ * 
+ * EXTRA
+ * extract styles so their not inlined
  */
 let div = c('div', {
   class: 'red',
+  style: 'color: red; font-weight: bold;',
   'data-id': 1,
   text: 'YELLOW!!'
 })
