@@ -29,35 +29,41 @@ Output: [[1,7]]
 
 /**
  * https://leetcode.com/problems/insert-interval/discuss/298982/Javascript-Solution-95-fast
+ * 
+ * if newinterval is before the first prepend it
+ * if newinterval is after last interval push it onto the array
+ * if newinterval is in between, merge it
+ * 
  * @param {number[][]} intervals
  * @param {number[]} newInterval
  * @return {number[][]}
  */
 var insert = function (intervals, newInterval) {
-  // non overlaping to begin with but could overlap when inserting a new interval
+  out = []
 
-  const result = []
-
-  for (const [start, end] of intervals) {
+  for ([start, end] of intervals) {
+    // MISSED!!! end < newInterval[0] --> this would mean the new interval is in front of the current interval... so add its not time for the ne winterval yet
+    // we need to add the newinterval in the future or we already added it, so just add the current interval
     if (!newInterval || end < newInterval[0]) {
-      result.push([start, end])
+      // its already been added, just add the rest
+      out.push([start, end])
     } else if (newInterval[1] < start) {
-      // its smaller than the start at it at the beginning, then add the start end, then the rest of the looping will add the rest
-      result.push(newInterval)
-      newInterval = null // set new INterval to null once its been added
-      result.push([start, end])
+      // the end is before the first one, push it to the beginning
+      out.push(newInterval)
+      newInterval = null
+      out.push([start, end])
+      continue
     } else {
-      // theres an overlap and we need to merge
       newInterval[0] = Math.min(newInterval[0], start)
       newInterval[1] = Math.max(newInterval[1], end)
     }
   }
 
-  // push it at the end if it hasnt been added yet
   if (newInterval) {
-    result.push(newInterval)
+    out.push(newInterval)
   }
-  return result
+
+  return out
 };
 
 console.log(insert([[1, 3], [6, 9]], [2, 5]))
