@@ -30,9 +30,10 @@ Output: [[1,7]]
 /**
  * https://leetcode.com/problems/insert-interval/discuss/298982/Javascript-Solution-95-fast
  * 
- * if newinterval is before the first prepend it
- * if newinterval is after last interval push it onto the array
- * if newinterval is in between, merge it
+ * if newinterval is not set or current interval goes before new interval starts... add the current interval
+ * if newinterval end is less than current interval start... add it, then set newinterval to null, then add the current interval
+ * else recalulate the new interval/ this is mergeing
+ * after loop check and add the interval if it hasent
  * 
  * @param {number[][]} intervals
  * @param {number[]} newInterval
