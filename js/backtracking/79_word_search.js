@@ -49,11 +49,13 @@ function dfs(board, word, row, col) {
   // now that were popping off the front char were always looking to match the first char
   if (isOutOfBounds(board, row, col) || board[row][col] !== word[0]) return false
 
-  // take away a candidate
+  // save the current chaar to be put back in later
   const curChar = board[row][col]
+  // take away a candidate
   const newWord = word.substr(1)
 
   // disable the current char (just like count number of islands)
+  // we take ot off the board as an option, this is how we ensure no dplicates
   board[row][col] = '#'
 
   const results = dfs(board, newWord, row + 1, col)
@@ -62,7 +64,7 @@ function dfs(board, word, row, col) {
     || dfs(board, newWord, row, col - 1)
 
   // this is the backtracking, just like arr.pop()
-  // but why?
+  // at this point we are as deep as possible in the search, add the candidate back in has the stack starts popping off
   board[row][col] = curChar
 
   return results
