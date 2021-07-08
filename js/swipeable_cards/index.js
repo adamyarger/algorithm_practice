@@ -14,6 +14,7 @@ class Cards {
     this.target = null
     this.draggingCard = false
     this.screenX = 0
+    this.targetX = 0
 
     // track when the card goes over a threshold then trigger remove
     this.startX = 0
@@ -41,6 +42,7 @@ class Cards {
 
     this.target = event.target
     //getBoundingClientRect is expensive so its good to do once and not every frame
+    // need to know how far weve moved
     this.targetBCR = this.target.getBoundingClientRect()
     // grab where the pointer is starting the drag horizontally
     this.startX = event.pageX || event.touches[0].pageX
@@ -58,16 +60,29 @@ class Cards {
     if (!this.target) return
     // update current on move so we can measure against start
     this.currentX = event.pageX || event.touches[0].pageX
+    // this will get called a bunch of times
     this.update()
   }
 
   onEnd(event) {
     if (!this.target) return
+
+    // this.currentX = event.pageX || event.changedTouches[0].pageX
+
+    this.targetX = 0
+    let screenX = this.currentX - this.startX
+
+    if (Math.abs(screenX) > this.targetBCR.width * 0.35) {
+      this.targetX = (screenX > 0) ? this.targetBCR.width : -this.targetBCR.width
+    }
+
     this.draggingCard = false
   }
 
   update() {
-    // console.log('fire')
+    // this will cause an infinite loop
+    // to unset it reset the target
+    // this will trigger update for each frame with a rate of 60fps
     requestAnimationFrame(this.update)
 
     if (!this.target) return
@@ -76,11 +91,17 @@ class Cards {
     if (this.draggingCard) {
       this.screenX = this.currentX - this.startX
     } else {
-      // we want to snap back to the middle
-      this.screenX += (0 - this.screenX) / 10
+      // use targetx chich can either be back to the middle or off screen to delete
+      // this controls the speed... but how? probably has to do with requestAnimationFrame
+      this.screenX += (this.targetX - this.screenX) / 4
     }
 
+    const normalizeDragDistance = (Math.abs(this.screenX) / this.targetBCR.width)
+    // using an exponent make the opacity change on a exponential curve instead of linear
+    const opacity = 1 - (normalizeDragDistance ** 3)
+
     this.target.style.transform = `translateX(${this.screenX}px)`
+    this.target.style.opacity = opacity
 
     // infinite lookup... why?
 
