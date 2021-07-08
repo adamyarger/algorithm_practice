@@ -49,41 +49,43 @@ Explanation: The largest subset is {"0", "1"}, so the answer is 2.
  * well be adding together since were counting
  */
 var findMaxForm = function (strs, m, n) {
-  return recur(strs, m, n, 0)
+  // create an array of zero and one counts
+  const counts = strs.reduce((acc, next) => {
+    const arr = next.split('')
+    const level = [0, 0]
+
+    arr.forEach(item => {
+      if (item === '0') {
+        level[0] += 1
+      } else {
+        level[1] += 1
+      }
+    })
+    acc.push(level)
+
+    return acc
+  }, [])
+
+  return recur(counts, m, n, 0)
 };
 
-function recur(strs, m, n, index) {
-  // base case placeholder... this is not correct
-  if (m < 0 || n < 0 || index >= strs.length) {
-    return 0
+function recur(counts, mZeroes, nOnes, index) {
+  const curCounts = counts[index]
+  // base cases
+  // 1. both m and n are equal to 0 or index is out of bounds
+  // 0 and 0 is an edge case
+  if ((mZeroes == 0 && nOnes == 0) || index >= counts.length) return 0
+
+  // 2. n or m is less than 0, call recur again to skip this one
+  // if either will go over then we cant pick it, move onto the next one
+  if (curCounts[0] > mZeroes || curCounts[1] > nOnes) {
+    return recur(counts, mZeroes, nOnes, index + 1)
   }
 
-  // get the counts
-  const counts = strs[index].split('').reduce((acc, next) => {
-    if (next === '1') {
-      acc.one += 1
-    } else {
-      acc.zero += 1
-    }
-    return acc
-  }, { one: 0, zero: 0 })
+  const include = recur(counts, mZeroes - curCounts[0], nOnes = curCounts[1], index + 1) + 1
+  const exclude = recur(counts, mZeroes, nOnes, index + 1)
 
-  // console.log(counts)
-
-  // choose an item or dont choose an item
-  // n 1's and m 0's
-  let choose0 = 0
-  if (counts.zero) {
-    choose0 = recur(strs, m - counts.zero, n, index + 1) + 1
-  }
-  let choose1 = 0
-  if (counts.one) {
-    choose1 = recur(strs, m, n - counts.one, index + 1) + 1
-  }
-
-  console.log(choose1, choose0)
-
-  return Math.max(choose1, choose0)
+  return Math.max(include, exclude)
 }
 
 const strs = ["10", "0001", "111001", "1", "0"]
