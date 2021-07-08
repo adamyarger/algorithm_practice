@@ -47,6 +47,8 @@ Explanation: The largest subset is {"0", "1"}, so the answer is 2.
  * the big difference is tracking 2 values that work towards the base case instead of one total weight
  *  
  * well be adding together since were counting
+ * 
+ * https://leetcode.com/problems/ones-and-zeroes/discuss/814077/Dedicated-to-Beginners
  */
 var findMaxForm = function (strs, m, n) {
   // create an array of zero and one counts
