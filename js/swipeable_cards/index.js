@@ -28,9 +28,13 @@ class Cards {
 
   addEventListeners() {
     // put all our event listeners in one place to be registered
-    document.addEventListener('touchstart', this.onStart) // acts as a throttle
+    document.addEventListener('touchstart', this.onStart)
     document.addEventListener('touchmove', this.onMove)
     document.addEventListener('touchend', this.onEnd)
+
+    document.addEventListener('mousedown', this.onStart)
+    document.addEventListener('mousemove', this.onMove)
+    document.addEventListener('mouseup', this.onEnd)
   }
 
   // https://www.youtube.com/watch?v=rBSY7BOYRo4&ab_channel=GoogleChromeDevelopers
@@ -49,6 +53,7 @@ class Cards {
     this.currentX = this.startX
 
     // this stops tons of repaints... but how?
+    // boosts performance letting the browser know were about to change transform
     this.target.style.willChange = 'transform'
     this.draggingCard = true
 
@@ -103,7 +108,56 @@ class Cards {
     this.target.style.transform = `translateX(${this.screenX}px)`
     this.target.style.opacity = opacity
 
-    // infinite lookup... why?
+    const isNearlyInvisible = (opacity < 0.01)
+    const isNearlyAtStart = (Math.abs(this.screenX) < 0.01) // for snapping back into the middle
+
+    if (!this.draggingCard) {
+      if (isNearlyInvisible) {
+        let isAfterCurrentTarget = false
+
+        if (this.target && this.target.parentNode) {
+          const onTransitionEnd = event => {
+            this.target = null
+            event.target.style.transition = 'none'
+            event.target.removeEventListener('transitionend', onTransitionEnd)
+          }
+
+          for (let i = 0; i < this.cards.length; i++) {
+            const card = this.cards[i]
+
+
+            if (card === this.target) {
+              // set the starting point
+              isAfterCurrentTarget = true
+              continue
+            }
+
+            if (!isAfterCurrentTarget) continue
+
+            // 20 is for the collpasing margins
+            card.style.transform = `translateY(${this.targetBCR.height + 20}px)`
+
+            // why do this??
+            requestAnimationFrame(_ => {
+              card.style.transition = `transform 0.15s cubic-bezier(0,0,0.31, 1)`
+              card.style.transform = 'none'
+            })
+
+            card.addEventListener('transitionend', onTransitionEnd)
+          }
+
+          // remove the node a delete its reference
+
+          this.target.parentNode.removeChild(this.target)
+        }
+      }
+
+      if (isNearlyAtStart) {
+        this.target.style.willChange = 'initial'
+        this.target.style.transform = 'none'
+        this.target = null
+      }
+    }
 
   }
 
