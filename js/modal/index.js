@@ -48,7 +48,12 @@ function modal() {
   }
 
   function hideModal() {
-    document.querySelector('.modal').classList.remove('show')
+    const modal = document.querySelector('.modal')
+    modal.style.opacity = 0
+    modal.style.transform = `translate(50%, -500%)`
+    setTimeout(() => {
+      modal.classList.remove('show')
+    }, 150);
   }
 
   function setOpenListeners() {
