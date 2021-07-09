@@ -8,6 +8,7 @@ function modal() {
   let isOpen = false
   let modalClass = ''
   let _onClose;
+  // let bgId = null
 
   function addBodyClass() {
     const body = document.querySelector('body')
@@ -15,9 +16,13 @@ function modal() {
   }
 
   function addBackdrop() {
-    const el = `<div class="modal-backdrop"></div>`
+    const el = `<div class="modal-backdrop" style="opacity: 0;"></div>`
     const frag = document.createRange().createContextualFragment(el)
     document.querySelector('body').appendChild(frag)
+    // wait for call stack to clear
+    setTimeout(() => {
+      document.querySelector('.modal-backdrop').style.opacity = 1
+    });
   }
 
   function showModal() {
@@ -25,7 +30,11 @@ function modal() {
   }
 
   function removeBackdrop() {
-    document.querySelector('.modal-backdrop').remove()
+    const backdrop = document.querySelector('.modal-backdrop')
+    backdrop.style.opacity = 0
+    setTimeout(() => {
+      backdrop.remove()
+    }, 150);
   }
 
   function removeBodyClass() {
