@@ -48,35 +48,40 @@ Output: true
  * were looking for a true value so it will be a s1 or s2 return value
  */
 var isInterleave = function (s1, s2, s3) {
-  return dfs(s1, s2, s3)
+  memo = {}
+  return dfs(s1, s2, s3, memo)
 };
 
-function dfs(s1, s2, s3) {
-  // base case indxes go over or s1 and s2 dont match
-  // subtract from s1 and s2 when you use them... then add them back... backtracking
-  // that wau there no need for s1 and s2 indexes its always the first char
-  // return true if s1 == 0 and s1 == 0 and index is at the end
-
+function dfs(s1, s2, s3, memo) {
   if (s1.length === 0 && s2.length === 0 && s3.length === 0) {
     return true // found it
   }
 
-  if ((s1 && s1[0] === s3[0]) && dfs(s1.substr(1), s2, s3.substr(1))) {
+  const key = `${s1.length}+${s2.length}`
+  if (key in memo) {
+    return false
+  }
+
+  if ((s1 && s1[0] === s3[0]) && dfs(s1.substr(1), s2, s3.substr(1), memo)) {
     return true
   }
 
-  if ((s2 && s2[0] === s3[0]) && dfs(s1, s2.substr(1), s3.substr(1))) {
+  if ((s2 && s2[0] === s3[0]) && dfs(s1, s2.substr(1), s3.substr(1), memo)) {
     return true
   }
+
+  // this sone dosnt work... save it
+  memo[`${s1.length}+${s2.length}`] = true
 
   return false
 }
 
-// let s1 = "aabcc"
-// let s2 = "dbbca"
-// let s3 = "aadbbcbcac"
-
 let s1 = "aabcc"
 let s2 = "dbbca"
-let s3 = "aadbbbaccc"
+let s3 = "aadbbcbcac"
+console.log(isInterleave(s1, s2, s3))
+
+s1 = "aabcc"
+s2 = "dbbca"
+s3 = "aadbbbaccc"
 console.log(isInterleave(s1, s2, s3))
