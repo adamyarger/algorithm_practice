@@ -24,38 +24,46 @@ function debounce(func, wait, immediate) {
 };
 
 /**
- * init vars outside the function that will be returned
- * return function
- * if throttled set args and contex then return
  * 
- * set throttled
- * apply fn
- * 
- * settimeout
- * throttle false
- * 
+ * STEPS
+ * save var on outside function scope
+ * if throttled set the new callback functions arguments
+ * if not reset throttled and call the callback
+ * restart timeout to throttle --> recursivly call wrapper again
  * 
  * @param {*} fn 
  * @param {*} wait 
  */
 function throttle(fn, wait) {
+  // is there a current active throttle?
   let throttled = false
-  let args
+
+  // why do these need to be on the outside?
   let context
+  let args
 
   function wrapper() {
     if (throttled) {
+      // if were still throttling, set the new context and arguments
+      // then return... its not time to fire yet
       args = arguments
       context = this
+
+      console.log(args, context)
       return
     }
 
+    // no longer throttled. reset it and call the function callback
     throttled = true
     fn.apply(context, arguments)
 
+    // set up the next throttle
     setTimeout(() => {
+      // when the wait is over this gets fired
       throttled = false
       if (args) {
+        // why call this again? because as long as the event is being fired we 
+        // need to keep checking when we can call our throttled function
         wrapper.apply(context, args)
         args = null
         context = null
