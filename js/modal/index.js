@@ -26,7 +26,13 @@ function modal() {
   }
 
   function showModal() {
-    document.querySelector('.modal').classList.add('show')
+    const modal = document.querySelector('.modal')
+    modal.style.opacity = 0
+    modal.classList.add('show')
+    setTimeout(() => {
+      modal.style.transform = `translate(50%, -50%)`
+      modal.style.opacity = 1
+    });
   }
 
   function removeBackdrop() {
