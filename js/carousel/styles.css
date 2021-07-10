@@ -1,0 +1,45 @@
+/*
+- should use css variables
+- do it based on chakra: https://chakra-ui.com/docs/theming/theme
+- nail these down in your head so you can wip up clean designs quickly
+*/
+html, body {
+    margin: 0;
+}
+
+body {
+    background: #E2E8F0;
+}
+
+.container {
+    max-width: 760px;
+    margin: 0 auto;
+    margin-top: 120px;
+}
+
+.card {
+    width: 100%;
+    height: auto;
+    background: #FFF;
+    border-radius: 3px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.carousel {
+    min-height: 100px;
+}
+
+.gallery {
+    border-radius: 3px;
+    width: 100%;
+    height: 250px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.gallery-image {
+    height: 100%;
+    width: auto;
+}
