@@ -86,6 +86,11 @@ s2 = "dbbca"
 s3 = "aadbbbaccc"
 console.log(isInterleave(s1, s2, s3))
 
+s1 = "abc"
+s2 = "aba"
+s3 = "aabcba"
+console.log(isInterleave(s1, s2, s3))
+
 
 function bottommUp(s1, s2, s3) {
   if (s3.length !== s1.length + s2.length) return false
@@ -98,12 +103,22 @@ function bottommUp(s1, s2, s3) {
   for (let row = 0; row < cols; row++) {
     for (let col = 0; col < rows; col++) {
       if (row == 0 && col == 0) {
+        // if at 0 and 0 set it as true so we can fullfill 0 based ones in the future
         memo[row][col] = true
-      } else if (row == 0) {
-
+      } else if (row === 0) {
+        // if left cell is true and current s2 index === current s3 index
+        memo[row][col] = memo[row][col - 1] && s2[col - 1] === s3[row + col - 1]
+      } else if (col === 0) {
+        // if above cell is true and current s1 index === current s3 index
+        memo[row][col] = memo[row - 1][col] && s1[row - 1] === s3[row + col - 1]
+      } else {
+        // choose either at
+        memo[row][col] = (memo[row][col - 1] && s2[col - 1] === s3[row + col - 1]) || (memo[row - 1][col] && s1[row - 1] === s3[row + col - 1])
       }
     }
   }
+
+  return memo[s1.length][s2.length]
 }
 
 
@@ -118,25 +133,4 @@ console.log(bottommUp(s1, s2, s3))
 // console.log(bottommUp(s1, s2, s3))
 
 
-// public class Solution {
-//   public boolean isInterleave(String s1, String s2, String s3) {
-//     if (s3.length() != s1.length() + s2.length()) {
-//       return false;
-//     }
-//     boolean dp[][] = new boolean[s1.length() + 1][s2.length() + 1];
-//     for (int i = 0; i <= s1.length(); i++) {
-//       for (int j = 0; j <= s2.length(); j++) {
-//         if (i == 0 && j == 0) {
-//           dp[i][j] = true;
-//         } else if (i == 0) {
-//           dp[i][j] = dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1);
-//         } else if (j == 0) {
-//           dp[i][j] = dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1);
-//         } else {
-//           dp[i][j] = (dp[i - 1][j] && s1.charAt(i - 1) == s3.charAt(i + j - 1)) || (dp[i][j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1));
-//         }
-//       }
-//     }
-//     return dp[s1.length()][s2.length()];
-//   }
-// }
+
