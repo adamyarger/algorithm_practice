@@ -40,18 +40,39 @@ function Carousel(el) {
 Carousel.prototype.setImages = function (images) {
   this.images = images
 
+  // add left and right buttons
+  // const left = c('div')
+
   const gallery = c('div', {
     class: 'gallery'
   })
 
   this.images.forEach(img => {
-    gallery.appendChild(c('img', {
+    const el = c('div', {
+      class: 'img-contain',
+      style: `width: ${this.el.offsetWidth}px`
+    })
+    el.appendChild(c('img', {
       src: img,
       class: 'gallery-image'
     }))
+    gallery.appendChild(el)
   })
 
   this.el.appendChild(gallery)
+
+
+
+  console.log(galleryWidth)
+
+  // get container width
+  // center image and fill height
+
+  // make sure each photo has a container that fills the gallery size
+
+  // use translateX to slide over to the next img
+
+  // if full width dont display images to save on rendering performance
 }
 
 

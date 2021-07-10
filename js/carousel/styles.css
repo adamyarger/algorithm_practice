@@ -27,19 +27,27 @@ body {
 
 .carousel {
     min-height: 100px;
+    overflow: hidden;
 }
 
 .gallery {
     border-radius: 3px;
-    width: 100%;
+    width: max-content; /* DOES not work on IE */
     height: 250px;
-    overflow-x: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    will-change: transform;
+    transform: translateX(0px);
 }
 
 .gallery-image {
     height: 100%;
     width: auto;
+}
+
+.img-contain {
+    display: flex;
+    justify-content: center;
 }
