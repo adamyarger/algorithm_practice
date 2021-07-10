@@ -28,6 +28,7 @@ body {
 .carousel {
     min-height: 100px;
     overflow: hidden;
+    position: relative;
 }
 
 .gallery {
@@ -40,6 +41,7 @@ body {
     flex-wrap: nowrap;
     will-change: transform;
     transform: translateX(0px);
+    transition: translate 200ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .gallery-image {
@@ -50,4 +52,22 @@ body {
 .img-contain {
     display: flex;
     justify-content: center;
+}
+
+.left {
+    height: 100%;
+    width: 50px;
+    position: absolute;
+    left: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.right {
+    height: 100%;
+    width: 50px;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    z-index: 1;
 }

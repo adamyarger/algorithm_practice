@@ -24,12 +24,16 @@ function c(type, props = {}) {
   return el
 }
 
+function textToEl(text) {
+  return document.createRange().createContextualFragment(text)
+}
+
 function Carousel(el) {
   this.images = []
   this.index = 0
   this.el = el
-
-  console.log(this.el)
+  this.leftActive = false
+  this.rightActive = false
 
   this.print = function () {
     console.log('dude')
@@ -41,7 +45,19 @@ Carousel.prototype.setImages = function (images) {
   this.images = images
 
   // add left and right buttons
-  // const left = c('div')
+  const left = textToEl(`
+    <div class="left">
+      prev
+    </div>
+  `)
+  this.el.appendChild(left)
+
+  const right = textToEl(`
+    <div class="right">
+      next
+    </div>
+  `)
+  this.el.appendChild(right)
 
   const gallery = c('div', {
     class: 'gallery'
@@ -63,18 +79,19 @@ Carousel.prototype.setImages = function (images) {
 
 
 
-  console.log(galleryWidth)
+  // register click events for left and right
+  // add transition via animate frame request
+  setTimeout(() => {
+    document.querySelector('.right').addEventListener('mouseup', () => {
+      // keep track of index and calculate px
+      this.el.querySelector('.gallery').style.transform = `translateX(-720px)`
+    })
 
-  // get container width
-  // center image and fill height
-
-  // make sure each photo has a container that fills the gallery size
-
-  // use translateX to slide over to the next img
-
-  // if full width dont display images to save on rendering performance
+    document.querySelector('.left').addEventListener('mouseup', () => {
+      this.el.querySelector('.gallery').style.transform = `translateX(0px)`
+    })
+  });
 }
-
 
 Carousel.prototype.getImages = function () {
   return this.images
