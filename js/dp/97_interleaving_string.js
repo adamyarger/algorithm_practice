@@ -92,6 +92,24 @@ s3 = "aabcba"
 console.log(isInterleave(s1, s2, s3))
 
 
+/**
+ * 
+ * @param {*} s1 
+ * @param {*} s2 
+ * @param {*} s3 
+ * @returns 
+ * 
+ * 
+ * create a matrix with one extra cell for padding
+ * set value to false by default
+ * loop through matrix
+ * if zero and zero index set to true... need this for looking left and down on fture zero indexes
+ * if row is 0
+ * if col is 0 
+ * else either one works
+ * 
+ * whatever one we choose, it means that the remainder of letters used so far have to have already been used
+ */
 function bottommUp(s1, s2, s3) {
   if (s3.length !== s1.length + s2.length) return false
 
@@ -106,6 +124,8 @@ function bottommUp(s1, s2, s3) {
         // if at 0 and 0 set it as true so we can fullfill 0 based ones in the future
         memo[row][col] = true
       } else if (row === 0) {
+        // we have to make sure the char before has been used in order to use the current
+        // thats why we check this memo[row][col - 1]
         // if left cell is true and current s2 index === current s3 index
         memo[row][col] = memo[row][col - 1] && s2[col - 1] === s3[row + col - 1]
       } else if (col === 0) {
