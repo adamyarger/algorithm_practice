@@ -3,6 +3,11 @@
  * when an emit gets called loop through and fire each callback under that name
  * 
  * how do we release? probably delete from
+ * 
+ * 
+ * facebooks: https://github.com/facebookarchive/emitter/blob/master/src/EventSubscriptionVendor.js
+ * 
+ * why is theres so robust?
  */
 function Emitter() {
   let subscribers = {}
@@ -51,7 +56,7 @@ window.addEventListener('load', () => {
 
   emitter.subscribe('onSelect', dude)
 
-  emitter.subscribe('onSelect', (dude) => {
+  emitter.subscribe('onSelect', () => {
     console.log(this)
   })
 
