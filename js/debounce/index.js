@@ -1,70 +1,72 @@
 
 
 /**
- * how do we declare a function type with unknown params and return values?
- * creates and returns a new debounced function whic is postponed until after the milleseconds told to wait
+ * keep reimplemnting a function as lang as its being triggered
+ * keep canceling the function as long as its being triggered within a wait time
+ * when the wait time is over fire it once
  * @param func 
  * @param wait 
  * @param immediate 
  */
 function debounce(func, wait, immediate) {
-  let timeout;
+  let timeout
+  let context
+  let args
+
   return function () {
-    const context = this
-    const args = arguments;
-    const later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
+    // if were in timeout save the latest args and context
+    if (timeout) {
+      context = this
+      args = arguments
+    }
+
+    const later = () => {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+
+    // timout will keep getting set so call now cant fire until later is fire and clears it
+    const callNow = immediate && !timeout
+    // if a timeout exists clear it... were about to start a new one
+    clearTimeout(timeout)
     timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
+    if (callNow) func.apply(context, args)
+  }
 };
 
 /**
  * 
  * STEPS
- * save var on outside function scope
- * if throttled set the new callback functions arguments
- * if not reset throttled and call the callback
- * restart timeout to throttle --> recursivly call wrapper again
+ * 
+ * 
+ * limit the amount of call to 1 time per wait time
  * 
  * @param {*} fn 
  * @param {*} wait 
  */
 function throttle(fn, wait) {
-  // is there a current active throttle?
   let throttled = false
-
-  // why do these need to be on the outside?
   let context
   let args
 
   function wrapper() {
     if (throttled) {
-      // if were still throttling, set the new context and arguments
-      // then return... its not time to fire yet
-      args = arguments
       context = this
-
-      console.log(args, context)
+      args = arguments
       return
     }
 
-    // no longer throttled. reset it and call the function callback
+    fn.apply(context, args)
     throttled = true
-    fn.apply(context, arguments)
 
-    // set up the next throttle
-    setTimeout(() => {
-      // when the wait is over this gets fired
+    setTimeout(function () {
+      // times up unthrottle
       throttled = false
+
+      // args lets us know if a function was waiting
       if (args) {
-        // why call this again? because as long as the event is being fired we 
-        // need to keep checking when we can call our throttled function
         wrapper.apply(context, args)
+        // fired... reset to base
         args = null
         context = null
       }
@@ -79,7 +81,7 @@ function throttle(fn, wait) {
 const myEfficientFn = debounce(function () {
   const frag = document.createRange().createContextualFragment(`<p>debounce</p>`)
   document.querySelector('.debounce').appendChild(frag)
-}, 300);
+}, 300, true);
 
 const throttleCb = throttle(function () {
   const frag = document.createRange().createContextualFragment(`<p>throttle</p>`)
