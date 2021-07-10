@@ -38,7 +38,7 @@ function merge() {
 
         if (deep && isCloneable(value)) {
           const base = Array.isArray(value) ? [] : {}
-          result[key] = extend(
+          result[key] = merge(
             true,
             Object.prototype.hasOwnProperty.call(result, key) && !isUnextendable(result[key])
               ? result[key] // its a primitive value
@@ -79,6 +79,8 @@ const obj = {
   }
 }
 
-const newObj = merge(obj, { a: 'dude', foo: 'var' })
+const newObj = merge(true, {}, obj, { a: 'dude', foo: 'var' })
 
+newObj.b.arr.push('bro')
 console.log(newObj)
+console.log(obj)
