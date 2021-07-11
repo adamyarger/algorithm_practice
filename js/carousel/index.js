@@ -102,12 +102,13 @@ Carousel.prototype.setEvents = function () {
 
     // hide prev show next
     this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
+    this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
     this.el.querySelector('.gallery').style.transform = `translateX(-${this.calcTransform()}px)`
   })
 
   document.querySelector('.left').addEventListener('mouseup', () => {
     this.index--
-    this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'none'
+    // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'none'
     const calc = this.calcTransform()
     const val = calc === 0 ? 0 : -calc
     this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
