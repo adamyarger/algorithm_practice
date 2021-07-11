@@ -44,36 +44,23 @@ function debounce(func, wait, immediate) {
  * @param {*} fn 
  * @param {*} wait 
  */
-function throttle(fn, wait) {
-  let throttled = false
+function throttle(fn, time) {
   let context
   let args
+  let timeoutId;
 
-  function wrapper() {
-    if (throttled) {
+  return function () {
+    if (timeoutId) {
       context = this
       args = arguments
-      return
+      return;
     }
 
-    fn.apply(context, args)
-    throttled = true
-
-    setTimeout(function () {
-      // times up unthrottle
-      throttled = false
-
-      // args lets us know if a function was waiting
-      if (args) {
-        wrapper.apply(context, args)
-        // fired... reset to base
-        args = null
-        context = null
-      }
-    }, wait);
+    timeoutId = setTimeout(() => {
+      fn.apply(context, args);
+      timeoutId = null;
+    }, time);
   }
-
-  return wrapper
 }
 
 
