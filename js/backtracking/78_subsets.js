@@ -22,7 +22,7 @@ Output: [[],[0]]
  * 
  *  use the pop way
  */
-var subsets = function (nums) {
+var isubsets = function (nums) {
   const out = []
   backtrack(nums, [], out)
   return out
@@ -34,5 +34,32 @@ function backtrack(nums, cur, out) {
     backtrack(nums.slice(i + 1), cur.concat(item), out)
   })
 }
+
+console.log(isubsets([1, 2, 3]))
+
+
+var subsets = function (nums) {
+  let len = nums.length
+  const out = []
+
+  function backtrack(start, cur) {
+    // needs to be a copy... why?
+    // because were using the same array and it wouold be pushing by reference
+    out.push(cur.slice())
+
+    for (let i = start; i < len; i++) {
+      // when using push we need to pop after because arrrrays are passed by reference
+      // the concat in the other one returns  anew array so its not a problem
+      cur.push(nums[i])
+      backtrack(i + 1, cur)
+      cur.pop()
+    }
+  }
+
+  backtrack(0, [])
+  return out
+};
+
+
 
 console.log(subsets([1, 2, 3]))
