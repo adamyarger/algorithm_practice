@@ -2,8 +2,8 @@
 function memo(func) {
   const memo = function (key) {
     const cache = memo.cache;
-    console.log(cache)
-    const address = '' + key;
+    const address = Array.prototype.slice.call(arguments).join('_')
+    console.log(address)
     if (!(address in cache)) cache[address] = func.apply(this, arguments);
     return cache[address];
   };
@@ -11,11 +11,11 @@ function memo(func) {
   return memo;
 }
 
-const fib = function (n) {
+const fibonacci = memo(function (n) {
   return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
-}
+})
 
-var fibonacci = memo(fib);
+// var fibonacci = memo(fib);
 
 console.log(fibonacci(15))
 
