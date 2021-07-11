@@ -30,21 +30,20 @@ function textToEl(text) {
 
 function Carousel(el) {
   this.images = []
+  this.imageNodes = []
   this.index = 0
   this.el = el
   this.leftActive = false
   this.rightActive = false
+  this.slideWidth = 0
 
-  this.print = function () {
-    console.log('dude')
+  this.calcTransform = function () {
+    return this.index * this.slideWidth
   }
 }
 
-// whats the difference between prototype function expression and adding function inside as this.func?
-Carousel.prototype.setImages = function (images) {
-  this.images = images
-
-  // add left and right buttons
+// should this be private?
+Carousel.prototype.addGallery = function () {
   const left = textToEl(`
     <div class="left">
       prev
@@ -63,34 +62,56 @@ Carousel.prototype.setImages = function (images) {
     class: 'gallery'
   })
 
-  this.images.forEach(img => {
+  // in rality we dont need all these ndoes, we only need a buffer
+  this.imageNodes = this.images.map((img, index) => {
+    const display = index === this.index ? 'initial' : 'none'
     const el = c('div', {
       class: 'img-contain',
-      style: `width: ${this.el.offsetWidth}px`
+      style: `width: ${this.slideWidth}px;`
     })
     el.appendChild(c('img', {
       src: img,
-      class: 'gallery-image'
+      class: 'gallery-image',
+      style: `display: ${display};`
     }))
     gallery.appendChild(el)
+    return el
   })
 
   this.el.appendChild(gallery)
+}
 
+// can we use a contructor? was that dded when classes were?
 
+// whats the difference between prototype function expression and adding function inside as this.func?
+Carousel.prototype.setImages = function (images) {
+  this.images = images
+  this.slideWidth = this.el.offsetWidth
 
+  this.addGallery()
+  this.setEvents()
+}
+
+Carousel.prototype.setEvents = function () {
+  // ite janky... should hide images not in view. show only next and prev and current
+  // need to keep track of nodes
   // register click events for left and right
   // add transition via animate frame request
-  setTimeout(() => {
-    document.querySelector('.right').addEventListener('mouseup', () => {
-      // keep track of index and calculate px
-      this.el.querySelector('.gallery').style.transform = `translateX(-720px)`
-    })
+  document.querySelector('.right').addEventListener('mouseup', () => {
+    this.index++
 
-    document.querySelector('.left').addEventListener('mouseup', () => {
-      this.el.querySelector('.gallery').style.transform = `translateX(0px)`
-    })
-  });
+    // hide prev show next
+    this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
+    this.el.querySelector('.gallery').style.transform = `translateX(-${this.calcTransform()}px)`
+  })
+
+  document.querySelector('.left').addEventListener('mouseup', () => {
+    this.index--
+    this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'none'
+    const calc = this.calcTransform()
+    const val = calc === 0 ? 0 : -calc
+    this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
+  })
 }
 
 Carousel.prototype.getImages = function () {
