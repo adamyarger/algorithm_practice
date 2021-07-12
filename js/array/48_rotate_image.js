@@ -17,14 +17,10 @@ Output: [[7,4,1],[8,5,2],[9,6,3]]
  * @param {number[][]} matrix
  * @return {void} Do not return anything, modify matrix in-place instead.
  * 
- * MUSt be in place
+ * STEPS
+ * transpose the matrix (swap i,j and j, i)
+ * reverse each row
  * 
- * are the value always 1 - n?
- * if so we could use them as indexes
- * 
- * is this like rotated binary search?
- * 
- * since its in place, that means swapping but what gets swapped?
  */
 var rotate = function (matrix) {
   const len = matrix[0].length
@@ -41,6 +37,7 @@ var rotate = function (matrix) {
     }
   }
 
+  // reverse each row
   for (let i = 0; i < len; i++) {
     // Math.floor(len/2) is the mid point
     for (let j = 0; j < Math.floor(len / 2); j++) {
