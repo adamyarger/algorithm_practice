@@ -36,6 +36,7 @@ function Carousel(el) {
   this.leftActive = false
   this.rightActive = false
   this.slideWidth = 0
+  this.intervalId = null
 
   this.calcTransform = function () {
     return this.index * this.slideWidth
@@ -90,6 +91,7 @@ Carousel.prototype.setImages = function (images) {
 
   this.addGallery()
   this.setEvents()
+  this.cycle(3000)
 }
 
 Carousel.prototype.setEvents = function () {
@@ -98,21 +100,54 @@ Carousel.prototype.setEvents = function () {
   // register click events for left and right
   // add transition via animate frame request
   document.querySelector('.right').addEventListener('mouseup', () => {
-    this.index++
-
-    // hide prev show next
-    this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
-    this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
-    this.el.querySelector('.gallery').style.transform = `translateX(-${this.calcTransform()}px)`
+    this.next()
+    this.cycle(3000)
   })
 
   document.querySelector('.left').addEventListener('mouseup', () => {
-    this.index--
-    // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'none'
-    const calc = this.calcTransform()
-    const val = calc === 0 ? 0 : -calc
-    this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
+    this.prev()
+    this.cycle(3000)
   })
+}
+
+// reset timer on events
+Carousel.prototype.next = function () {
+  this.index++
+
+  if (this.index === this.images.length) {
+    this.index = 0
+  }
+
+
+  this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
+  if (this.index) {
+    this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
+  }
+  this.el.querySelector('.gallery').style.transform = `translateX(-${this.calcTransform()}px)`
+}
+
+Carousel.prototype.prev = function () {
+  this.index--
+  // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'none'
+  const calc = this.calcTransform()
+  const val = calc === 0 ? 0 : -calc
+  this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
+}
+
+Carousel.prototype.cycle = function (wait) {
+
+  clearInterval(this.intervalId)
+  console.log('cycle')
+
+  // cycle through every x amount of time
+  // needs to be named to cancel
+
+  // why dos setINterval set this to window???
+
+  // what happens when we hit the end of images.. should delete or go to beginning
+  this.intervalId = setInterval(() => {
+    // this.next()
+  }, wait);
 }
 
 Carousel.prototype.getImages = function () {

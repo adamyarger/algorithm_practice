@@ -39,7 +39,7 @@
                 return res.json()
             })
             .then(data => {
-                carousel.setImages(extractImages(data))
+                carousel.setImages(extractImages(data).slice(0, 3))
                 console.log(carousel.getImages())
             })
 
