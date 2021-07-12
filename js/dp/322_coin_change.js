@@ -43,6 +43,8 @@ Output: 2
  - do all variations from brute force to optimized
  - https://leetcode.com/problems/coin-change/discuss/77409/Evolve-from-brute-force-to-optimal-a-review-of-all-solutions
 
+//  https://github.com/mission-peace/interview/blob/master/src/com/interview/dynamic/CoinChangingMinimumCoin.java
+
 
  since were looking for the smallest amoujt of coins... the best answer will contain the largest coins possible that work
  start with the largest coins and work down till you find a solution
