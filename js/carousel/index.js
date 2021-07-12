@@ -47,14 +47,14 @@ function Carousel(el) {
 Carousel.prototype.addGallery = function () {
   const left = textToEl(`
     <div class="left">
-      prev
+      <div class="arrow-left"></div>
     </div>
   `)
   this.el.appendChild(left)
 
   const right = textToEl(`
     <div class="right">
-      next
+      <div class="arrow-right"></div>
     </div>
   `)
   this.el.appendChild(right)
