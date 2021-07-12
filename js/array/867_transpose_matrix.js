@@ -22,16 +22,7 @@ Output: [[1,4],[2,5],[3,6]]
  * @return {number[][]}
  */
 var transpose = function (matrix) {
-  const len = matrix.length
-
-  // wont work
-  for (let i = 0; i < len; i++) {
-    for (let j = i; j < len; j++) {
-      let temp = matrix[i][j]
-      matrix[i][j] = matrix[j][i]
-      matrix[j][i] = temp
-    }
-  }
+  return matrix[0].map((val, index) => matrix.map(row => row[index]))
 };
 
-print(transpose([[1, 2, 3], [4, 5, 6]]))
+console.log(transpose([[1, 2, 3], [4, 5, 6]]))
