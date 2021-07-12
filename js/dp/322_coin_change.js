@@ -42,27 +42,28 @@ Output: 2
 
  - do all variations from brute force to optimized
  - https://leetcode.com/problems/coin-change/discuss/77409/Evolve-from-brute-force-to-optimal-a-review-of-all-solutions
+
+
+ since were looking for the smallest amoujt of coins... the best answer will contain the largest coins possible that work
+ start with the largest coins and work down till you find a solution
+ thats a greedy algorithm
  */
 var coinChange = function (coins, amount) {
-  const out = []
-  const cur = []
-  // since were looking for an exact amount were going to subtract from amount
-  backtrack(coins, amount, cur, out)
-  console.log(out)
-};
-
-function backtrack(coins, amount, cur, out) {
-  if (amount < 0) return
-  if (amount === 0) {
-    out.push(cur)
-    return
-  }
+  if (amount < 0) return -1
+  if (amount === 0) return 0
+  // set to negative one since thats the default failure answer
+  let cc = -1
 
   for (let i = 0; i < coins.length; i++) {
-    const newAmount = amount - coins[i]
-    backtrack(coins.slice(i), newAmount, cur.concat(coins[i]), out)
+    // move it towards the base case
+    const coin = coinChange(coins, amount - coins[i])
+    if (coin >= 0) {
+      cc = cc < 0 ? coin : Math.min(cc, coin)
+    }
   }
-}
+
+  return cc < 0 ? -1 : cc + 1
+};
 
 const change = coinChange([1, 2, 5], 11)
 console.log(change)
