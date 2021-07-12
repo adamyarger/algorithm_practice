@@ -47,22 +47,35 @@ Output: 2
  since were looking for the smallest amoujt of coins... the best answer will contain the largest coins possible that work
  start with the largest coins and work down till you find a solution
  thats a greedy algorithm
+
+ // iterate through coins
+ call recursion while subtracting the coins value from the amount
+ if coin value is greater than amount coninure the array
+
  */
 var coinChange = function (coins, amount) {
-  if (amount < 0) return -1
+  // if amount is 0 there nothing more we can do
   if (amount === 0) return 0
-  // set to negative one since thats the default failure answer
-  let cc = -1
+
+  // default to infinity so anything found will be better
+  let min = Infinity
 
   for (let i = 0; i < coins.length; i++) {
-    // move it towards the base case
-    const coin = coinChange(coins, amount - coins[i])
-    if (coin >= 0) {
-      cc = cc < 0 ? coin : Math.min(cc, coin)
+    const val = coins[i]
+    if (val > amount) {
+      continue // skip it since its too big
+    }
+    let count = coinChange(coins, amount - val)
+    // anything after this point is on its way up
+
+    // if our newly found coin is smaller then use it as the min
+    if (count < min) {
+      min = count
     }
   }
 
-  return cc < 0 ? -1 : cc + 1
+  min = min === Infinity ? min : min + 1
+  return min
 };
 
 const change = coinChange([1, 2, 5], 11)
