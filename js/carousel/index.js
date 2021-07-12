@@ -11,7 +11,6 @@ function c(type, props = {}) {
   const el = document.createElement(type)
 
   for (let key in props) {
-    // borrow the function in case something weird was passed in
     if (Object.prototype.hasOwnProperty.call(props, key) && props[key] !== 'text') {
       el.setAttribute(key, props[key])
     }
@@ -45,25 +44,23 @@ function Carousel(el) {
 
 // should this be private?
 Carousel.prototype.addGallery = function () {
-  const left = textToEl(`
+  const controls = textToEl(`
     <div class="left">
       <div class="arrow-left"></div>
     </div>
-  `)
-  this.el.appendChild(left)
+    
+    <div class="dots"></div>
 
-  const right = textToEl(`
     <div class="right">
       <div class="arrow-right"></div>
     </div>
   `)
-  this.el.appendChild(right)
+  this.el.appendChild(controls)
 
   const gallery = c('div', {
     class: 'gallery'
   })
 
-  // in rality we dont need all these ndoes, we only need a buffer
   this.imageNodes = this.images.map((img, index) => {
     const display = index === this.index ? 'initial' : 'none'
     const el = c('div', {
@@ -82,23 +79,15 @@ Carousel.prototype.addGallery = function () {
   this.el.appendChild(gallery)
 }
 
-// can we use a contructor? was that dded when classes were?
-
-// whats the difference between prototype function expression and adding function inside as this.func?
 Carousel.prototype.setImages = function (images) {
   this.images = images
   this.slideWidth = this.el.offsetWidth
-
   this.addGallery()
   this.setEvents()
   this.cycle(3000)
 }
 
 Carousel.prototype.setEvents = function () {
-  // ite janky... should hide images not in view. show only next and prev and current
-  // need to keep track of nodes
-  // register click events for left and right
-  // add transition via animate frame request
   document.querySelector('.right').addEventListener('mouseup', () => {
     this.next()
     this.cycle(3000)
@@ -110,14 +99,12 @@ Carousel.prototype.setEvents = function () {
   })
 }
 
-// reset timer on events
 Carousel.prototype.next = function () {
   this.index++
 
   if (this.index === this.images.length) {
     this.index = 0
   }
-
 
   this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
   if (this.index) {
@@ -128,23 +115,13 @@ Carousel.prototype.next = function () {
 
 Carousel.prototype.prev = function () {
   this.index--
-  // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'none'
   const calc = this.calcTransform()
   const val = calc === 0 ? 0 : -calc
   this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
 }
 
 Carousel.prototype.cycle = function (wait) {
-
   clearInterval(this.intervalId)
-  console.log('cycle')
-
-  // cycle through every x amount of time
-  // needs to be named to cancel
-
-  // why dos setINterval set this to window???
-
-  // what happens when we hit the end of images.. should delete or go to beginning
   this.intervalId = setInterval(() => {
     // this.next()
   }, wait);
