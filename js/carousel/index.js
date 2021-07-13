@@ -36,13 +36,12 @@ function Carousel(el) {
   this.rightActive = false
   this.slideWidth = 0
   this.intervalId = null
-
-  this.calcTransform = function () {
-    return this.index * this.slideWidth
-  }
 }
 
-// should this be private?
+Carousel.prototype.calcTransform = function () {
+  return this.index * this.slideWidth
+}
+
 Carousel.prototype.addGallery = function () {
   const controls = textToEl(`
     <div class="left">
@@ -62,8 +61,6 @@ Carousel.prototype.addGallery = function () {
   })
 
   this.imageNodes = this.images.map((img, index) => {
-    const display = index === this.index ? 'initial' : 'none'
-
     const dotClass = index === this.index ? 'dot active' : 'dot'
     const dot = c('div', { class: dotClass, id: `dot-${index}` })
     this.el.querySelector('.dots').appendChild(dot)
@@ -75,7 +72,6 @@ Carousel.prototype.addGallery = function () {
     el.appendChild(c('img', {
       src: img,
       class: 'gallery-image',
-      // style: `display: ${display};`
     }))
     gallery.appendChild(el)
     return el
