@@ -75,7 +75,7 @@ Carousel.prototype.addGallery = function () {
     el.appendChild(c('img', {
       src: img,
       class: 'gallery-image',
-      style: `display: ${display};`
+      // style: `display: ${display};`
     }))
     gallery.appendChild(el)
     return el
@@ -92,6 +92,19 @@ Carousel.prototype.setImages = function (images) {
   this.cycle(3000)
 }
 
+Carousel.prototype.addDotClickEvent = function () {
+  this.el.querySelector('.dots').addEventListener('mouseup', (event) => {
+    if (event.target.classList.contains('dot')) {
+      const index = Number(event.target.getAttribute('id').split('dot-')[1])
+      this.setActive(this.index, index)
+    }
+  })
+}
+
+Carousel.prototype.setIndex = function (prev, index) {
+  this.updateActiveDot(prev, index)
+}
+
 Carousel.prototype.setEvents = function () {
   document.querySelector('.right').addEventListener('mouseup', () => {
     this.next()
@@ -102,10 +115,11 @@ Carousel.prototype.setEvents = function () {
     this.prev()
     this.cycle(3000)
   })
+
+  this.addDotClickEvent()
 }
 
 Carousel.prototype.updateActiveDot = function (prev, index) {
-  // handle going ot first one again
   if (index === this.images.length) {
     this.el.querySelector(`#dot-${0}`).classList.add('active')
   } else {
@@ -115,6 +129,26 @@ Carousel.prototype.updateActiveDot = function (prev, index) {
   this.el.querySelector(`#dot-${prev}`).classList.remove('active')
 }
 
+Carousel.prototype.setActive = function (prev, index) {
+  this.imageNodes[prev]
+
+  this.updateActiveDot(prev, index)
+  this.index = index
+
+  if (index === this.images.length) {
+    this.index = 0
+  }
+
+  // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
+  // if (this.index) {
+  //   this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
+  // }
+  const calc = this.calcTransform()
+  const val = calc === 0 ? 0 : -calc
+  this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
+}
+
+// these should be make active prev next
 Carousel.prototype.next = function () {
   this.updateActiveDot(this.index, this.index + 1)
 
@@ -124,10 +158,10 @@ Carousel.prototype.next = function () {
     this.index = 0
   }
 
-  this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
-  if (this.index) {
-    this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
-  }
+  // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
+  // if (this.index) {
+  //   this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
+  // }
   this.el.querySelector('.gallery').style.transform = `translateX(-${this.calcTransform()}px)`
 }
 
