@@ -63,6 +63,11 @@ Carousel.prototype.addGallery = function () {
 
   this.imageNodes = this.images.map((img, index) => {
     const display = index === this.index ? 'initial' : 'none'
+
+    const dotClass = index === this.index ? 'dot active' : 'dot'
+    const dot = c('div', { class: dotClass, id: `dot-${index}` })
+    this.el.querySelector('.dots').appendChild(dot)
+
     const el = c('div', {
       class: 'img-contain',
       style: `width: ${this.slideWidth}px;`
@@ -99,7 +104,20 @@ Carousel.prototype.setEvents = function () {
   })
 }
 
+Carousel.prototype.updateActiveDot = function (prev, index) {
+  // handle going ot first one again
+  if (index === this.images.length) {
+    this.el.querySelector(`#dot-${0}`).classList.add('active')
+  } else {
+    this.el.querySelector(`#dot-${index}`).classList.add('active')
+  }
+
+  this.el.querySelector(`#dot-${prev}`).classList.remove('active')
+}
+
 Carousel.prototype.next = function () {
+  this.updateActiveDot(this.index, this.index + 1)
+
   this.index++
 
   if (this.index === this.images.length) {
@@ -114,6 +132,7 @@ Carousel.prototype.next = function () {
 }
 
 Carousel.prototype.prev = function () {
+  this.updateActiveDot(this.index, this.index - 1)
   this.index--
   const calc = this.calcTransform()
   const val = calc === 0 ? 0 : -calc

@@ -90,3 +90,26 @@ body {
   border-bottom: 30px solid transparent;
   border-right: 30px solid black;
 }
+
+.dots {
+    position: absolute;
+    bottom: 16px;
+    z-index: 1;
+    display: flex;
+    left: 50%;
+    flex-direction: row;
+    transform: translateX(-50%);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin: 0 8px;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: white;
+}
