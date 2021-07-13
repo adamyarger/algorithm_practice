@@ -139,44 +139,23 @@ Carousel.prototype.setActive = function (prev, index) {
     this.index = 0
   }
 
-  // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
-  // if (this.index) {
-  //   this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
-  // }
   const calc = this.calcTransform()
   const val = calc === 0 ? 0 : -calc
   this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
 }
 
-// these should be make active prev next
 Carousel.prototype.next = function () {
-  this.updateActiveDot(this.index, this.index + 1)
-
-  this.index++
-
-  if (this.index === this.images.length) {
-    this.index = 0
-  }
-
-  // this.imageNodes[this.index].querySelector('.gallery-image').style.display = 'initial'
-  // if (this.index) {
-  //   this.imageNodes[this.index - 1].querySelector('.gallery-image').style.display = 'initial'
-  // }
-  this.el.querySelector('.gallery').style.transform = `translateX(-${this.calcTransform()}px)`
+  this.setActive(this.index, this.index + 1)
 }
 
 Carousel.prototype.prev = function () {
-  this.updateActiveDot(this.index, this.index - 1)
-  this.index--
-  const calc = this.calcTransform()
-  const val = calc === 0 ? 0 : -calc
-  this.el.querySelector('.gallery').style.transform = `translateX(${val}px)`
+  this.setActive(this.index, this.index - 1)
 }
 
 Carousel.prototype.cycle = function (wait) {
   clearInterval(this.intervalId)
   this.intervalId = setInterval(() => {
-    // this.next()
+    this.next()
   }, wait);
 }
 
