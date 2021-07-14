@@ -41,6 +41,33 @@ Output:
  * 
  * we check for unique by sorting it so all same numbers are next to eachother
  */
+var combinationSum = function (candidates, target) {
+  const out = []
+  backtrack(candidates, target, [], out)
+  return out
+};
+
+function backtrack(nums, target, cur, out) {
+  if (target === 0) {
+    out.push(cur)
+    return
+  }
+
+
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] > target) continue
+
+    backtrack(nums.slice(i), target - nums[i], cur.concat(nums[i]), out)
+  }
+}
+
+console.log(combinationSum([2, 3, 6, 7], 7))
+
+
+
+
+
+
 var combinationSum2 = function (candidates, target) {
   const out = []
   candidates.sort()
