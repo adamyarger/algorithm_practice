@@ -49,6 +49,8 @@ countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
  * if first iteration its 1
  * 
  * contigous of same brings up sliding window
+ * 
+ * if in an interview, draw out the forst couple strings by hand and confirm its correct
  */
 var countAndSay = function (n) {
   let val = '1'
