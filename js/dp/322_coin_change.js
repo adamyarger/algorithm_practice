@@ -56,29 +56,28 @@ Output: 2
 
  */
 var coinChange = function (coins, amount) {
-  // if amount is 0 there nothing more we can do
-  if (amount === 0) return 0
+  const memo = {}
 
-  // default to infinity so anything found will be better
-  let min = Infinity
+  function dfs(amount) {
+    if (amount === 0) return 0
+    if (amount in memo) return memo[amount]
 
-  for (let i = 0; i < coins.length; i++) {
-    const val = coins[i]
-    if (val > amount) {
-      continue // skip it since its too big
+    let min = Infinity
+
+    for (let i = 0; i < coins.length; i++) {
+      if (coins[i] > amount) continue
+      let count = dfs(amount - coins[i])
+
+      if (count < min) {
+        min = count
+      }
     }
-    let count = coinChange(coins, amount - val)
-    // anything after this point is on its way up
-
-    // if our newly found coin is smaller then use it as the min
-    if (count < min) {
-      min = count
-    }
+    memo[amount] = min === -1 ? min : min + 1
+    return memo[amount]
   }
 
-  min = min === Infinity ? min : min + 1
-  return min
+  return dfs(amount)
 };
 
-const change = coinChange([1, 2, 5], 11)
+const change = coinChange([1, 2, 3], 5)
 console.log(change)
