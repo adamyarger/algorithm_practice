@@ -34,45 +34,31 @@ Output:
  * @return {number[][]}
  * 
  * 
- * unique combos of sum
- * were looking for a target value
- * no repeats
+ * unique combos that add up to  target sum
+ * the unlimted choosing of a number is like the coin change problem
+ * both can work by finsing all combos
+ * this one is about reurning all unique combos, as in order doesnt matter
  * 
- * how do we check if weve already seen a combo?
- * we take away from candidates each time we use one
- * == remove from nums add to cur selection
- * 
- * recursive call in a loop
- * if we go over target sum continue
- * this is kind of like coin change problem but instead of returning the smallest combo we return all and theres no repeats
- * 
- * 
- * what are the little trick for different vaiations of backtracking
- * - no repeats
- * - no reordering
- * - allow repeats
- * - allow reordering
+ * we check for unique by sorting it so all same numbers are next to eachother
  */
 var combinationSum2 = function (candidates, target) {
   const out = []
   candidates.sort()
-  backtrack(candidates, target, [], out, 0)
+  backtrack(candidates, target, [], out)
   return out
 };
 
-function backtrack(nums, target, cur, out, index) {
+function backtrack(nums, target, cur, out) {
   if (target === 0) {
     out.push(cur)
     return
   }
 
-  for (let i = 0; i < nums.length; i++) {
-    const val = nums[i]
-    if (val > target || (nums[i] == nums[i - 1])) {
-      continue
-    }
 
-    backtrack(nums.slice(i + 1), target - val, cur.concat(val), out, i + 1)
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] > target || nums[i] === nums[i - 1]) continue
+
+    backtrack(nums.slice(i + 1), target - nums[i], cur.concat(nums[i]), out)
   }
 }
 
