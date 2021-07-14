@@ -79,5 +79,43 @@ var coinChange = function (coins, amount) {
   return dfs(amount)
 };
 
-const change = coinChange([1, 2, 3], 5)
-console.log(change)
+// const change = coinChange([1, 2, 3], 5)
+// console.log(change)
+
+
+// https://leetcode.com/problems/coin-change/discuss/133487/Clean-JavaScript-solution
+
+function bottomUp(coins, amount) {
+  /**
+   * create a matrix
+   * fill it in with infinity
+   * y axis is coins
+   * x axis is amount incrmenting by 1
+   * 
+   * if there enough amount
+   * and current amount - coin amount to get the index to look back at
+   * 
+   * KEY POINT
+   * choose min of top cell or cell at 5 amount back +1
+   */
+
+  // add 1 for the lookback
+  // we only need 1 array because we overwrite the last one at each new level
+  const dp = Array(amount + 1).fill(Infinity)
+  dp[0] = 0
+
+  for (let i = 1; i <= amount; i++) {
+    for (const coin of coins) {
+      if (i - coin >= 0) {
+        // dp[i] is the equivlent of looking up 1 cell on a 2d array
+        // dp[i - coin] + 1 is go back by coin amount and add 1
+        dp[i] = Math.min(dp[i], dp[i - coin] + 1)
+      }
+    }
+  }
+
+  return dp[amount] === Infinity ? -1 : dp[amount]
+}
+
+const bottom = bottomUp([1, 2, 3], 5)
+console.log(bottom)
