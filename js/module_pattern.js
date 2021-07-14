@@ -16,7 +16,7 @@ const Modules = (function Manager() {
       // create an array of deps by looking them up in modules then passing them through apply
       deps[i] = modules[deps[i]]
     }
-    // what does apply on self do???
+    // pass in dependencies via apply
     modules[name] = impl.apply(impl, deps)
   }
 
