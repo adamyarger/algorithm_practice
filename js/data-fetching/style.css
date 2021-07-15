@@ -1,0 +1,18 @@
+body, html {
+    margin: 0;
+}
+
+body {
+    background: #E2E8F0;
+}
+
+.container {
+  max-width: 760px;
+  margin-top: 200px;
+}
+
+.box {
+    background-color: #FFF;
+    border-radius: 4px;
+    min-height: 100px;
+}
