@@ -36,6 +36,9 @@ Output: 0
  * nedd a way to track subarrays that have the target sum
  * if new found sum takes less number update the min which gets returned
  * 
+ * 
+ * MISSED the great than or equal part
+ * 
  */
 var minSubArrayLen = function (target, nums) {
   let min = Infinity
