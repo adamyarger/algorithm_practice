@@ -1,6 +1,9 @@
 /**
  * this is a varition of a mixin which allows us to use the parents class overriden function
  * similar to super() in other languages, its kind of what classes in js do behind the scenes
+ * 
+ * we dont need to use new with the Car function since were only using the Vehicle
+ * when we use new with it it will be discarded, so we could just use Car() iwthout new
  */
 
 function Vehicle() {
