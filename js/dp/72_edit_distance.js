@@ -48,10 +48,12 @@ var minDistance = function (word1, word2) {
   if (!word1) return word2.length
   if (!word2) return word1.length
 
-  return dfs(word1, word2, 0, 0)
+  const memo = Array(word1.length).fill(-1).map(_ => Array(word2.length).fill(-1))
+
+  return dfs(memo, word1, word2, 0, 0)
 };
 
-function dfs(word1, word2, i, j) {
+function dfs(memo, word1, word2, i, j) {
   /**
    * whats the base case?
    * since were returning a count we can pop off letters once there solved
@@ -66,29 +68,31 @@ function dfs(word1, word2, i, j) {
 
   if (word2.length === j) return word1.length - i
 
+  if (memo[i][j] !== -1) return memo[i][j]
+
   let out = null
 
   // their both the same, we can skip it and move forward on both
   if (word1[i] === word2[j]) {
-    out = dfs(word1, word2, i + 1, j + 1)
+    memo[i][j] = dfs(memo, word1, word2, i + 1, j + 1)
   } else {
     // try all 3 ways and return the min
     // how is this insert? were adding a new letter j didnt work so move j forward for next time
-    let insert = dfs(word1, word2, i, j + 1)
+    let insert = dfs(memo, word1, word2, i, j + 1)
 
     // why is this delete?
     // were deleteing, i didnt work, so move it forward for next time
-    let del = dfs(word1, word2, i + 1, j)
+    let del = dfs(memo, word1, word2, i + 1, j)
 
     // swapped so move both forward
     // swapping works move both forward
-    let sub = dfs(word1, word2, i + 1, j + 1)
+    let sub = dfs(memo, word1, word2, i + 1, j + 1)
 
     // why + 1 => each counts as 1 move so add it on
-    out = Math.min(insert, del, sub) + 1
+    memo[i][j] = Math.min(insert, del, sub) + 1
   }
 
-  return out
+  return memo[i][j]
 }
 
 var word1 = "horse",
