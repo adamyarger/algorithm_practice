@@ -27,6 +27,8 @@ inention -> enention (replace 'i' with 'e')
 enention -> exention (replace 'n' with 'x')
 exention -> exection (replace 'n' with 'c')
 exection -> execution (insert 'u')
+
+https://afteracademy.com/blog/edit-distance-problem
  */
 
 /**
@@ -95,7 +97,31 @@ function dfs(memo, word1, word2, i, j) {
   return memo[i][j]
 }
 
-var word1 = "horse",
-  word2 = "ros"
 
-console.log(minDistance('horse', 'ros'))
+// console.log(minDistance('horse', 'ros'))
+
+function bottomUp(word1, word2) {
+  const memo = Array(word1.length + 1).fill(0).map(_ => Array(word2.length + 1).fill(0))
+
+  for (let row = 0; row < word1.length + 1; row++) {
+    for (let col = 0; col < word2.length + 1; col++) {
+      if (row === 0) {
+        memo[row][col] = col
+      } else if (col === 0) {
+        memo[row][col] = row
+      } else if (word1[row - 1] === word2[col - 1]) {
+        memo[row][col] = memo[row - 1][col - 1]
+      } else {
+        // choose smallest of 3 + 1
+        memo[row][col] = Math.min(
+          memo[row - 1][col],
+          memo[row - 1][col - 1],
+          memo[row][col - 1]
+        ) + 1
+      }
+    }
+  }
+  return memo[word1.length][word2.length]
+}
+
+console.log(bottomUp('horse', 'ros'))
