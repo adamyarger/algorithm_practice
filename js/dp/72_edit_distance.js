@@ -39,6 +39,10 @@ exection -> execution (insert 'u')
  * how would replace work?
  * 
  * looks like it moves in order
+ * 
+ * TIME comlexity => O(3**n)
+ * 
+ * we have 3 base branches were starting from
  */
 var minDistance = function (word1, word2) {
   if (!word1) return word2.length
