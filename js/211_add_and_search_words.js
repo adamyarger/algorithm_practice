@@ -39,7 +39,6 @@ var WordDictionary = function () {
 
 function Node() {
   this.isWord = false
-  // defaultdict(Node)
 }
 
 /** 
@@ -47,13 +46,9 @@ function Node() {
  * @return {void}
  */
 WordDictionary.prototype.addWord = function (word) {
-  // if . found it counts as match
-  // mark dict with another node
   let cur = this.root
   for (char of word) {
-    // no in will also include things from the prototype chain, use hasOwnProperty to be safer
     if (!(char in cur)) {
-      // create it
       cur[char] = new Node()
     }
     cur = cur[char]
