@@ -8,9 +8,10 @@
     <meta name="viewport" content="width=device-width">
     <title>Infinite Scroll</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style.css">
     <style>
         html {
-            background: #eeeeee;
+            background: #e2e8f0;
         }
 
         html,
@@ -26,36 +27,49 @@
         #templates {
             display: none;
         }
+
+        #scroller {
+            width: 100%;
+            padding-top: 100px;
+        }
     </style>
     <link href='styles/main.css' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
     <div id="templates">
-        <li class="chat-item" data-id="{{id}}">
-            <img class="avatar" width="48" height="48">
-            <div class="bubble">
-                <p></p>
-                <img width="300" height="300">
-                <div class="meta">
-                    <time class="posted-date"></time>
-                </div>
-            </div>
-        </li>
-        <li class="chat-item tombstone" data-id="{{id}}">
-            <img class="avatar" width="48" height="48" src="images/unknown.jpg">
-            <div class="bubble">
-                <p></p>
-                <p></p>
-                <p></p>
-                <div class="meta">
-                    <time class="posted-date"></time>
-                </div>
-            </div>
-        </li>
+        <div class="card">
+
+        </div>
     </div>
-    <ul id="chat-timeline">
-    </ul>
+
+    <div id="scroller">
+        <div class="container"></div>
+    </div>
+
     <!-- <script src="stats.min.js"></script> -->
     <script src="index.js"></script>
     <script src="messages.js"></script>
+
+    <script>
+        window.addEventListener('load', function () {
+
+            const scroller = new Scroller('#scroller')
+            scroller.init(getImages(5), '.container')
+        })
+
+        function getImages(size) {
+            const num = i => i % 76
+            return Array(size).fill(null).map((_, i) => `
+                <div class="card" data-id="${num(i)}">
+                    <img src="images/image${num(i)}.jpg">
+                    <div class="card-text">
+                        Cool text below
+                    </div>
+                </div>
+            `)
+        }
+    </script>
+</body>
+
+</html>
