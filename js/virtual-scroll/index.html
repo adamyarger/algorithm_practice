@@ -53,16 +53,15 @@
 
     <script>
         window.addEventListener('load', function () {
-
             const scroller = new Scroller('#scroller', {
                 target: '.container',
-                fetch: getImages
+                fetch: () => getImages(20)
             })
-            // scroller.init(getImages(5), '.container')
         })
 
         let imageCount = 0
 
+        // dom mounting should be handled from outside
         function getImages(size) {
             const num = i => i % 76
             return Array(size).fill(null).map((_, i) => {

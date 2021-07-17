@@ -25,7 +25,7 @@ const Scroller = (function (global) {
 
   const RUNWAY_ITEMS = 5
 
-  const MAX_IMAGE = 76
+  const MAX_ITEMS = 50
 
 
   function Scroller(scroller, props = {}) {
@@ -34,6 +34,7 @@ const Scroller = (function (global) {
     this.sentinal = null
     this.target = null
     this.observer = null
+    this.items = []
     this.fetch = () => { }
 
     this.init(props)
@@ -54,47 +55,60 @@ const Scroller = (function (global) {
     this.target = this.scroller.querySelector(props.target)
 
     this.sentinal = c('div', { class: 'sentinal', style: 'height: 1px; width: 1px;' })
-    this.scroller.appendChild(this.sentinal)
 
     this.observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        // const id = entry.target.getAttribute('data-id')
-        // if (entry.isIntersecting) {
-        //   console.log(`item ${id} is visible`, entry.target)
-        // }
-
         if (entry.target === this.sentinal && entry.isIntersecting) {
-          console.log('found sentinal')
-          // make request
-          this.items.push(this.createItems(this.fetch(5), this.observer))
+          this.items = [...this.items, ...this.createItems(this.fetch(), this.observer)]
+
+          if (this.items.length > MAX_ITEMS) {
+            console.log(this.items.length, 'OVER')
+            this.recycle(20)
+          }
         }
       }
     })
 
-    this.items = this.createItems(this.fetch(5), this.observer)
+    this.items = this.createItems(this.fetch(), this.observer)
 
     this.observer.observe(this.sentinal)
 
     this.resize()
   }
 
+  Scroller.prototype.updateSentinal = function () {
+    if (this.scroller.querySelector('.sentinal')) {
+      this.sentinal = this.target.removeChild(this.sentinal)
+    }
+    this.target.appendChild(this.sentinal)
+  }
+
   // should be done from the outside
   Scroller.prototype.createItems = function (arr, observer) {
     return arr.map((item, index) => {
       const frag = document.createRange().createContextualFragment(item)
-      const el = this.target.appendChild(frag)
+      let el = this.target.appendChild(frag)
+      el = this.target.lastElementChild
 
-      // do we need to observe images???
-      // observer.observe(this.scroller.querySelector(`[data-id="${index}"]`))
+      if (arr.length - index === RUNWAY_ITEMS) {
+        this.updateSentinal()
+      }
+
       return el
     })
   }
 
-  // what if we based every thing off item in view instead of heights?
 
-  // first what in view
+  // get rid of items after certain threshold
+  // should we cache some? then garbage collect for goo after?
+  Scroller.prototype.recycle = function (size) {
+    for (let i = 0; i < size; i++) {
+      this.target.removeChild(this.items[0])
+      this.items.shift()
+    }
+  }
 
-
+  // How does intersection observer change on window resize?
 
 
 
