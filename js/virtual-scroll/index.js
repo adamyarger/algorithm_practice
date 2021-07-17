@@ -102,9 +102,11 @@ const Scroller = (function (global) {
   // get rid of items after certain threshold
   // should we cache some? then garbage collect for goo after?
   Scroller.prototype.recycle = function (size) {
+    // TODO: add nodes back in on way up
     for (let i = 0; i < size; i++) {
       this.target.removeChild(this.items[0])
       this.items.shift()
+      // should be just cache the nodes we take off?
     }
   }
 
