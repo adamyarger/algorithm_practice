@@ -62,53 +62,35 @@ const { count } = require("console");
  * UNIT of time === array item
  * 
  * do both ways, with heap and greedy
- * - create hap in JS, need to nail this since there are no heaps in JS
+ * https://leetcode.com/problems/task-scheduler/discuss/401103/simple-Javascript-idle-slots-1-pass-with-detailed-description
  */
 var leastInterval = function (tasks, n) {
-  // why use Map? because it keeps order and we can loop it
-  const charMap = new Map()
-  let maxCharCount = 0
-  let maxChar = tasks[0]
+  const map = new Map()
 
-  // loop through tasks
-  for (let char of tasks) {
-    // increment char count by 1
-    charMap.set(char, (charMap.get(char) || 0) + 1)
-    // in order to be greedy we need to know the most frequently used char
-    // count and find the most used char
-    if (charMap.get(char) > maxCharCount) {
-      maxCharCount = charMap.get(char)
-      maxChar = char
+  // max ocurrances
+  let maxVal = 0
+
+  // how many different chars are tied for max
+  let maxValCount = 0
+
+  for (char of tasks) {
+    // add 1 or start with 1
+    let cur = map.has(char) ? map.get(char) + 1 : 1
+    map.set(char, cur)
+
+    if (cur > maxVal) {
+      maxVal = cur
+      maxValCount = 1
+    } else if (cur === maxVal) {
+      // deal with duplicate max values
+      maxValCount += 1
     }
   }
 
-  // why??? 
-  // we need to know how many intervals go between the most frquent char
-  // we do this by subtracking 1 from max since we only need between a__b__a vs a__b__a__
-  // then multiply by n for interval size
-
-  // this is the max amount of intervals for the largest char
-  let idleCount = (maxCharCount - 1) * n
-
-  // how many idles can we delete?
-  charMap.forEach((count, char) => {
-    // return is like continue in forEach
-    // why? skip, this doesnt subtract from the idels
-    if (char === maxChar) return
-
-    // we have a char with the same size as max count
-    if (count === maxCharCount) {
-      // count the middle intervals and subtract count since they will be replacing 1 idle for each char
-      idleCount -= count - 1
-    } else {
-      // mans we found another char that can go in between
-      idleCount -= count
-    }
-  })
-
-  if (idleCount <= 0) return tasks.length
-
-  return tasks.length + idleCount
+  // can never be smaller than tasks.length
+  return Math.max(tasks.length, (maxVal - 1) * (n + 1) + maxValCount)
 };
 
 console.log(leastInterval(["A", "A", "A", "B", "B", "B"], 2))
+
+// result = (maxoccurances - 1) * n+1 + numMAxTasks
