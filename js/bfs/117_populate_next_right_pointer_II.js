@@ -75,3 +75,22 @@ var connect = function (root) {
   }
   return root
 };
+
+
+var connect = function (root) {
+  const queue = [root]
+
+  while (queue.length) {
+    let last = null
+    let arr = queue.slice()
+    arr.forEach(item => {
+      const node = queue.shift()
+      if (last) last.next = node
+      if (node && node.left) queue.push(node.left)
+      if (node && node.right) queue.push(node.right)
+      last = node
+    })
+  }
+
+  return root
+};
