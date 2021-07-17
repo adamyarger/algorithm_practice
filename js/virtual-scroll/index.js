@@ -28,12 +28,15 @@ const Scroller = (function (global) {
   const MAX_IMAGE = 76
 
 
-  function Scroller(scroller) {
+  function Scroller(scroller, props = {}) {
     this.scroller = document.querySelector(scroller)
     this.scrollerHeight = 0
     this.sentinal = null
     this.target = null
     this.observer = null
+    this.fetch = () => { }
+
+    this.init(props)
   }
 
   Scroller.prototype.resize = function () {
@@ -45,30 +48,44 @@ const Scroller = (function (global) {
     // calculate height
   }
 
-  Scroller.prototype.init = function (items, target) {
-    this.target = this.scroller.querySelector(target)
+  // IEDA: put sentinal part way throguh the content to make request
+  Scroller.prototype.init = function (props) {
+    this.fetch = props.fetch
+    this.target = this.scroller.querySelector(props.target)
 
-    this.sentinal = c('div', { class: 'sentinal' })
+    this.sentinal = c('div', { class: 'sentinal', style: 'height: 1px; width: 1px;' })
     this.scroller.appendChild(this.sentinal)
 
     this.observer = new IntersectionObserver((entries) => {
-      console.log('fire', entries)
+      for (const entry of entries) {
+        // const id = entry.target.getAttribute('data-id')
+        // if (entry.isIntersecting) {
+        //   console.log(`item ${id} is visible`, entry.target)
+        // }
+
+        if (entry.target === this.sentinal && entry.isIntersecting) {
+          console.log('found sentinal')
+          // make request
+          this.items.push(this.createItems(this.fetch(5), this.observer))
+        }
+      }
     })
-    this.items = this.createItems(items, this.observer)
+
+    this.items = this.createItems(this.fetch(5), this.observer)
+
+    this.observer.observe(this.sentinal)
 
     this.resize()
   }
 
   // should be done from the outside
   Scroller.prototype.createItems = function (arr, observer) {
-    console.log(observer)
-
     return arr.map((item, index) => {
       const frag = document.createRange().createContextualFragment(item)
       const el = this.target.appendChild(frag)
-      // need to unbound this
-      // index is all messed up here
-      observer.observe(this.scroller.querySelector(`[data-id="${index}"]`))
+
+      // do we need to observe images???
+      // observer.observe(this.scroller.querySelector(`[data-id="${index}"]`))
       return el
     })
   }

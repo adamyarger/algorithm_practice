@@ -54,20 +54,28 @@
     <script>
         window.addEventListener('load', function () {
 
-            const scroller = new Scroller('#scroller')
-            scroller.init(getImages(5), '.container')
+            const scroller = new Scroller('#scroller', {
+                target: '.container',
+                fetch: getImages
+            })
+            // scroller.init(getImages(5), '.container')
         })
+
+        let imageCount = 0
 
         function getImages(size) {
             const num = i => i % 76
-            return Array(size).fill(null).map((_, i) => `
-                <div class="card" data-id="${num(i)}">
-                    <img src="images/image${num(i)}.jpg">
-                    <div class="card-text">
-                        Cool text below
+            return Array(size).fill(null).map((_, i) => {
+                imageCount += 1
+                return `
+                    <div class="card" data-id="${imageCount}">
+                        <img src="images/image${num(imageCount)}.jpg">
+                        <div class="card-text">
+                            Cool text below
+                        </div>
                     </div>
-                </div>
-            `)
+                `
+            })
         }
     </script>
 </body>
