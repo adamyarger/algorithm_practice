@@ -61,7 +61,7 @@ function dfs(memo, s, left, right) {
   return memo[left][right]
 }
 
-console.log(longestPalindromeSubseq('bbbab'))
+// console.log(longestPalindromeSubseq('bbbab'))
 
 
 /**
@@ -71,3 +71,32 @@ console.log(longestPalindromeSubseq('bbbab'))
  * the traversing will be movinf up left to right
  * the middle diagonal cells will all be 0
  */
+
+function bottomUp(s) {
+  const size = s.length
+  const memo = Array(size).fill(0).map(_ => Array(size).fill(0))
+
+  for (let i = 0; i < size; i++) {
+    // start at i end at i is always 1 in length
+    memo[i][i] = 1
+  }
+
+  // the reason for this weird order is that we need to look left and down
+  // in order for down to exist we have to start at the bottom and go up
+  for (let start = size - 1; start >= 0; start--) {
+    for (let end = start + 1; end < size; end++) {
+      if (s[start] === s[end]) {
+        memo[start][end] = memo[start + 1][end - 1] + 2
+      } else {
+        memo[start][end] = Math.max(memo[start + 1][end], memo[start][end - 1])
+      }
+    }
+  }
+
+  console.log(memo)
+
+  // return top right cell
+  return memo[0][size - 1]
+}
+
+console.log(bottomUp('bbbab'))
