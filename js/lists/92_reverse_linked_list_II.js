@@ -56,10 +56,17 @@ var reverseBetween = function (head, left, right) {
     pre = pre.next
   }
 
+  console.log(pre.val)
+
+  // pre comes before the sub list
+  // set cur to next to enter the sub list
   let cur = pre.next
 
+  // right - left is the length of the sub list
   for (let i = 0; i < right - left; i++) {
+    // stash next, since were reassigning and stil need it later
     let next = cur.next
+
     cur.next = next.next
     next.next = pre.next
     pre.next = next
@@ -76,6 +83,7 @@ head.next.next.next.next = new ListNode(5)
 
 var out = reverseBetween(head, 2, 4)
 
+console.log('-----------')
 var cur = out
 while (cur) {
   console.log(cur.val)
