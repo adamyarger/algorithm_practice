@@ -58,10 +58,13 @@ body {
     display: grid;
     grid-template-columns: repeat(10, auto);
     grid-column-gap: 10px;
-    padding-left: 10px;
+    /* align-items: end; */
+    padding-left: 11px;
     /* flex-flow: row nowrap; */
     /* justify-content: space-between; */
 }
+
+/* bottom ticks need to be realigned */
 
 .bottom-ticks div {
     justify-self: center;
