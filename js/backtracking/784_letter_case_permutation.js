@@ -49,6 +49,9 @@ var letterCasePermutation = function (s) {
     }
 
     if (char.test(s[i])) { // is it a string?
+
+      // this works by replacing the letters at the index on the way back up
+      // there are 2 options but they need to stay in place just replace the index with the other option when bubbling up
       arr[i] = s[i].toLowerCase()
       backtrack(i + 1)
       arr[i] = s[i].toUpperCase()
