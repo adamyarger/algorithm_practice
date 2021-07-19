@@ -48,7 +48,36 @@ function ListNode(val, next) {
  2.) 
  */
 var reverseBetween = function (head, left, right) {
+  if (!head || left === right) return head
 
+  // why a dummy node?
+  const dummy = new ListNode(0, head)
+
+  // need pre cur and next
+  // to find pre and cur find the edge of the range
+  // if we didnt have the dummy node the loop would have set pre to cur
+  let pre = dummy
+
+  for (let i = 1; i < left; i++) {
+    pre = pre.next
+  }
+  // should be at 2
+  let cur = pre.next
+
+  // go throguh range that needs to be flipped
+  // will iterate 2 spots
+  for (let i = 0; i < (right - left); i++) {
+    // stash next in line for next iteration
+    let next = cur.next
+    // why this one?
+    cur.next = next.next
+
+    next.next = pre.next
+    pre.next = next
+  }
+
+  // why?
+  return dummy.next
 };
 
 const head = new ListNode(1)
