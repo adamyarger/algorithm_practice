@@ -37,44 +37,69 @@ Output: []
  * what if we changed them to uppercase we found in a word
  * if we can tell the dofference but still compare we can tell it when to discount
  * 
- * how could we use a trie?
+ * how could we use a trie? trie is for caching on each word search
+ * https://leetcode.com/problems/word-search-ii/discuss/138279/Clean-JavaScript-solution
  */
 var findWords = function (board, words) {
   // loop through matrix
+  // acts similar to backtracking with out
   const found = []
-  words.forEach(word => {
-    for (let row = 0; row < board.length; row++) {
-      for (let col = 0; col < board[0].length; col++) {
-        if (word[0] === board[row][col] && dfs(board, row, col, word) && !found.includes(word)) {
-          found.push(word)
-        }
-      }
+  const root = buildTrie(words)
+
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[0].length; col++) {
+      dfs(board, row, col, root, found)
     }
-  })
+  }
   return found
 };
 
 // should it be 1 word passed in?
 // is there a recurrance? can we memo?
-function dfs(board, row, col, word) {
-  // base case for out of bounds
-  if (word.length === 0) return true
+function dfs(board, row, col, node, found) {
+  // couldnt we get a false positive here half way through a word?
+  if (node.end) { // found it
+    found.push(node.end)
+    // ensure its only printed once
+    node.end = null
+  }
 
-  if (row < 0 || col < 0 || row >= board.length || col >= board[0].length || word[0] !== board[row][col]) return false
+  // boundries
+  if (row < 0 || col < 0 || row >= board.length || col >= board[0].length) return
+  // the char is not set in the true
+  if (!node[board[row][col]]) return
 
-  // anything beyonf here is a match
-  let char = word[0]
-  let newWord = word.substr(1)
+  // anything beyond here is a match
+  let char = board[row][col]
+  // dont repeat
   board[row][col] = '#'
 
   // search 4 ways
-  const result = dfs(board, row + 1, col, newWord)
-    || dfs(board, row - 1, col, newWord)
-    || dfs(board, row, col + 1, newWord)
-    || dfs(board, row, col - 1, newWord)
+  // instaed of popping of chars from a single word we created a trie that tracks all the words
+  // were just moving through the try and seeing if the word exists
+  dfs(board, row + 1, col, node[char], found)
+  dfs(board, row - 1, col, node[char], found)
+  dfs(board, row, col + 1, node[char], found)
+  dfs(board, row, col - 1, node[char], found)
 
   board[row][col] = char
-  return result
+  // return result
+}
+
+function buildTrie(words) {
+  const root = {}
+  for (const word of words) {
+    let pointer = root
+
+    for (const char of word) {
+      if (!pointer[char]) pointer[char] = {}
+      // set pointer to curent node for next iteration
+      pointer = pointer[char]
+    }
+    // at end of word set end property to the word
+    pointer.end = word
+  }
+  return root
 }
 
 
@@ -89,10 +114,10 @@ var words = ["oath", "pea", "eat", "rain"]
 // console.log(findWords(board, words))
 
 board = [
-  ["o", "a", "b", "n"],
+  ["o", "a", "o", "a"],
   ["o", "t", "a", "e"],
   ["a", "h", "k", "r"],
   ["a", "f", "l", "v"]
 ]
-words = ["oa", "oaa"]
+words = ["oa", "oaa", "oaoa"]
 console.log(findWords(board, words))
