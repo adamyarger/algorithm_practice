@@ -43,36 +43,12 @@ function ListNode(val, next) {
  * how to handle the middle?
  * 
  https://leetcode.com/problems/reverse-linked-list-ii/discuss/1167578/Javascript-iterative-solution-(Easy-to-understand)
+
+ 1.) find the start of the range, one short then use .next
+ 2.) 
  */
 var reverseBetween = function (head, left, right) {
-  if (!head || left === right) return head
 
-  const dummy = new ListNode(0, head)
-  let pre = dummy
-
-  // loop forward till we are at the start of the sub list
-  // start at 1 since the left and right are padded by 1
-  for (let i = 1; i < left; i++) {
-    pre = pre.next
-  }
-
-  console.log(pre.val)
-
-  // pre comes before the sub list
-  // set cur to next to enter the sub list
-  let cur = pre.next
-
-  // right - left is the length of the sub list
-  for (let i = 0; i < right - left; i++) {
-    // stash next, since were reassigning and stil need it later
-    let next = cur.next
-
-    cur.next = next.next
-    next.next = pre.next
-    pre.next = next
-  }
-
-  return dummy.next
 };
 
 const head = new ListNode(1)

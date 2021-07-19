@@ -43,11 +43,26 @@ var reverseList = function (head) {
   let prev = null
 
   while (cur) {
-    let _next = cur.next
+    let next = cur.next
     cur.next = prev
     prev = cur
-    cur = _next
+    cur = next
   }
 
   return prev
 };
+
+const head = new ListNode(1)
+head.next = new ListNode(2)
+head.next.next = new ListNode(3)
+head.next.next.next = new ListNode(4)
+head.next.next.next.next = new ListNode(5)
+
+var out = reverseList(head)
+
+console.log('-----------')
+var cur = out
+while (cur) {
+  console.log(cur.val)
+  cur = cur.next
+}
