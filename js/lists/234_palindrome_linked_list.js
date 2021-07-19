@@ -59,7 +59,50 @@ var isPalindrome = function (head) {
 
 let head = new ListNode(1)
 head.next = new ListNode(2)
-// head.next.next = new ListNode(2)
-// head.next.next.next = new ListNode(1)
+head.next.next = new ListNode(2)
+head.next.next.next = new ListNode(1)
 
-console.log(isPalindrome(head))
+// console.log(isPalindrome(head))
+
+
+
+function optimize(head) {
+  /**
+   * find mid point of list
+   * reverse second half
+   * compare
+   */
+  let mid = head
+  let tail = head
+  // we can find the mid point by having a fast pointer cover double the spaces
+  // when it reaches the end we know the half way point
+  // REMEMBER THIS HACK!!!
+  while (tail && tail.next) {
+    mid = mid.next
+    tail = tail.next && tail.next.next ? tail.next.next : tail.next
+  }
+
+  //reverse 2nd half
+  let prev = null
+  while (mid) {
+    const nextNode = mid.next
+    mid.next = prev
+    prev = mid
+    mid = nextNode
+  }
+
+  //compare reversed 2nd half with first half, they should match
+  while (tail) {
+    if (head.val !== tail.val) {
+      return false
+    }
+    head = head.next
+    tail = tail.next
+  }
+
+  return true
+}
+
+
+console.log(optimize(head))
+
