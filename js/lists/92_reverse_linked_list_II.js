@@ -67,12 +67,14 @@ var reverseBetween = function (head, left, right) {
   // go throguh range that needs to be flipped
   // will iterate 2 spots
   for (let i = 0; i < (right - left); i++) {
-    // stash next in line for next iteration
+    // need to keep moving forward, so stash this
     let next = cur.next
-    // why this one?
+    // because curs next is being put in front of it and its sliding forward one
     cur.next = next.next
-
+    // next is the one that got push to the front
+    // it will now point at whatever was the front before which is whatever pre pointed at before
     next.next = pre.next
+    // pre will point the the node that got pushed to the front
     pre.next = next
   }
 
