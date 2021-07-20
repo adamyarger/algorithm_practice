@@ -45,37 +45,36 @@ function ListNode(val, next) {
  * by that time the newer index will be in place
  */
 var removeNthFromEnd = function (head, n) {
-  let first = head
+  let fast = head
+  let slow = head
 
   for (let i = 0; i < n; i++) {
-    first = first.next
+    fast = fast.next
   }
 
-  let second = head
-  let prev = null
+  // this is th safe gaurd
+  // edge case: it mans we went through the whole list
+  // so n to end is the head.next
+  if (!fast) return head.next
 
-  while (first) {
-    first = first.next
-    prev = second
-    second = second.next
+  // by wayching fast.next instead we dont need to keep track of prev
+  // instead it end sone early
+  while (fast.next) {
+    fast = fast.next
+    slow = slow.next
   }
-  // its aat target since it goes one more time when the first hits null
-  // need to keep a prev
-  console.log(prev.val)
-  // after the cur node will be our prev to the target node
-  // should be 3
-  // unlink the target
-  const _next = prev.next.next
-  prev.next.next = null
-  prev.next = _next
+
+  // reset
+  slow.next = slow.next.next
+
   return head
 };
 
 let head = new ListNode(1)
 head.next = new ListNode(2)
-head.next.next = new ListNode(3)
-head.next.next.next = new ListNode(4)
-head.next.next.next.next = new ListNode(5)
+// head.next.next = new ListNode(3)
+// head.next.next.next = new ListNode(4)
+// head.next.next.next.next = new ListNode(5)
 
 let node = removeNthFromEnd(head, 2)
 
