@@ -8,6 +8,8 @@ const ce = (function (w) {
   const Text = w.Text
 
   function context() {
+    const cleanupFuncs = []
+
     function h(...args) {
       let el = null
       // item handles everything
@@ -34,13 +36,18 @@ const ce = (function (w) {
 
         } else if (typeof arg === 'object') {
           // handle props set attributes
+          // on events
+          // styles as objects allow camel case
           for (const key in arg) {
-            if (Object.prototype.hasOwnProperty.call(arg, key)) {
-              el.setAttribute(key, arg[key])
-
-              // take in styles as object would be dope
+            if (typeof arg[key] === 'function') {
+              handleFunction(key, arg)
+            } else {
+              if (Object.prototype.hasOwnProperty.call(arg, key)) {
+                el.setAttribute(key, arg[key])
+              }
             }
           }
+
         } else if (typeof arg === 'function') {
           // handle onclick and stuff
         }
@@ -56,6 +63,23 @@ const ce = (function (w) {
           const r = document.createTextNode(arg)
           el.appendChild(r)
           return r
+        }
+      }
+
+      function handleFunction(key, arg) {
+        if (/^on\w+/.test(key)) {
+          (function (key, arg) {
+            el.addEventListener(key.substring(2), arg[key], false)
+            cleanupFuncs.push(function () {
+              el.removeEventListener(key.substring(2), arg[key], false)
+            })
+          })(key, arg)
+        } else {
+          // observable what that mean???
+          el[key] = arg[key]()
+          cleanupFuncs.push(arg[key](function (v) {
+            el[key] = v
+          }))
         }
       }
 
@@ -85,7 +109,7 @@ const el = h(
   'div',
   h('div', 'dude what',
     ' more text',
-    h('h1', 'Hello World', { style: 'color: red;' })))
+    h('h1', 'Hello World', { style: 'color: red;', onmouseup: () => { console.log('click') } })))
 
 console.log(el)
 document.querySelector('.card').appendChild(el)
