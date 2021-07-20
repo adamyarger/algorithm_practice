@@ -17,6 +17,7 @@ const ce = (function (w) {
         // handle string - either tag or text
         // element must exist first before text
         if (arg === null) {
+          // eat the null
         } else if (typeof arg === 'string') {
           r = handleString(arg)
         } else if (typeof arg === 'number') {
@@ -30,13 +31,21 @@ const ce = (function (w) {
         } else if (arg instanceof Text) {
           // allow passing in arbitrary text
           el.appendChild(r = arg)
+
         } else if (typeof arg === 'object') {
           // handle props set attributes
+          for (const key in arg) {
+            if (Object.prototype.hasOwnProperty.call(arg, key)) {
+              el.setAttribute(key, arg[key])
+
+              // take in styles as object would be dope
+            }
+          }
         } else if (typeof arg === 'function') {
           // handle onclick and stuff
         }
 
-        // r is the node that gets tacked on
+        // r just exists in case we want to mess with it
         return r
       }
 
@@ -76,7 +85,7 @@ const el = h(
   'div',
   h('div', 'dude what',
     ' more text',
-    h('h1', 'Hello World')))
+    h('h1', 'Hello World', { style: 'color: red;' })))
 
 console.log(el)
 document.querySelector('.card').appendChild(el)
