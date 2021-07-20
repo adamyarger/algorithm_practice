@@ -18,12 +18,7 @@ const ce = (function (w) {
         // element must exist first before text
         if (arg === null) {
         } else if (typeof arg === 'string') {
-          // move to function handleString
-          if (!el) {
-            el = document.createElement(arg)
-          } else {
-            el.appendChild(r = document.createTextNode(arg))
-          }
+          r = handleString(arg)
         } else if (typeof arg === 'number') {
           // handleNumbers coerce to string
         } else if (Array.isArray(arg)) {
@@ -43,6 +38,16 @@ const ce = (function (w) {
 
         // r is the node that gets tacked on
         return r
+      }
+
+      function handleString(arg) {
+        if (!el) {
+          el = document.createElement(arg)
+        } else {
+          const r = document.createTextNode(arg)
+          el.appendChild(r)
+          return r
+        }
       }
 
       while (args.length) {
@@ -69,6 +74,9 @@ const h = ce()
 
 const el = h(
   'div',
-  h('div', 'dude what'))
+  h('div', 'dude what',
+    ' more text',
+    h('h1', 'Hello World')))
 
 console.log(el)
+document.querySelector('.card').appendChild(el)
