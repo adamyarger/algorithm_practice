@@ -19,6 +19,9 @@ Output: [[7,4,1],[8,5,2],[9,6,3]]
  * 
  * STEPS
  * transpose the matrix (swap i,j and j, i)
+ * when we transpose we only iterate through the top diagnal half
+ * just like in longest palindromic subsequence
+ * WHY? because if we go through everything well switch spots twice and en up with our orignal array
  * reverse each row
  * 
  */
