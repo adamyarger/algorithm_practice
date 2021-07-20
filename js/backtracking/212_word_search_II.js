@@ -61,6 +61,7 @@ function dfs(board, row, col, node, found) {
   if (node.end) { // found it
     found.push(node.end)
     // ensure its only printed once
+    // this is like crossing it off the word find list it been found
     node.end = null
   }
 
