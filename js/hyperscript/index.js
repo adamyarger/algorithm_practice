@@ -75,7 +75,7 @@ const ce = (function (w) {
             })
           })(key, arg)
         } else {
-          // observable what that mean???
+          // call callback function when cleanedup
           el[key] = arg[key]()
           cleanupFuncs.push(arg[key](function (v) {
             el[key] = v
