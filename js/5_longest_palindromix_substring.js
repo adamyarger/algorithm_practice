@@ -29,33 +29,40 @@ Output: "a"
  * 
  */
 var longestPalindrome = function (s) {
-  let longest = '';
+  // iterate through each item
+  // current item will be the middle
+  // move left and right pointer out fro middle to check for palindrome
+  // stop and exit when boundaries are hit
 
-  const find = (str, left, right) => {
-    // were starting at the middle and moving outwards so left would move -- till it hit the edge of 0
-    while (left >= 0 && right < str.length && str[left] === str[right]) {
-      // keep moving outwards
+  let long = ''
+
+  function find(left, right) {
+    while (left >= 0 && right < s.length && s[left] === s[right]) {
+      // its a palindrome
+      // keep growing it
       left -= 1
       right += 1
     }
-    // return a new string representing the palindrome
-    // why + 1?
-    return str.slice(left + 1, right)
+    // parties whats the palindrome
+    // rights fine since it can go past
+    // left has to come forward 1 since it went overboard
+    return s.slice(left + 1, right)
   }
 
   for (let i = 0; i < s.length; i++) {
-    // palin drome adds to count if its 1 letter or 2
-    const cur1 = find(s, i, i)
-    const cur2 = find(s, i, i + 1)
-    const curMax = cur1.length > cur2.length ? cur1 : cur2
+    const oneChar = find(i, i)
+    const twoChar = find(i, i + 1)
 
-    if (curMax.length > longest.length) {
-      //update we have a new one
-      longest = curMax
+    // it it bigger than the rest???
+    const maxChar = oneChar.length > twoChar.length ? oneChar : twoChar
+    if (maxChar.length > long.length) {
+      long = maxChar
     }
   }
 
-  return longest
+  return long
 }
 
 console.log(longestPalindrome('babad'))
+
+console.log(longestPalindrome('cbbd'))
