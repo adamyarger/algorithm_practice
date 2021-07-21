@@ -72,11 +72,13 @@ var coinChange = function (coins, amount) {
         min = count
       }
     }
-    memo[amount] = min === -1 ? min : min + 1
+    memo[amount] = min === Infinity ? min : min + 1
     return memo[amount]
   }
 
-  return dfs(amount)
+  const out = dfs(amount)
+
+  return out === Infinity ? -1 : out
 };
 
 // const change = coinChange([1, 2, 3], 5)
