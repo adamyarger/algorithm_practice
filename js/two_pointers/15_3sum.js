@@ -28,17 +28,8 @@ Output: []
  * backtracking will exceed time limit
  * since were looking for 0, we can solve this faster when the array is Sorted
  * 
- * sort
- * loop through
- * skip duplicates
- * use 2 pointers left and right since they ar most likely to cancel eachother out
- * while left and right havent crossed
- * check the sum (we have 2 pointer left and right then the middle i is shifting, on each shift were seeing if the sum is 0)
- * if sum is 0
- *  append
- *  shift left and right so theres no duplicates (while loops) 
- * elseif sum > 0 move end
- * else move start
+ * i acts as a pivot point kind of like quick sort
+ * i and start keep moving forward so once we get past 0 we know we can break out early
  * 
  */
 var threeSum = function (nums) {
