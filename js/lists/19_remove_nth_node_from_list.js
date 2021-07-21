@@ -31,42 +31,36 @@ function ListNode(val, next) {
  * @param {number} n
  * @return {ListNode}
  * 
- * this is nth from the end
- * could do fast and slow pointer, that way on hit the end while the other is in the middle and knows where to go to
  * 
- * step 1: find the nth to last node
- * step 2: remove node
- * - track prev
- * - point prev to cur.next
+ * 1.) find the node before the target node
+ * 2.) point pre node to targetnode.next
  * 
- * 
- * IDEA: move first poiter forward by n amount
- * then add a second pointer at the beginning and move forward until the first one hits the end
- * by that time the newer index will be in place
+ * iterate n amount
+ * then start second pointer and iterate till first hits the end
+ * we need it to stop at the last one NOT go past it
+ * to do so we loop while fatspointer.next still exists
  */
 var removeNthFromEnd = function (head, n) {
   let fast = head
   let slow = head
 
+  // need to check length see how many are left over
+  // then return early
+  // whats the edge case here?
   for (let i = 0; i < n; i++) {
     fast = fast.next
   }
 
-  // this is th safe gaurd
-  // edge case: it mans we went through the whole list
-  // so n to end is the head.next
+  // if n === lis.length we delete the head
+  // which means we just return head.next as the new head
   if (!fast) return head.next
 
-  // by wayching fast.next instead we dont need to keep track of prev
-  // instead it end sone early
-  while (fast.next) {
+  while (fast && fast.next) {
     fast = fast.next
     slow = slow.next
   }
 
-  // reset
   slow.next = slow.next.next
-
   return head
 };
 
@@ -76,7 +70,7 @@ head.next = new ListNode(2)
 // head.next.next.next = new ListNode(4)
 // head.next.next.next.next = new ListNode(5)
 
-let node = removeNthFromEnd(head, 2)
+let node = removeNthFromEnd(head, 1)
 
 console.log('-----')
 while (node) {
