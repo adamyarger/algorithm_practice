@@ -31,7 +31,13 @@ const htm = (function () {
     let char, propName
 
     const commit = field => {
-
+      // match line breaks
+      if (mode === MODE_TEXT && (field || (buffer = buffer.replace(/^\s*\n\s*|\s*\n\s*$/g, '')))) {
+        current.push(field ? fields[field] : buffer)
+      }
+      else if (mode === MODE_TAGNAME && field || buffer) {
+        current[1] = field ? fields[field] : buffer
+      }
     }
 
     for (let i = 0; i < statics.length; i++) {
