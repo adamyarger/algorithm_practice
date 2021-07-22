@@ -55,68 +55,89 @@ Output: 2
  if coin value is greater than amount coninure the array
 
  */
+// var brute = function (coins, amount) {
+//   return dfs(coins, amount)
+// };
+
+// function dfs(coins, amount) {
+//   if (amount === 0) return 0
+
+//   let result
+//   let min = Number.MAX_SAFE_INTEGER
+
+//   for (let i = 0; i < coins.length; i++) {
+//     if (coins[i] > amount) continue
+
+//     result = Math.min(min, dfs(coins, amount - coins[i]) + 1)
+//   }
+
+//   return result === Number.MAX_SAFE_INTEGER ? -1 : result
+// }
+
+// const change = brute([1, 2, 3], 11)
+// console.log(change)
+
+
 var coinChange = function (coins, amount) {
   const memo = {}
-
-  function dfs(amount) {
-    if (amount === 0) return 0
-    if (amount in memo) return memo[amount]
-
-    let min = Infinity
-
-    for (let i = 0; i < coins.length; i++) {
-      if (coins[i] > amount) continue
-      let count = dfs(amount - coins[i])
-
-      if (count < min) {
-        min = count
-      }
-    }
-    memo[amount] = min === Infinity ? min : min + 1
-    return memo[amount]
-  }
-
-  const out = dfs(amount)
-
+  const out = dfs(coins, amount, memo)
   return out === Infinity ? -1 : out
 };
 
-// const change = coinChange([1, 2, 3], 5)
-// console.log(change)
+function dfs(coins, amount, memo) {
+  if (amount === 0) return 0
+
+  // why does this work???
+  // whats the min amount of coins at each level, it might stay the same in between finding the next best
+  if (memo[amount]) return memo[amount]
+
+  // keep track of min outside the loop
+  // this acts like a cache at the top of the call stack
+  let min = Infinity
+
+  for (let i = 0; i < coins.length; i++) {
+    if (coins[i] > amount) continue
+
+    let count = dfs(coins, amount - coins[i], memo)
+
+    if (count < min) {
+      min = count
+    }
+  }
+
+  // dont add the 1 till later else it messes it up
+  return memo[amount] = min === Infinity ? min : min + 1
+}
+
+// console.log(coinChange([1, 2, 3], 11))
+
+// console.log(coinChange([2, 5, 10, 1], 27))
 
 
 // https://leetcode.com/problems/coin-change/discuss/133487/Clean-JavaScript-solution
 
 function bottomUp(coins, amount) {
   /**
-   * create a matrix
-   * fill it in with infinity
-   * y axis is coins
-   * x axis is amount incrmenting by 1
-   * 
-   * if there enough amount
-   * and current amount - coin amount to get the index to look back at
-   * 
-   * KEY POINT
-   * choose min of top cell or cell at 5 amount back +1
+   * we dont need a 2d matrix since we just need to compare to the last coins outcome, then we overwrite it
+   * we look back by coin amount since that acts as subtraction from the current amount were looking for what ever worked 2 back +1 is the answer
    */
 
-  // add 1 for the lookback
-  // we only need 1 array because we overwrite the last one at each new level
+  // pad with 0 to make adding easy
   const dp = Array(amount + 1).fill(Infinity)
   dp[0] = 0
 
-  for (let i = 1; i <= amount; i++) {
+  for (let i = 0; i <= amount + 1; i++) {
     for (const coin of coins) {
+      // check if coin is choosable else it stays at infinity
       if (i - coin >= 0) {
-        // dp[i] is the equivlent of looking up 1 cell on a 2d array
-        // dp[i - coin] + 1 is go back by coin amount and add 1
         dp[i] = Math.min(dp[i], dp[i - coin] + 1)
       }
     }
   }
 
-  return dp[amount] === Infinity ? -1 : dp[amount]
+  console.log(dp)
+
+  return dp[amount]
 }
 
 const bottom = bottomUp([1, 2, 3], 5)
