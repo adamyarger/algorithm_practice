@@ -29,7 +29,43 @@ Output: [1]
 /**
  * @param {number[]} nums
  * @return {void} Do not return anything, modify nums in-place instead.
+ * 
+ * // sort in place
+  // merge sort uses an auxilary array quick sort uses in place
+  // we need to use the quick sort partition
+  // pick a partition item at the start, set left and right pointers
+  // move left forward as long as its smaller than partition
+  // move right inwards as long as its bigger than partition
+  // when they meet swap partition for last item
+
+  since we only have 3 possibilities we just chose which position to switch them to
+  swap 0 to its placethen swap 2 and 1 if needed
+  then mve in
  */
 var sortColors = function (nums) {
+  function swap(a, b) {
+    [nums[a], nums[b]] = [nums[b], nums[a]]
+  }
 
+  let cur = 0
+  let left = 0
+  let right = nums.length - 1
+
+  while (cur <= right) {
+    const val = nums[cur]
+    if (val === 0) {
+      swap(cur, left)
+      left++
+      cur++
+    } else if (val == 2) {
+      swap(cur, right)
+      right--
+    } else {
+      cur++
+    }
+  }
+
+  return nums
 };
+
+console.log(sortColors([2, 0, 2, 1, 1, 0]))
