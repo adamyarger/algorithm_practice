@@ -56,13 +56,17 @@ It does not matter what you leave beyond the returned k (hence they are undersco
  * do it iterativly look back one and delete to begin with
  * 
  * could do binary search way next
+ * 
+ * for faster dont splice, just count
  */
 var removeDuplicates = function (nums) {
   let i = 0;
-  while (i < nums.length) {
-    nums[i] === nums[i + 2] ? nums.splice(i, 1) : i++;
+  while (i + 1 < nums.length) {
+    nums[i] === nums[i + 1] ? nums.splice(i, 1) : i++;
   }
   return nums.length;
 };
 
+
+console.log(removeDuplicates([1, 1, 2]))
 console.log(removeDuplicates([0, 0, 1, 1, 1, 1, 2, 3, 3]))
