@@ -25,47 +25,60 @@ Output: []
  * @param {number[]} nums
  * @return {number[][]}
  * 
- * backtracking will exceed time limit
- * since were looking for 0, we can solve this faster when the array is Sorted
  * 
- * i acts as a pivot point kind of like quick sort
- * i and start keep moving forward so once we get past 0 we know we can break out early
+ * sub problems
+ * - remove duplicates (skip duplicates)
+ * - sort then use 2 pointers
+ * - its like a normal 2 pointers atrting on the ends to find a sum in 2sum
+ * - but we have a 3rd pointer in the middle that needs to iterate through
  * 
+ * end gets reset every time
+ * we use a for loop to shrink the array
+ * 
+ * can this be broken up to make easier to rememeber?
+ * 
+ * like classic 2sum there 3 scenarios
+ * if equal if larger if less
+ * 
+ * reframe: 3 sum is the same as sorted 2 sum, we just repeat it in a for loop while setting a new 3rd partition item on each new iteration
  */
 var threeSum = function (nums) {
   nums.sort((a, b) => a - b)
   const out = []
-  const len = nums.length
 
   for (let i = 0; i < nums.length; i++) {
-    // the start gets set by the i + 1 so if 1 < 0 everything after is bigger than 0 and cant create a sum of 0
     if (nums[i] > 0) break
 
-    // skip duplicates
-    if (i && nums[i] == nums[i - 1]) continue
+    // stop duplicates
+    if (i && nums[i] === nums[i - 1]) continue
 
-    start = i + 1 // why +1
-    end = len - 1
-    while (end > start) {
-      const sum = nums[start] + nums[i] + nums[end]
+    let left = i + 1
+    let right = nums.length - 1
+
+    while (left < right) {
+      const sum = nums[i] + nums[left] + nums[right]
 
       if (sum === 0) {
-        out.push([nums[start], nums[i], nums[end]])
+        out.push([nums[i], nums[left], nums[right]])
+        // remove dups
+        // if we didnt skip the other 2 pointers would be the same and the 3rd as well making it a duplicate
+        while (left < right && nums[left] === nums[left + 1]) {
+          left++
+        }
 
-        // get rid of dups
-        while (start < end && nums[start] === nums[start + 1]) {
-          start += 1
+        while (right > left && nums[right] === nums[right - 1]) {
+          right--
         }
-        while (end > start && nums[end] === nums[end - 1]) {
-          end -= 1
-        }
-        start += 1
-        end -= 1
+
+        // its a match we used both, move both in so we dont repeat
+        right--
+        left++
       } else if (sum > 0) {
-        // move in end
-        end -= 1
+        // move right in
+        right--
       } else {
-        start += 1
+        // move left in
+        left++
       }
     }
   }
