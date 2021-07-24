@@ -1,4 +1,13 @@
+/**
+ * 
+ * Time Complexity: O(n^{k - 1})O(nk−1), or O(n^3)O(n3) for 4Sum. We have k - 2k−2 loops, and twoSum is O(n)O(n).
 
+Note that for k > 2k>2, sorting the array does not change the overall time complexity.
+
+Space Complexity: O(n)O(n). We need O(k)O(k) space for the recursion. kk can be the same as nn in the worst case for the generalized algorithm.
+
+Note that, for the purpose of complexity analysis, we ignore the memory required for the output.
+ */
 
 var kSum = function (nums, target, k, result, results) {
   const len = nums.length
@@ -36,6 +45,8 @@ var kSum = function (nums, target, k, result, results) {
         break
       }
 
+      // this is similar to backtracking
+      // whats the relation to two pointers -> backtracking -> dynamic programming???
       if (i === 0 || i > 0 && nums[i - 1] !== nums[i]) {
         kSum(nums.slice(i + 1), target - nums[i], k - 1, result.concat(nums[i]), results)
       }
