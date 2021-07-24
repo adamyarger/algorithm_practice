@@ -47,8 +47,8 @@ var brute = function (nums) {
   return right - left < 0 ? 0 : (right - left) + 1
 };
 
-console.log(brute([2, 6, 4, 8, 10, 9, 15]))
-console.log(brute([1, 2, 3, 4]))
+// console.log(brute([2, 6, 4, 8, 10, 9, 15]))
+// console.log(brute([1, 2, 3, 4]))
 
 
 
@@ -68,5 +68,50 @@ var sort = function (nums) {
   return end - start >= 0 ? end - start + 1 : 0
 };
 
-console.log(sort([2, 6, 4, 8, 10, 9, 15]))
-console.log(sort([1, 2, 3, 4]))
+// console.log(sort([2, 6, 4, 8, 10, 9, 15]))
+// console.log(sort([1, 2, 3, 4]))
+
+
+var twoPointer = function (nums) {
+  let lo = 0
+  let hi = nums.length - 1
+
+  // find the first number out of sorting order at the beginning
+  while (lo < nums.length - 1 && nums[lo] <= nums[lo + 1]) {
+    lo++
+  }
+
+  // its already sorted
+  if (lo == nums.length - 1) return 0
+
+  // find the upp end that out of place
+  while (hi > 0 && nums[hi] >= nums[hi - 1]) {
+    hi--
+  }
+
+  // find the max and min of the subarray
+  let min = Infinity
+  let max = -Infinity
+  for (let i = lo; i < hi + 1; i++) {
+    min = Math.min(min, nums[i])
+    max = Math.max(max, nums[i])
+  }
+
+  // extend low out
+  while (lo > 0 && nums[lo - 1] > min) {
+    lo--
+  }
+
+  // extend hi out
+  while (hi < nums.length - 1 && nums[hi + 1] < max) {
+    hi++
+  }
+
+  return (hi - lo) + 1
+}
+
+console.log(twoPointer([2, 6, 4, 8, 10, 9, 15]))
+console.log(twoPointer([1, 2, 3, 4]))
+console.log(twoPointer([1, 3, 2, 3, 3]))
+
+
