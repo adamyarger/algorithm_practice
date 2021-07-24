@@ -37,15 +37,12 @@ var fourSum = function (nums, target) {
   const out = []
   const len = nums.length
 
-  // why - 3 ???
+  // why - 3 ??? 3 other pointers
+  // because we have 4 pointers total j will be outside by 1, left will be outside by 2, and right will be out by 3
   for (let i = 0; i < len - 3; i++) {
     for (let j = i + 1; j < len - 2; j++) {
       let left = j + 1
       let right = len - 1
-
-
-      // dups
-      // if (nums[j] === nums[j - 1]) continue
 
       while (left < right) {
         const sum = nums[i] + nums[j] + nums[left] + nums[right]
@@ -60,7 +57,6 @@ var fourSum = function (nums, target) {
           while (left < right && nums[right] === nums[right - 1]) {
             right--
           }
-          // move left and right in WebGLShaderPrecisionFormat.length.toString. we already used those and cant repeat
           left++
           right--
         } else if (sum > target) {
@@ -69,8 +65,10 @@ var fourSum = function (nums, target) {
           left++
         }
       }
+      // skip dups
       while (nums[j] === nums[j + 1]) j++
     }
+    // skip dups
     while (nums[i] === nums[i + 1]) i++
   }
 
