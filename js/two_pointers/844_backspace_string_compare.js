@@ -57,7 +57,60 @@ function build(str) {
   return out.join('')
 }
 
-console.log(backspaceCompare('ab#c', 'ad#c'))
-console.log(backspaceCompare('a', 'ad#'))
-console.log(backspaceCompare('ab##', 'c#d#'))
-console.log(backspaceCompare('a#c', 'b'))
+// console.log(backspaceCompare('ab#c', 'ad#c'))
+// console.log(backspaceCompare('a', 'ad#'))
+// console.log(backspaceCompare('ab##', 'c#d#'))
+// console.log(backspaceCompare('a#c', 'b'))
+
+
+
+
+
+
+var twoPointer = function (s, t) {
+  let index1 = s.length - 1
+  let index2 = t.length - 1
+
+  while (index1 >= 0 || index2 >= 0) {
+    let i1 = getNextChar(s, index1)
+    let i2 = getNextChar(t, index2)
+
+    if (i1 < 0 && i2 < 0) {
+      return true
+    }
+
+    if (s[i1] !== t[i2]) {
+      return false
+    }
+
+    if (i1 < 0 || i2 < 0) {
+      return false
+    }
+
+    index1 = i1 - 1
+    index2 = i2 - 1
+  }
+  return true
+};
+
+// use a stack and pop off whenever you see a '#'
+// you were on track with this one
+function getNextChar(str, index) {
+  let removeCnt = 0
+  while (index >= 0) {
+    if (str[index] === '#') {
+      removeCnt++
+    } else if (removeCnt) {
+      removeCnt--
+    } else {
+      break
+    }
+    index--
+  }
+  return index
+}
+
+console.log(twoPointer('ab#c', 'ad#c'))
+console.log(twoPointer('a', 'ad#'))
+console.log(twoPointer('ab##', 'c#d#'))
+console.log(twoPointer('a#c', 'b'))
