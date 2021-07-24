@@ -65,3 +65,9 @@ function fourSum(nums, target) {
 
 console.log(fourSum([1, 0, -1, 0, -2, 2], 0)) //[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
 console.log(fourSum([2, 2, 2, 2, 2], 8))
+
+
+
+// REDO LATTER
+
+// https://leetcode.com/problems/4sum/solution/
