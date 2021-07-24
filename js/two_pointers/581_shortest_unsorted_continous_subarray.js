@@ -71,7 +71,7 @@ var sort = function (nums) {
 // console.log(sort([2, 6, 4, 8, 10, 9, 15]))
 // console.log(sort([1, 2, 3, 4]))
 
-
+// this is essentially 3 different 2 pointer methods put together
 var twoPointer = function (nums) {
   let lo = 0
   let hi = nums.length - 1
