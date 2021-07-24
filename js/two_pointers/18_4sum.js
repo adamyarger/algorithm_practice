@@ -65,7 +65,8 @@ var fourSum = function (nums, target) {
           left++
         }
       }
-      // skip dups
+      // skip dups, need to allow the work to be done at least 
+      // once incase the whole set is repeats like[2, 2, 2, 2]
       while (nums[j] === nums[j + 1]) j++
     }
     // skip dups
