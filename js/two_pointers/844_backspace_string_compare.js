@@ -75,6 +75,7 @@ var twoPointer = function (s, t) {
     let i1 = getNextChar(s, index1)
     let i2 = getNextChar(t, index2)
 
+    // edge case of index 1 and 2 bein set to -1
     if (i1 < 0 && i2 < 0) {
       return true
     }
@@ -93,7 +94,7 @@ var twoPointer = function (s, t) {
   return true
 };
 
-// use a stack and pop off whenever you see a '#'
+
 // you were on track with this one
 function getNextChar(str, index) {
   let removeCnt = 0
