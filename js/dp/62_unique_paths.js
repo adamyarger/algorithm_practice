@@ -45,24 +45,19 @@ Output: 6
  * check for base case of being out of bounds
  */
 var uniquePaths = function (m, n) {
-  const memo = Array(m).fill(-1).map(item => Array(n).fill(-1))
-  return recur(memo, m - 1, n - 1, 0, 0)
+  const memo = Array(m).fill(-1).map(_ => Array(n).fill(-1))
+  return dfs(memo, m - 1, n - 1)
 };
 
-function recur(memo, m, n, cur_m, cur_n) {
-  // can only move m and n up in array values for down and right
-  // were counting to exit with zero to be added
-  if (cur_m > m || cur_n > n) return 0
+function dfs(memo, m, n) {
+  if (m === 0 && n === 0) return 1
+  if (m < 0 || n < 0) return 0
 
-  if (cur_m == m && cur_n == n) return 1
+  if (memo[m][n] !== -1) return memo[m][n]
 
-  if (memo[cur_m][cur_n] !== -1) {
-    return memo[cur_m][cur_n]
-  }
+  memo[m][n] = dfs(memo, m - 1, n) + dfs(memo, m, n - 1)
 
-  memo[cur_m][cur_n] = recur(memo, m, n, cur_m + 1, cur_n) + recur(memo, m, n, cur_m, cur_n + 1)
-
-  return memo[cur_m][cur_n]
+  return memo[m][n]
 }
 
 // console.log(uniquePaths(3, 3))
