@@ -44,11 +44,12 @@ var characterReplacement = function (s, k) {
 
     // most frequent char
     freq = Math.max(freq, seen[char])
-    console.log(freq)
 
     // while we go over k, remove left
     // (right - left + 1) gives us our range
     // freq
+    // when (right - left + 1 - freq) is 0 it means all the chars are the same
+    // the number goes up it represents how many different chars are in at
     while ((right - left + 1 - freq) > k) {
       const removeChar = s[left]
       seen[removeChar]--
