@@ -50,7 +50,9 @@ var characterReplacement = function (s, k) {
     // freq
     // when (right - left + 1 - freq) is 0 it means all the chars are the same
     // the number goes up it represents how many different chars are in at
-    while ((right - left + 1 - freq) > k) {
+    const difCharCount = (right - left + 1 - freq)
+
+    while (difCharCount > k) {
       const removeChar = s[left]
       seen[removeChar]--
       left++
@@ -62,4 +64,4 @@ var characterReplacement = function (s, k) {
   return max
 };
 
-console.log(characterReplacement('AABABBA', 1))
+console.log(characterReplacement('AABA', 1))
