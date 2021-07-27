@@ -48,11 +48,16 @@ var checkInclusion = function (s1, s2) {
 
   while (end < s2.length) {
     if (map.has(s2[end])) {
+      // decrement count of char
       map.set(s2[end], map.get(s2[end]) - 1);
+      // if we hit zero no more of that char needed
       if (map.get(s2[end]) === 0) counter--;
     }
+    // move forward like a for loop
     end++;
 
+    // wont get first till the end
+    // this will be sliding up the left
     while (counter === 0) {
       if (map.has(s2[start])) {
         map.set(s2[start], map.get(s2[start]) + 1);
@@ -72,9 +77,9 @@ Map.prototype.getOrDefault = function (key, value) {
 
 // console.log(checkInclusion('ab', 'eidbaooo'))
 // console.log(checkInclusion('ab', 'eidboaoo'))
-// console.log(checkInclusion("adc", "dcda"))
+console.log(checkInclusion("adc", "dcda"))
 
-console.log(checkInclusion("hello", "ooolleoooleh")) // false
+// console.log(checkInclusion("hello", "ooolleoooleh")) // false
 
 // "hello"
 // "ooolleoooleh"
