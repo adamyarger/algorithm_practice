@@ -35,7 +35,7 @@ Explanation: The array cannot be partitioned into equal sum subsets.
  */
 var canPartition = function (nums) {
   const sum = nums.reduce((acc, item) => acc + item, 0)
-  // needs to be even to be able to split
+
   if (sum % 2 !== 0) return false
 
   const target = sum / 2
@@ -46,7 +46,6 @@ var canPartition = function (nums) {
 
 function dfs(memo, nums, target) {
   if (target === 0) return true
-
   if (target in memo) return memo[target]
 
   for (let i = 0; i < nums.length; i++) {
@@ -59,10 +58,8 @@ function dfs(memo, nums, target) {
   }
 
   memo[target] = false
-
   return memo[target]
 }
 
 console.log(canPartition([1, 5, 11, 5]))
-
 console.log(canPartition([1, 2, 3, 5]))
