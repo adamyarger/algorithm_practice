@@ -22,62 +22,64 @@ Output: false
  * @param {string} s2
  * @return {boolean}
  * 
- * does s2 contain a permutation of s1
  * 
- * get permutations of s1
- * 
- * we know the sliding window will be a certain size
- * so grow the sliding window to size then move it forward
- * 
- * if have all permutations we can check if window exists in permutations
- * 
- * options 2:
- * dont need permutations just need to know if all chars get used up
- * add to array when yu find a char
- * 
- * could make a map of chars with counts, check if key exists
+ * move right pointer forward until we use all the chars, thats our end point of the permutation
+ * now we move the left pointer forward, if the length is just right we found it
+ * if the length stops short its not a match
+
+  // sliding window means start and end pointers
+
+  // HARDEST PART
+  // track uniq chars
+
+  // TAKE CARE OF END POINTER
+  // if char count hits zero subtract from unique chars
+  // keep moving end
+
+  // START POINTER
+  // once uniw is 0 start moving the left pointers
+  // add back unique when it goes over zero, its the inverse of the top
+  // stop when end-start === s1.length
  */
 var checkInclusion = function (s1, s2) {
-  if (!s1 || !s2 || s1.length > s2.length) return false;
+  if (!s1 || !s2 || s1.length > s2.length) return false
 
-  let map = new Map();
-  for (let s of s1) {
-    map.set(s, map.getOrDefault(s, 0) + 1);
+  // need to pointers and trackers
+  const map = new Map()
+  for (const char of s1) {
+    map.set(char, map.getOrDefault(char, 0) + 1)
   }
-  let start = 0
-  let end = 0
+
+  let left = 0
+  let right = 0
   let uniq = map.size
 
-  while (end < s2.length) {
-    if (map.has(s2[end])) {
-      // decrement count of char, this can decrement chars below zero
-      // thats what makes the bottom part work
-      map.set(s2[end], map.get(s2[end]) - 1);
-      // if we hit zero no more of that char needed
-      if (map.get(s2[end]) === 0) uniq--;
-    }
-    // move forward like a for loop
-    end++;
-
-    // wont get first till the end
-    // this will be sliding up the left
-    // in order to start the while loop, every char will have to have been found
-    while (uniq === 0) {
-      console.log(map)
-      if (map.has(s2[start])) {
-
-        console.log('fire', start, s2[start])
-
-        map.set(s2[start], map.get(s2[start]) + 1);
-        if (map.get(s2[start]) > 0) uniq++;
+  while (right < s2.length) {
+    // find stop point
+    if (map.has(s2[right])) {
+      map.set(s2[right], map.get(s2[right]) - 1)
+      if (map.get(s2[right]) === 0) {
+        uniq--
       }
-      //
-      console.log(end, start, uniq)
-      if (end - start === s1.length) return true;
-      start++;
+    }
+
+    right++
+
+    // move left forward until we find the correct length
+    while (uniq === 0) {
+      if (map.has(s2[left])) {
+        map.set(s2[left], map.get(s2[left]) + 1)
+
+        if (map.get(s2[left]) > 0) {
+          uniq++
+        }
+      }
+      if (right - left === s1.length) return true
+      left++
     }
   }
-  return false;
+
+  return false
 }
 
 Map.prototype.getOrDefault = function (key, value) {
@@ -85,11 +87,13 @@ Map.prototype.getOrDefault = function (key, value) {
 }
 
 
-// console.log(checkInclusion('ab', 'eidbaooo'))
-// console.log(checkInclusion('ab', 'eidboaoo'))
+console.log(checkInclusion('ab', 'eidbaooo'))
+console.log(checkInclusion('ab', 'eidboaoo'))
 console.log(checkInclusion("ad", "dcda"))
 
-// console.log(checkInclusion("hello", "ooolleoooleh")) // false
+console.log(checkInclusion("hello", "ooolleoooleh")) // false
+
+console.log(checkInclusion("ab", "a"))
 
 // "hello"
 // "ooolleoooleh"
