@@ -50,7 +50,8 @@ var checkInclusion = function (s1, s2) {
 
   while (end < s2.length) {
     if (map.has(s2[end])) {
-      // decrement count of char
+      // decrement count of char, this can decrement chars below zero
+      // thats what makes the bottom part work
       map.set(s2[end], map.get(s2[end]) - 1);
       // if we hit zero no more of that char needed
       if (map.get(s2[end]) === 0) uniq--;
