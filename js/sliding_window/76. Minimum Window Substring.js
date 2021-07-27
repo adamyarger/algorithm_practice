@@ -70,6 +70,7 @@ var minWindow = function (s, t) {
     right++
 
     while (uniq === 0) {
+      // dont need right +1 since we do right++ before hand
       out = out && out.length < (right - left) ? out : s.slice(left, right)
 
       if (map.has(s[left])) {
