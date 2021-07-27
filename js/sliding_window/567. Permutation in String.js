@@ -44,25 +44,34 @@ var checkInclusion = function (s1, s2) {
   for (let s of s1) {
     map.set(s, map.getOrDefault(s, 0) + 1);
   }
-  let start = 0, end = 0, counter = map.size;
+  let start = 0
+  let end = 0
+  let uniq = map.size
 
   while (end < s2.length) {
     if (map.has(s2[end])) {
       // decrement count of char
       map.set(s2[end], map.get(s2[end]) - 1);
       // if we hit zero no more of that char needed
-      if (map.get(s2[end]) === 0) counter--;
+      if (map.get(s2[end]) === 0) uniq--;
     }
     // move forward like a for loop
     end++;
 
     // wont get first till the end
     // this will be sliding up the left
-    while (counter === 0) {
+    // in order to start the while loop, every char will have to have been found
+    while (uniq === 0) {
+      console.log(map)
       if (map.has(s2[start])) {
+
+        console.log('fire', start, s2[start])
+
         map.set(s2[start], map.get(s2[start]) + 1);
-        if (map.get(s2[start]) > 0) counter++;
+        if (map.get(s2[start]) > 0) uniq++;
       }
+      //
+      console.log(end, start, uniq)
       if (end - start === s1.length) return true;
       start++;
     }
@@ -77,7 +86,7 @@ Map.prototype.getOrDefault = function (key, value) {
 
 // console.log(checkInclusion('ab', 'eidbaooo'))
 // console.log(checkInclusion('ab', 'eidboaoo'))
-console.log(checkInclusion("adc", "dcda"))
+console.log(checkInclusion("ad", "dcda"))
 
 // console.log(checkInclusion("hello", "ooolleoooleh")) // false
 
