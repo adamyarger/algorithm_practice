@@ -23,14 +23,18 @@ The substring "BBBB" has the longest repeating letters, which is 4.
  * @param {number} k
  * @return {number}
  * 
- * replace and char up to k times
- * whats the longest substring of the same letter?
+ * return longest substring of the same letter
+ * can have up to k wildcard letters
  * 
- * since its a substring we can use sliding window
- * keep growing the window as long as chars are the same and k other chars havent been exhausted yet
- * need a count of how many other chars have been used in the window
+ * need to know the most frequest letter since its the most liekly winner
+ * but that means we need to track all letter lengths to know when frequency change
  * 
- * when we go over keep
+ * going over moving left
+ * 
+ * sliding window is almost always a nested while loop in a for loop
+ * 
+ * MISSED point before:
+ * // how do we check going over k?
  */
 var characterReplacement = function (s, k) {
   const seen = {}
@@ -42,18 +46,14 @@ var characterReplacement = function (s, k) {
     const char = s[right]
     seen[char] = seen[char] ? seen[char] + 1 : 1
 
-    // most frequent char
-    freq = Math.max(freq, seen[char])
+    freq = Math.max(seen[char], freq)
 
-    // while we go over k, remove left
-    // (right - left + 1) gives us our range
-    // freq
-    // when (right - left + 1 - freq) is 0 it means all the chars are the same
-    // the number goes up it represents how many different chars are in at
+    // this will be 0 if its all the same char
+    // does this get run on each while loop?
+    while ((right - left + 1) - freq > k) {
 
-    while ((right - left + 1 - freq) > k) {
-      const removeChar = s[left]
-      seen[removeChar]--
+      const leftChar = s[left]
+      seen[leftChar]--
       left++
     }
 
@@ -63,4 +63,5 @@ var characterReplacement = function (s, k) {
   return max
 };
 
-console.log(characterReplacement('AABA', 1))
+console.log(characterReplacement('ABAB', 2))
+console.log(characterReplacement('AABABBA', 1))
