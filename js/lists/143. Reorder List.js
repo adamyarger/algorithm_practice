@@ -69,6 +69,7 @@ var reorderList = function (head) {
     mid.next = next
   }
 
+  // merge into place
   slow = head
   fast = mid.next
   while (slow !== mid) {
