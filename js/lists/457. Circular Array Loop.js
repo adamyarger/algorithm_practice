@@ -65,12 +65,15 @@ var circularArrayLoop = function (nums) {
 
       // console.log(fast)
 
+      // this acts like going 2 ahead in normal fast slow pointer
+      // but since we dont know that space amount we just say go ahead by 2 calls
       if (fast !== -1) {
         // if we havent broke the rule move fast forward more
         fast = findNextIndex(nums, isForward, fast)
       }
 
       // why fast === slow??? because that means weve gone through a whole cycle
+      // either we found a cycle if they match or it broke the rules
       if (slow === -1 || fast === -1 || fast === slow) break
     }
 
