@@ -42,23 +42,73 @@ Every nums[seq[j]] must be either all positive or all negative.
 /**
  * @param {number[]} nums
  * @return {boolean}
+ * 
+ * no going over or under since its circular
+ * 
+ * in order to be cicular it need to go through the last item and loop around again
+ * a cycle the DOES NOT cover all nodes wont count
+ * 
+ * nums you hit must be either all positive or all negative
  */
 var circularArrayLoop = function (nums) {
-  const set = new Set()
-  let i = 0
+  for (let i = 0; i < nums.length; i++) {
+    // negative to move back, needs to all be the same
+    isForward = nums[i] >= 0
+    let slow = i
+    let fast = i
 
-  while (i > -1) {
-    // track indexes being visited
-    if (set.has(i)) {
-      return true
-    } else {
-      set.add(i)
-      i = (i + nums[i]) % nums.length
+    // if slow or fast becomes -1 we cant find a cycle
+    while (true) {
+      // move one step for slow pointer
+      slow = findNextIndex(nums, isForward, slow)
+      fast = findNextIndex(nums, isForward, fast)
+
+      // console.log(fast)
+
+      if (fast !== -1) {
+        // if we havent broke the rule move fast forward more
+        fast = findNextIndex(nums, isForward, fast)
+      }
+
+      // why fast === slow??? because that means weve gone through a whole cycle
+      if (slow === -1 || fast === -1 || fast === slow) break
     }
+
+    if (slow !== -1 && slow === fast) return true
   }
+
   return false
 };
 
-console.log(circularArrayLoop([2, -1, 1, 2, 2]))
+function findNextIndex(nums, isForward, index) {
+  let direction = nums[index] >= 0
 
-console.log(circularArrayLoop([2, -1, 1, -2, -2])) // this causes a loop
+  // change direction, this breaks the rules
+  // console.log(isForward, direction)
+  if (isForward !== direction) {
+    return -1
+  }
+
+  // its circular so use modulo
+  let next = (index + nums[index]) % nums.length
+
+  // python handles negative indexes and js doesnt
+  if (next < 0) {
+    next = next + nums.length
+  }
+
+  // check if weve hit a loop of landing on the same index every time???
+  // a 1 element cycle
+  if (next === index) {
+    next = -1
+  }
+
+  return next
+}
+
+// console.log(circularArrayLoop([2, -1, 1, 2, 2]))
+
+// console.log(circularArrayLoop([2, -1, 1, -2, -2])) // this causes a loop
+
+console.log(circularArrayLoop([-2, 1, -1, -2, -2]))
+
