@@ -71,6 +71,8 @@ var reorderList = function (head) {
 
   // merge start and mid pointers
   // left side next is always a pointer, the value comes before the next
+
+  // which pointers get overwritten? we need a reference for those
   slow = head
   fast = mid.next
   while (slow !== mid) {
