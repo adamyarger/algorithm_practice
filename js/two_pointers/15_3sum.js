@@ -25,68 +25,57 @@ Output: []
  * @param {number[]} nums
  * @return {number[][]}
  * 
+ * 3sum is all about wrapping a for loop around the solution to 2sum sorted
  * 
- * sub problems
- * - remove duplicates (skip duplicates)
- * - sort then use 2 pointers
- * - its like a normal 2 pointers atrting on the ends to find a sum in 2sum
- * - but we have a 3rd pointer in the middle that needs to iterate through
+ * looking for 0
  * 
- * end gets reset every time
- * we use a for loop to shrink the array
- * 
- * can this be broken up to make easier to rememeber?
- * 
- * like classic 2sum there 3 scenarios
- * if equal if larger if less
- * 
- * reframe: 3 sum is the same as sorted 2 sum, we just repeat it in a for loop while setting a new 3rd partition item on each new iteration
+ * needs to be sorted that O(nlogn)
  */
 var threeSum = function (nums) {
   nums.sort((a, b) => a - b)
-  const out = []
+  out = []
 
+  // skip 2 because those spots are taken by the start and end pointers
   for (let i = 0; i < nums.length - 2; i++) {
-    if (nums[i] > 0) break
-
-    // stop duplicates
-    if (i && nums[i] === nums[i - 1]) continue
-
     let left = i + 1
     let right = nums.length - 1
 
     while (left < right) {
+      // needs to be inside while loop to get recalculated
       const sum = nums[i] + nums[left] + nums[right]
 
       if (sum === 0) {
         out.push([nums[i], nums[left], nums[right]])
-        // remove dups
-        // if we didnt skip the other 2 pointers would be the same and the 3rd as well making it a duplicate
+
+        // get rid of dups
         while (left < right && nums[left] === nums[left + 1]) {
           left++
         }
 
-        while (right > left && nums[right] === nums[right - 1]) {
+        while (left < right && nums[right] === nums[right - 1]) {
           right--
         }
 
-        // its a match we used both, move both in so we dont repeat
-        right--
+        // move left and right inwards so we dont duplicate
         left++
+        right--
       } else if (sum > 0) {
-        // move right in
         right--
       } else {
-        // move left in
         left++
       }
+    }
+
+    // always look forward, we already handled this 1 time at this point, so skip it if the next one is the same
+    while (nums[i] === nums[i + 1]) {
+      i++
     }
   }
 
   return out
 };
 
-console.log(threeSum([-4, -1, -1, 0, 1, 2])) // [ [ -1, -1, 2 ], [ -1, 0, 1 ], [ -1, 0, 1 ] ]
+console.log(threeSum([-4, -1, -1, 0, 1, 2])) // [ [ -1, -1, 2 ], [ -1, 0, 1 ] ]
 
 console.log(threeSum([0, 0, 0, 0]))
 
