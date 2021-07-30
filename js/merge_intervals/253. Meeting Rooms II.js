@@ -29,6 +29,8 @@ Output: 2
 Explanation: We will need one room for [2,3] and [3,5], and another room for [2,4] and [4,5].
 
 Here is a visual representation of Example 4:
+
+https://github.com/Cokeeeeman/leetcode-solutions/blob/master/greedy/253.-meeting-rooms-ii.md
  */
 
 // WHY does this not work???
