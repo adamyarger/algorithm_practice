@@ -46,43 +46,26 @@ Output: [[3,7]]
  */
 var intervalIntersection = function (firstList, secondList) {
   const out = []
-  let first = firstList.shift()
-  let second = secondList.shift()
+  let index1 = 0
+  let index2 = 0
 
-  while (firstList.length || secondList.length) {
-    // edge cases
-    // one list has values the other is empty
-    if ((!firstList.length && secondList.length) || (!secondList.length && firstList.length)) return out
+  while (index1 < firstList.length && index2 < secondList.length) {
+    // grab min end and max start to find the overlap
+    let start = Math.max(firstList[index1][0], secondList[index2][0])
+    let end = Math.min(firstList[index1][1], secondList[index2][1])
 
-    // we have an overlap
-    // opposite logic would be true as well
-    if (first[1] >= second[0] || second[1] >= first[0]) {
-      // if intersection
-      // min end and max start
-      const end = Math.min(first[1], second[1])
-      const start = Math.max(first[0], second[0])
-
+    if (start <= end) {
       out.push([start, end])
-      // who has the smaller end? go to the next one
-      if (first[1] < second[1]) {
-        first = firstList.shift()
-      } else {
-        second = secondList.shift()
-      }
-
-      // wheres the next end start?
-    } else if (firstList.length && !secondList.length) {
-      first = firstList.shift()
-    } else if (!firstList.length && secondList.length) {
-      second = secondList.shift()
-    } else {
-      first = firstList.shift()
-      second = secondList.shift()
     }
 
-    // when do we update first and second?
-
-    // what if one interval was one big segment while the other was broken up?
+    // we move forward which ever one has the smaller end
+    // since that means weve run out so we need to find the next
+    // what about equals??? that should have been handled already
+    if (firstList[index1][1] < secondList[index2][1]) {
+      index1++
+    } else {
+      index2++
+    }
   }
 
   return out
