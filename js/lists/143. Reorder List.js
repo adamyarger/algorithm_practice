@@ -32,35 +32,34 @@ Input: head = [1,2,3,4,5]
 Output: [1,5,2,4,3]
  */
 
-/**
- * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
- * }
- */
+
+function ListNode(val, next) {
+  this.val = (val === undefined ? 0 : val)
+  this.next = (next === undefined ? null : next)
+}
+
 /**
  * @param {ListNode} head
  * @return {void} Do not return anything, modify head in-place instead.
  * 
  * find the middle
  * reverse half after the middle
- * start reorder one by one
+ * start reorder one by one (merge)
  */
 var reorderList = function (head) {
-  if (!head || !head.next) return
-
+  // find 1 before the middle
   let slow = head
   let fast = head
-  // why next.next? because it stops it early when there an even amount of nodes
-  // and we need to reverse the half after the middle
   while (fast.next && fast.next.next) {
     slow = slow.next
     fast = fast.next.next
   }
 
-  // reverse half after middle node
+  // do this again and again
+  // reverse after mid
+  // pre before part that gets reverse
   let mid = slow
+  // cur is first item in half that gets reversed
   let cur = slow.next
   while (cur.next) {
     let next = cur.next
@@ -69,14 +68,31 @@ var reorderList = function (head) {
     mid.next = next
   }
 
-  // merge into place
+  // merge start and mid pointers
+  // left side next is always a pointer, the value comes before the next
   slow = head
   fast = mid.next
   while (slow !== mid) {
+    // swap
     mid.next = fast.next
     fast.next = slow.next
     slow.next = fast
+    // iterate
     slow = fast.next
     fast = mid.next
   }
 };
+
+const head = new ListNode(1)
+head.next = new ListNode(2)
+head.next.next = new ListNode(3)
+head.next.next.next = new ListNode(4)
+
+reorderList(head)
+
+
+let cur = head
+while (cur) {
+  console.log(cur.val)
+  cur = cur.next
+}
