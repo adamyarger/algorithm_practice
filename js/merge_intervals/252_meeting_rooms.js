@@ -43,7 +43,7 @@ var canAttendMeetings = function (intervals) {
 
   for (let i = 1; i < intervals.length; i++) {
     const cur = intervals[i]
-    if (cur[1] < end) {
+    if (cur[0] < end) {
       return false
     }
     start = cur[0]
