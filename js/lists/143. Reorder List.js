@@ -78,7 +78,7 @@ var reorderList = function (head) {
   slow = head
   fast = mid.next
   while (slow !== mid) {
-    // swap
+    // swap (order matters)
     mid.next = fast.next
     fast.next = slow.next
     slow.next = fast
