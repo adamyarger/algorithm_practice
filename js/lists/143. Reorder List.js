@@ -47,6 +47,7 @@ function ListNode(val, next) {
  * start reorder one by one (merge)
  */
 var reorderList = function (head) {
+  if (!head || !head.next) return
   // find 1 before the middle
   let slow = head
   let fast = head
