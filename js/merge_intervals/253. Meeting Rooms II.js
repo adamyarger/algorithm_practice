@@ -135,14 +135,21 @@ var minMeetingRooms = function (intervals) {
 
   if (size <= 1) return size
 
+  // sort by start time
   intervals.sort((a, b) => a[0] - b[0])
 
+  // track end time, soonest to end is at top
   const rooms = new MinHeap()
 
   for (let [start, end] of intervals) {
+    // check if we have an overlap
+    // sinc we sorted by start time, the smallest end time is most likely to overlap
+    // because we know the start time of current is bigger than or qual to the one in the heap
     if (rooms.size() > 0 && rooms.peek() <= start) {
       rooms.pop()
     }
+    // this always gets called because we need at least one room
+    // the pop acts as an offset when no overlap happens
     rooms.insert(end)
   }
 
