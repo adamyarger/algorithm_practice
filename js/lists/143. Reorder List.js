@@ -65,6 +65,8 @@ var reorderList = function (head) {
   while (cur.next) {
     let next = cur.next
     cur.next = next.next
+    // this needs to come before mid.next gets set
+    // mid.next is pointing to cur initially
     next.next = mid.next
     mid.next = next
   }
