@@ -49,4 +49,5 @@ var minMeetingRooms = function (intervals) {
 
 
 console.log(minMeetingRooms([[0, 30], [5, 10], [15, 20]])) // 2
+console.log(minMeetingRooms([[0, 30], [5, 10], [15, 20], [10, 20], [20, 30]])) // 3
 console.log(minMeetingRooms([[7, 10], [2, 4]])) // 1
