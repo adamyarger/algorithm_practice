@@ -47,7 +47,8 @@ function ListNode(val, next) {
  * start reorder one by one (merge)
  */
 var reorderList = function (head) {
-  if (!head || !head.next) return
+  if (!head || !head.next) return head
+
   // find 1 before the middle
   let slow = head
   let fast = head
@@ -56,33 +57,27 @@ var reorderList = function (head) {
     fast = fast.next.next
   }
 
-  // do this again and again
-  // reverse after mid
-  // pre before part that gets reverse
+  // reverse second half
   let mid = slow
-  // cur is first item in half that gets reversed
   let cur = slow.next
   while (cur.next) {
-    let next = cur.next
+    const next = cur.next // 4
     cur.next = next.next
-    // this needs to come before mid.next gets set
-    // mid.next is pointing to cur initially
     next.next = mid.next
     mid.next = next
   }
 
-  // merge start and mid pointers
-  // left side next is always a pointer, the value comes before the next
-
-  // which pointers get overwritten? we need a reference for those
+  // merge together
   slow = head
   fast = mid.next
   while (slow !== mid) {
-    // swap (order matters)
+    // work from right to left
     mid.next = fast.next
     fast.next = slow.next
     slow.next = fast
-    // iterate
+
+
+    // set the next
     slow = fast.next
     fast = mid.next
   }
@@ -92,6 +87,8 @@ const head = new ListNode(1)
 head.next = new ListNode(2)
 head.next.next = new ListNode(3)
 head.next.next.next = new ListNode(4)
+head.next.next.next.next = new ListNode(5)
+head.next.next.next.next.next = new ListNode(6)
 
 reorderList(head)
 
