@@ -51,10 +51,9 @@ Every nums[seq[j]] must be either all positive or all negative.
  * nums you hit must be either all positive or all negative
  */
 var circularArrayLoop = function (nums) {
-  // why the loop?
   for (let i = 0; i < nums.length; i++) {
     // negative to move back, needs to all be the same
-    const isForward = nums[i] >= 0
+    let isForward = nums[i] >= 0
     let slow = i
     let fast = i
 
@@ -66,15 +65,12 @@ var circularArrayLoop = function (nums) {
 
       // console.log(fast)
 
-      // this acts like going 2 ahead in normal fast slow pointer
-      // but since we dont know that space amount we just say go ahead by 2 calls
       if (fast !== -1) {
         // if we havent broke the rule move fast forward more
         fast = findNextIndex(nums, isForward, fast)
       }
 
       // why fast === slow??? because that means weve gone through a whole cycle
-      // either we found a cycle if they match or it broke the rules
       if (slow === -1 || fast === -1 || fast === slow) break
     }
 
@@ -94,9 +90,9 @@ function findNextIndex(nums, isForward, index) {
   }
 
   // its circular so use modulo
+  // python handles negative indexes and js doesnt
   let next = (index + nums[index]) % nums.length
 
-  // python handles negative indexes and js doesnt
   if (next < 0) {
     next = next + nums.length
   }
@@ -110,7 +106,7 @@ function findNextIndex(nums, isForward, index) {
   return next
 }
 
-// console.log(circularArrayLoop([2, -1, 1, 2, 2]))
+console.log(circularArrayLoop([2, -1, 1, 2, 2]))
 
 // console.log(circularArrayLoop([2, -1, 1, -2, -2])) // this causes a loop
 
