@@ -47,7 +47,7 @@ class MinHeap {
   pop() {
     const val = this.items[1]
     //swap with the last item
-    this._swap(1, this.len)
+    this.items[1] = this.items[this.last]
     // get rid of last item which was the min val
     this.items.pop()
     // sink the last item that got put at the top
@@ -82,17 +82,26 @@ class MinHeap {
   }
 
   // create a heap from an array
-  heapify() {
-
+  heapify(arr) {
+    let i = Math.floor(arr.length / 2)
+    this.items = [0, ...arr]
+    while (i > 0) {
+      this._sink(i)
+      i = i - 1
+    }
   }
 }
 
 const heap = new MinHeap()
-heap.push(5)
-heap.push(3)
-heap.push(2)
-heap.push(4)
+// heap.push(5)
+// heap.push(3)
+// heap.push(2)
+// heap.push(4)
+// heap.push(6)
+// heap.push(1)
+heap.heapify([5, 3, 2, 4, 6, 1])
 
 console.log(heap.items)
+console.log(heap.pop())
 console.log(heap.pop())
 console.log(heap.items)
