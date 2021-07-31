@@ -1,17 +1,17 @@
 
-class MinHeap {
+export default class MinHeap {
   constructor() {
     // this makes getting parent easier
     this.items = [0]
   }
 
-  get last() {
+  get size() {
     return this.items.length - 1
   }
 
   // read the min value
   peek() {
-    return this.last ? this.items[1] : undefined
+    return this.size ? this.items[1] : undefined
   }
 
   // push to the end of items
@@ -22,7 +22,7 @@ class MinHeap {
   }
 
   _swim() {
-    let i = this.last
+    let i = this.size
 
     while (Math.floor(i / 2) > 0) {
       const parent = Math.floor(i / 2)
@@ -47,7 +47,7 @@ class MinHeap {
   pop() {
     const val = this.items[1]
     //swap with the last item
-    this.items[1] = this.items[this.last]
+    this.items[1] = this.items[this.size]
     // get rid of last item which was the min val
     this.items.pop()
     // sink the last item that got put at the top
@@ -59,7 +59,7 @@ class MinHeap {
   _sink(i) {
     // swap with 
 
-    while (i * 2 <= this.last) {
+    while (i * 2 <= this.size) {
       // al that matters is the min item that will replace it
       const min_i = this.minChild(i)
       if (this.items[i] > this.items[min_i]) {
@@ -75,7 +75,7 @@ class MinHeap {
     let right = left + 1
 
     // no right exists
-    if (right > this.last) {
+    if (right > this.size) {
       return left
     }
     return this.items[left] < this.items[right] ? left : right
@@ -92,16 +92,16 @@ class MinHeap {
   }
 }
 
-const heap = new MinHeap()
-// heap.push(5)
-// heap.push(3)
-// heap.push(2)
-// heap.push(4)
-// heap.push(6)
-// heap.push(1)
-heap.heapify([5, 3, 2, 4, 6, 1])
+// const heap = new MinHeap()
+// // heap.push(5)
+// // heap.push(3)
+// // heap.push(2)
+// // heap.push(4)
+// // heap.push(6)
+// // heap.push(1)
+// heap.heapify([5, 3, 2, 4, 6, 1])
 
-console.log(heap.items)
-console.log(heap.pop())
-console.log(heap.pop())
-console.log(heap.items)
+// console.log(heap.items)
+// console.log(heap.pop())
+// console.log(heap.pop())
+// console.log(heap.items)

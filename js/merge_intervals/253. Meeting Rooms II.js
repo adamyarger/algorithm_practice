@@ -33,102 +33,7 @@ Here is a visual representation of Example 4:
 https://github.com/Cokeeeeman/leetcode-solutions/blob/master/greedy/253.-meeting-rooms-ii.md
  */
 
-// WHY does this not work???
-// var minMeetingRooms = function (intervals) {
-//   let max = 0
-//   let cur = 0
-
-//   intervals.sort((a, b) => a[0] = b[0])
-
-//   let start = intervals[0][0]
-//   let end = intervals[0][1]
-
-//   // find max overlaps at once
-//   for (let i = 1; i < intervals.length; i++) {
-//     const interval = intervals[i]
-
-//     if (interval[0] < end) {
-//       // overlap add to cur count
-//       cur += 1
-//     } else {
-//       cur = 0
-//     }
-
-//     start = interval[0]
-//     end = interval[1]
-
-//     max = Math.max(max, cur)
-//   }
-
-//   return max
-// }
-
-const swap = (arr, i, j) => {
-  let tmp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = tmp;
-};
-
-class MinHeap {
-  constructor() {
-    this.heap = [];
-  }
-
-  insert(value) {
-    this.heap.push(value);
-    this.siftUp(this.heap.length - 1);
-  }
-
-  siftUp(index) {
-    let child = index;
-    let parent = Math.floor((child - 1) / 2);
-
-    while (parent >= 0 && this.heap[child] < this.heap[parent]) {
-      swap(this.heap, child, parent);
-      child = parent;
-      parent = Math.floor((child - 1) / 2);
-    }
-  }
-
-  peek() {
-    return this.heap.length > 0 ? this.heap[0] : null;
-  }
-
-  pop() {
-    if (this.heap.length === 0) return null;
-
-    const min = this.heap[0];
-    swap(this.heap, 0, this.heap.length - 1);
-    this.heap.pop();
-    this.siftDown(0);
-    return min;
-  }
-
-  size() {
-    return this.heap.length;
-  }
-
-  siftDown(index) {
-    let parent = index;
-    let left = parent * 2 + 1;
-    let right = parent * 2 + 2;
-
-    while (
-      (left < this.heap.length && this.heap[left] < this.heap[parent]) ||
-      (right < this.heap.length && this.heap[right] < this.heap[parent])
-    ) {
-      let smallest = left;
-      if (right < this.heap.length && this.heap[right] < this.heap[left]) {
-        smallest = right;
-      }
-
-      swap(this.heap, smallest, parent);
-      parent = smallest;
-      left = parent * 2 + 1;
-      right = parent * 2 + 2;
-    }
-  }
-}
+import MinHeap from '../utils/MinHeap.js'
 
 var minMeetingRooms = function (intervals) {
   const size = intervals.length
@@ -145,15 +50,15 @@ var minMeetingRooms = function (intervals) {
     // check if we have an overlap
     // sinc we sorted by start time, the smallest end time is most likely to overlap
     // because we know the start time of current is bigger than or qual to the one in the heap
-    if (rooms.size() > 0 && rooms.peek() <= start) {
+    if (rooms.size > 0 && rooms.peek() <= start) {
       rooms.pop()
     }
     // this always gets called because we need at least one room
     // the pop acts as an offset when no overlap happens
-    rooms.insert(end)
+    rooms.push(end)
   }
 
-  return rooms.size()
+  return rooms.size
 }
 
 
