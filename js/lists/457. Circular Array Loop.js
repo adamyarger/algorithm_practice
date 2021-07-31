@@ -51,6 +51,7 @@ Every nums[seq[j]] must be either all positive or all negative.
  * nums you hit must be either all positive or all negative
  */
 var circularArrayLoop = function (nums) {
+  // loop because the cycle can start at any index
   for (let i = 0; i < nums.length; i++) {
     // negative to move back, needs to all be the same
     let isForward = nums[i] >= 0
@@ -93,6 +94,8 @@ function findNextIndex(nums, isForward, index) {
   // python handles negative indexes and js doesnt
   let next = (index + nums[index]) % nums.length
 
+  // -1 index means count from the back
+  // so in js we need the remainder to calculate the positive index
   if (next < 0) {
     next = next + nums.length
   }
