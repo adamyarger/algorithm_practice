@@ -51,9 +51,10 @@ Every nums[seq[j]] must be either all positive or all negative.
  * nums you hit must be either all positive or all negative
  */
 var circularArrayLoop = function (nums) {
+  // why the loop?
   for (let i = 0; i < nums.length; i++) {
     // negative to move back, needs to all be the same
-    isForward = nums[i] >= 0
+    const isForward = nums[i] >= 0
     let slow = i
     let fast = i
 
