@@ -61,6 +61,10 @@ We discard any intervals that contain inf as they aren't finite.
  * then find gaps
  */
 var employeeFreeTime = function (intervals) {
+  intervals = order(intervals)
+
+  console.log(intervals)
+
   const out = []
   let start = intervals[0][0]
   let end = intervals[0][1]
@@ -79,5 +83,26 @@ var employeeFreeTime = function (intervals) {
   return out
 }
 
-console.log(employeeFreeTime([[1, 2], [1, 3], [4, 10], [5, 6]]))
-// console.log(employeeFreeTime([[1, 2, 5, 6], [1, 3], [4, 10]]))
+function order(intervals) {
+  const aux = []
+
+  // would need to merge sort all intervals at the same time
+  for (let i = 0; i < intervals.length; i++) {
+    const cur = intervals[i]
+    if (cur.length > 2) {
+      // splice in groups of 2 after first 2
+      for (let j = 0; j < cur.length; j++) {
+        if (j % 2 === 1) {
+          aux.push([cur[j - 1], cur[j]])
+        }
+      }
+    } else {
+      aux.push(cur)
+    }
+  }
+
+  return aux.sort((a, b) => a[0] - b[0])
+}
+
+// console.log(employeeFreeTime([[1, 2], [1, 3], [4, 10], [5, 6]]))
+console.log(employeeFreeTime([[1, 2, 5, 6, 7, 8], [1, 3], [4, 10]]))
