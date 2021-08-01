@@ -59,6 +59,10 @@ We discard any intervals that contain inf as they aren't finite.
  * then start mergeing together
  * 
  * then find gaps
+ * 
+ * other option: break up and insert all intervals into a min queue
+ * then pop off and compare
+ * 
  */
 var employeeFreeTime = function (intervals) {
   intervals = order(intervals)
