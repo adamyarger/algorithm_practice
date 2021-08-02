@@ -35,24 +35,31 @@ Explanation: n = 1 since there is 1 number, so all numbers are in the range [0,1
  * if i == ival do nothing
  * if i is max number do nothing
  * swap i val with i
+ * 
+ * if see n do nothing or if i === val do nothing
+ * else swap with i
  */
 var missingNumber = function (nums) {
-  // should be while loop
   let i = 0
+
   while (i < nums.length) {
     const val = nums[i]
-    if (i == val || val === nums.length) {
+    if (i === val || val === nums.length) {
       i++
     } else {
+      // why not go forward on swap?
+      // because what you just swapped is not in place yet
+      // for loop would have skipped this
       nums[i] = nums[val]
       nums[val] = val
     }
   }
 
-  const index = nums.findIndex(item => item === nums.length)
+  let out = nums.findIndex(item => item === nums.length)
 
-  return index !== -1 ? index : nums.length
+  return out !== -1 ? out : nums.length
 };
 
 
 console.log(missingNumber([3, 0, 1]))
+console.log(missingNumber([9, 6, 4, 2, 3, 5, 7, 0, 1]))
