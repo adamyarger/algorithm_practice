@@ -27,6 +27,8 @@ Input: lists = [[]]
 Output: []
  */
 
+import MinHeap from '../utils/MinHeap.js'
+
 /**
  * Definition for singly-linked list.
  * function ListNode(val, next) {
@@ -37,7 +39,35 @@ Output: []
 /**
  * @param {ListNode[]} lists
  * @return {ListNode}
+ * 
+ * create a min heap
+ * put the first items from each list in the heap
+ * 
+ * grab the next smallest of the
  */
-var mergeKLists = function (lists) {
 
+var mergeKLists = function (lists) {
+  const heap = new MinHeap()
+
+  // only need to do this once then we can traverse linked lists
+  for (const list of lists) {
+    if (list) {
+      heap.push(list)
+    }
+  }
+
+  let dummy = new ListNode(0)
+  let cur = dummy
+
+  while (heap.size) {
+    cur.next = heap.pop()
+    cur = cur.next
+
+    // how to add back to heap?
+    if (cur.next) {
+      heap.push(cur.next)
+    }
+  }
+
+  return dummy.next
 };
