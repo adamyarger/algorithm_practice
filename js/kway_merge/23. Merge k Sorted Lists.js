@@ -46,6 +46,8 @@ import MinHeap from '../utils/MinHeap.js'
  * grab the next smallest of the
  */
 
+// TODO: add compare attribute to minheap
+
 var mergeKLists = function (lists) {
   const heap = new MinHeap()
 
