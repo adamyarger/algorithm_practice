@@ -37,7 +37,7 @@ function trick() {
   new Promise((resolve) => {
     resolve('dude')
     Promise.resolve('yoyo').then(res => console.log(res))
-  }).then(res => {
+  }).then(res => { // then hasent been reached yet, so its the second task in the micro task queue
     console.log(res)
   })
 }
