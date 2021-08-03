@@ -26,19 +26,16 @@ function ListNode(val, next) {
  * @param {number} k
  * @return {ListNode}
  * 
- * taske off the end and put on the front
+ * DONT think push pop
+ * THINK circle
  * 
- * pop
- * 
- * unshift
+ * we create a circle then find the head then set the tail to null
  */
 var rotateRight = function (head, k) {
   let dummy = new ListNode(0, head)
   let slow = dummy
   let fast = dummy
   let len = 0
-
-
 
   // get the tail and the length of the list
   // we can use the length later to loop around to grab a new prev
@@ -56,7 +53,9 @@ var rotateRight = function (head, k) {
 
   // tail = head
   fast.next = dummy.next
+  // dummy.next is like using a variable
   dummy.next = slow.next
+  // slow is the tail
   slow.next = null
 
   return dummy.next
