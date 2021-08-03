@@ -34,39 +34,30 @@ from typing import List
 from heapq import *
 
 
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
+class ListNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.next = None
 
 
 class ListNodeExtension(ListNode):
-    # we need this for the min heap to work
     def __lt__(self, other):
         return self.val < other.val
 
 
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        '''
-        - create amin heap
-        - loop through the arrays of linked list and grab the root of eachand put them in the min heap
-        - use a while loop to pop off roots, add them to a new linked list then add the roots next to the min heap
-        '''
         ListNode.__lt__ = ListNodeExtension.__lt__
         min_heap = []
-
         for root in lists:
             if root is not None:
                 heappush(min_heap, root)
 
-        # head will still equal that first dummy node, that mean when we do next it points to the first node we inserted
-        head = dummy = ListNode(0)
+        head = tail = ListNode(0)
         while min_heap:
-            dummy.next = heappop(min_heap)
-            dummy = dummy.next
-
-            if root.next is not None:
-                heappush(min_heap, dummy.next)
+            tail.next = heappop(min_heap)
+            tail = tail.next
+            if tail.next:
+                heappush(min_heap, tail.next)
 
         return head.next
