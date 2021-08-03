@@ -32,33 +32,34 @@ function ListNode(val, next) {
  * we create a circle then find the head then set the tail to null
  */
 var rotateRight = function (head, k) {
+  // dummy takes care of having one node case so we can check node.next
   let dummy = new ListNode(0, head)
-  let tail = dummy
+  let slow = dummy
   let fast = dummy
-  // need len so we can handle going around multiple time
-  let len = 0
+  // start at 0 since we have a dummy
+  let size = 0
 
-  // get the tail and the length of the list
-  // we can use the length later to loop around to grab a new prev
   while (fast.next) {
     fast = fast.next
-    len++
+    size += 1
   }
 
-  // wrap around if k is large
-  k = k % len
-  // we need to find the new tail
-  for (let i = 0; i < len - k; i++) {
-    tail = tail.next
+  // reduce work if big number
+  k = k % size
+  // find the new tail
+  //size - k will give use the new tail node
+  for (let i = 0; i < size - k; i++) {
+    slow = slow.next
   }
 
-  // tail = head
+  // make it a circle
+  // point it at head to make a circle
   fast.next = dummy.next
-  // dummy.next is like using a variable
-  dummy.next = tail.next
-  // tail is the tail
-  tail.next = null
-
+  // point dummy to the new head
+  dummy.next = slow.next
+  // unpoint tail
+  slow.next = null
+  // return new head
   return dummy.next
 };
 
