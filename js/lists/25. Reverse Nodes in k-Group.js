@@ -56,11 +56,11 @@ var reverseKGroup = function (head, k) {
 
   // setup the next group
   let next = tail.next
-  // why null? we saved it above, this makes connecting later easier
+  // set tail.next to null so reverse loop know where to stop
   tail.next = null
   // its recursive so always pass in head
   reverse(head)
-  // do it again for the next sub section
+  // the old head is now the tail just connect it to the next head which starts as the tail
   head.next = reverseKGroup(next, k)
   return tail
 };
