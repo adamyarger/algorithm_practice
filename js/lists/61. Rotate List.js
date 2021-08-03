@@ -33,8 +33,9 @@ function ListNode(val, next) {
  */
 var rotateRight = function (head, k) {
   let dummy = new ListNode(0, head)
-  let slow = dummy
+  let tail = dummy
   let fast = dummy
+  // need len so we can handle going around multiple time
   let len = 0
 
   // get the tail and the length of the list
@@ -46,17 +47,17 @@ var rotateRight = function (head, k) {
 
   // wrap around if k is large
   k = k % len
-  // why len - k??? slow wil end on the first of non rotated since it has a dummy node up front
+  // we need to find the new tail
   for (let i = 0; i < len - k; i++) {
-    slow = slow.next
+    tail = tail.next
   }
 
   // tail = head
   fast.next = dummy.next
   // dummy.next is like using a variable
-  dummy.next = slow.next
-  // slow is the tail
-  slow.next = null
+  dummy.next = tail.next
+  // tail is the tail
+  tail.next = null
 
   return dummy.next
 };
