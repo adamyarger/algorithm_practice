@@ -78,7 +78,7 @@ head.next.next = new ListNode(3)
 head.next.next.next = new ListNode(4)
 head.next.next.next.next = new ListNode(5)
 
-var out = reverseKGroup(head)
+var out = reverseKGroup(head, 2)
 
 console.log('-----------')
 var cur = out
