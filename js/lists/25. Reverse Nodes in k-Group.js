@@ -48,12 +48,17 @@ var reverseKGroup = function (head, k) {
   // break out early if there not enough nodes
   let tail = head
   for (let i = 1; i < k; i++) {
+    // move tail forward
     tail = tail.next
+    // if we run out then its the last sement
     if (!tail) return head
   }
 
+  // setup the next group
   let next = tail.next
+  // why null? we saved it above, this makes connecting later easier
   tail.next = null
+  // its recursive so always pass in head
   reverse(head)
   // do it again for the next sub section
   head.next = reverseKGroup(next, k)
