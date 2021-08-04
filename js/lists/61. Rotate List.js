@@ -26,40 +26,36 @@ function ListNode(val, next) {
  * @param {number} k
  * @return {ListNode}
  * 
- * DONT think push pop
- * THINK circle
- * 
- * we create a circle then find the head then set the tail to null
+ * make a circle find slow set next to null
+ * find neew head and return
  */
 var rotateRight = function (head, k) {
-  // dummy takes care of having one node case so we can check node.next
   let dummy = new ListNode(0, head)
   let slow = dummy
   let fast = dummy
-  // start at 0 since we have a dummy
   let size = 0
 
   while (fast.next) {
     fast = fast.next
-    size += 1
+    size++
   }
 
-  // reduce work if big number
   k = k % size
-  // find the new tail
-  //size - k will give use the new tail node
+
+  // find new head
   for (let i = 0; i < size - k; i++) {
     slow = slow.next
   }
 
-  // make it a circle
-  // point it at head to make a circle
+  // old tail connects to old head making it a circle
   fast.next = dummy.next
-  // point dummy to the new head
+
+  // repurpose dummy to point to the new head
   dummy.next = slow.next
-  // unpoint tail
+
+  // break circle new tail points to nothing
   slow.next = null
-  // return new head
+
   return dummy.next
 };
 
