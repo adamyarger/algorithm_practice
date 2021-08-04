@@ -42,5 +42,13 @@ function trick() {
   })
 }
 
-trick()
+// trick()
+
+
+function syncCallback(fn) {
+  fn()
+}
+
+syncCallback(() => console.log('1'))
+console.log(2)
 
