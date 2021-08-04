@@ -29,7 +29,18 @@ Output: 3
  * @param {TreeNode} root
  * @param {number} targetSum
  * @return {number}
+ * 
+ * 
+ * do dfs like normal
+ * if we find a sum add it to the count
+ * when we go over remove the highest node from the current list
+ * 
+ * backtrack when we hit the bottom?
  */
 var pathSum = function (root, targetSum) {
 
 };
+
+function dfs(params) {
+
+}
