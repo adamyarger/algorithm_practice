@@ -38,6 +38,7 @@ Output: 3
  * backtrack when we hit the bottom?
  * 
  * O(n^2)
+ * this way does a dfs with each node as the new root, this is slow
  */
 var pathSum = function (root, targetSum) {
   let count = 0
