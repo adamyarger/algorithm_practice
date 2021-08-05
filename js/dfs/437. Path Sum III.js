@@ -36,11 +36,30 @@ Output: 3
  * when we go over remove the highest node from the current list
  * 
  * backtrack when we hit the bottom?
+ * 
+ * O(n^2)
  */
 var pathSum = function (root, targetSum) {
+  let count = 0
 
+  const dfs = (node, sum) => {
+    // could exit early
+    if (!node) return
+    sum -= node.val
+    if (sum === 0) {
+      count++
+    }
+    dfs(node.left, sum)
+    dfs(node.right, sum)
+  }
+
+  const main = (node, sum) => {
+    if (!node) return
+    dfs(node, sum)
+    main(node.left, sum)
+    main(node.right, sum)
+  }
+
+  main(root, targetSum)
+  return count
 };
-
-function dfs(params) {
-
-}
