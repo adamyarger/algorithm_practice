@@ -84,10 +84,16 @@ function dfs(root, cur, target, map) {
   if (!root) return 0
 
   cur += root.val
+
+  // crate a property if it doesnt exists for the number were looking for
   let res = map[cur - target] ? map[cur - target] : 0
+
+  // mark cur as beeing seen
   map[cur] = map[cur] ? map[cur] + 1 : 1
 
+  // add past res count and what we found in left and right nodes
   res += dfs(root.left, cur, target, map) + dfs(root.right, cur, target, map)
+  // backtrack when we hit the bottom
   map[cur]--
   return res
 }
