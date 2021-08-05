@@ -50,7 +50,7 @@ var firstMissingPositive = function (nums) {
     }
   }
 
-  for (i = 0; i < nums.length; i++) {
+  for (let i = 0; i < nums.length; i++) {
     // return the first non matching
     if (nums[i] !== i + 1) return i + 1
   }
