@@ -35,19 +35,30 @@ function TreeNode(val, left, right) {
  * how do we measure that?
  * 
  * at each node count max nodes of left and right branches
+ * 
+ * max left + max right compare at each level
  */
 var diameterOfBinaryTree = function (root) {
+  let max = 1
+
   function dfs(node) {
     if (!node) return 0
 
-    let left = dfs(node.left) + 1
-    console.log(left)
-    let right = dfs(node.right) + 1
+    // were doing post order traversal
+    // get to the leaves first so we can add up from 0
+    let left = dfs(node.left)
+    let right = dfs(node.right)
 
+    // check to see if the current node as root has the longest path
+    // the + 1 is to count the current root node
+    max = Math.max(max, left + right + 1)
 
+    // get max depth like usual
+    return 1 + Math.max(left, right)
   }
 
   dfs(root)
+  return max - 1
 };
 
 const root = new TreeNode(1)
