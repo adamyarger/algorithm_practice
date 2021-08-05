@@ -19,14 +19,13 @@ Input: root = [1,2]
 Output: 1
  */
 
-/**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
- * }
- */
+
+function TreeNode(val, left, right) {
+  this.val = (val === undefined ? 0 : val)
+  this.left = (left === undefined ? null : left)
+  this.right = (right === undefined ? null : right)
+}
+
 /**
  * @param {TreeNode} root
  * @return {number}
@@ -38,5 +37,23 @@ Output: 1
  * at each node count max nodes of left and right branches
  */
 var diameterOfBinaryTree = function (root) {
+  function dfs(node) {
+    if (!node) return 0
 
+    let left = dfs(node.left) + 1
+    console.log(left)
+    let right = dfs(node.right) + 1
+
+
+  }
+
+  dfs(root)
 };
+
+const root = new TreeNode(1)
+root.left = new TreeNode(2)
+root.left.right = new TreeNode(5)
+root.right = new TreeNode(3)
+root.right.left = new TreeNode(4)
+
+console.log(diameterOfBinaryTree(root))
