@@ -64,3 +64,30 @@ var pathSum = function (root, targetSum) {
   main(root, targetSum)
   return count
 };
+
+
+/**
+ * 
+ * @param {*} root 
+ * @param {*} targetSum 
+ * @returns 
+ * 
+ * O(n)
+ */
+var pathSum = function (root, targetSum) {
+  const map = {}
+  map[0] = 1
+  return dfs(root, 0, targetSum, map)
+};
+
+function dfs(root, cur, target, map) {
+  if (!root) return 0
+
+  cur += root.val
+  let res = map[cur - target] ? map[cur - target] : 0
+  map[cur] = map[cur] ? map[cur] + 1 : 1
+
+  res += dfs(root.left, cur, target, map) + dfs(root.right, cur, target, map)
+  map[cur]--
+  return res
+}
