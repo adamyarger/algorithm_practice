@@ -49,16 +49,22 @@ import MinHeap from '../utils/MinHeap.js'
  */
 var findMaximizedCapital = function (k, w, profits, capital) {
   const heap = new MinHeap()
+  // merge the 2 arrays together
   const projects = zip(profits, capital).sort((a, b) => a[1] - b[1])
   let i = 0
 
   for (let j = 0; j < k; j++) {
+    // on each iteration add all projects that are within budget
+    // i makes sure we dont reuse the same project again
     while (i < projects.length && projects[i][1] <= w) {
+      // use it as a max heap, we want the biggest profits
       heap.push(-projects[i][0])
       i++
     }
 
     if (heap.size) {
+      // -= is to offset the max heap -
+      // add the largest profit project to our capital
       w -= heap.pop()
     }
   }
