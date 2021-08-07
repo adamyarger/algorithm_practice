@@ -38,19 +38,24 @@ function TreeNode(val, left, right) {
  * how to handle negatives?
  */
 var maxPathSum = function (root) {
+  // so something gets set no matter what
   let max = -Infinity
 
   function dfs(node) {
     if (!node) return 0
 
-    // we dont want negatives thats why we compare against zero, since that mans we dont choose them
+    // dont choose left or right if below 0, because it has to be added to the root which by it self is gaurenteed to be higher
     let left = Math.max(dfs(node.left), 0)
     let right = Math.max(dfs(node.right), 0)
 
-    // do we have a new max?
-    max = Math.max(max, node.val + left + right)
+    // add up left right and the current root
+    let curMax = node.val + left + right
 
-    // add the current root with the larger branch
+    // is it the max weve seen yet?
+    max = Math.max(max, curMax)
+
+    // choose the largest branch from left or right
+    // instead of adding a + 1 like the tree depth we add the current node value
     return node.val + Math.max(left, right)
   }
 
