@@ -33,7 +33,7 @@ Output: 3
  * 
  * do dfs like normal
  * if we find a sum add it to the count
- * when we go over remove the highest node from the current list
+ * when we go over remove the highest node from the sumrent list
  * 
  * backtrack when we hit the bottom?
  * 
@@ -41,28 +41,7 @@ Output: 3
  * this way does a dfs with each node as the new root, this is slow
  */
 var pathSum = function (root, targetSum) {
-  let count = 0
 
-  const dfs = (node, sum) => {
-    // could exit early
-    if (!node) return
-    sum -= node.val
-    if (sum === 0) {
-      count++
-    }
-    dfs(node.left, sum)
-    dfs(node.right, sum)
-  }
-
-  const main = (node, sum) => {
-    if (!node) return
-    dfs(node, sum)
-    main(node.left, sum)
-    main(node.right, sum)
-  }
-
-  main(root, targetSum)
-  return count
 };
 
 
@@ -73,27 +52,36 @@ var pathSum = function (root, targetSum) {
  * @returns 
  * 
  * O(n)
+ * 
+ * if a target value exists then one of the curent sum minus a past sums must equal target since that what would be remaining
+ * think of this in sums not node values
+ * this reminds me of partition equal subsets, if we find the target the combo must exist
  */
 var pathSum = function (root, targetSum) {
-  const map = {}
-  map[0] = 1
+  // why??? we need to include root which represent 0 and would count as 1 frequency
+  const map = { 0: 1 }
   return dfs(root, 0, targetSum, map)
 };
 
-function dfs(root, cur, target, map) {
+function dfs(root, curPathSum, target, map) {
   if (!root) return 0
 
-  cur += root.val
+  // curPathSum gets added to on the way down
+  curPathSum += root.val
+
+  let oldPathSum = curPathSum - target
 
   // crate a property if it doesnt exists for the number were looking for
-  let res = map[cur - target] ? map[cur - target] : 0
+  let res = map[oldPathSum] ? map[oldPathSum] : 0
 
-  // mark cur as beeing seen
-  map[cur] = map[cur] ? map[cur] + 1 : 1
+  // mark curPathSum as beeing seen
+  map[curPathSum] = map[curPathSum] ? map[curPathSum] + 1 : 1
 
   // add past res count and what we found in left and right nodes
-  res += dfs(root.left, cur, target, map) + dfs(root.right, cur, target, map)
+  // exhaust all nodes till we run out, this will fill the map
+  res += dfs(root.left, curPathSum, target, map) + dfs(root.right, curPathSum, target, map)
   // backtrack when we hit the bottom
-  map[cur]--
+  map[curPathSum]--
+
   return res
 }
