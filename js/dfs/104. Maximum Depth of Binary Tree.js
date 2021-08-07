@@ -37,13 +37,9 @@ Output: 1
  * @return {number}
  */
 var maxDepth = function (root) {
-  function dfs(node) {
-    if (!node) return 0
-
-    return Math.max(
-      dfs(node.left),
-      dfs(node.right)
-    ) + 1
-  }
-  return dfs(root)
+  if (!root) return 0
+  return Math.max(
+    maxDepth(root.left),
+    maxDepth(root.right)
+  ) + 1
 };
