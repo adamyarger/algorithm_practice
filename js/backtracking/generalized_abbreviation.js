@@ -31,6 +31,7 @@ function generate(word) {
 }
 
 function backtrack(word, cur, start, count, out) {
+  // base case
   if (start === word.length) {
     if (count !== 0) {
       cur.push(count)
@@ -39,6 +40,9 @@ function backtrack(word, cur, start, count, out) {
     return
   }
 
+  // why backtrack called 2 times?
+  // this one adds a number then other one a letter
+  // this is like choosing left and right in a tree -> similar to letter case permutations
   backtrack(word, cur.slice(), start + 1, count + 1, out)
 
   if (count !== 0) {
@@ -47,6 +51,8 @@ function backtrack(word, cur, start, count, out) {
 
   let newWord = cur.slice()
   newWord.push(word[start])
+
+  // add to start -> move towards base case
   backtrack(word, newWord, start + 1, 0, out)
 }
 
