@@ -23,6 +23,8 @@ Output: "code", "cod1", "co1e", "co2", "c1de", "c1d1", "c2e", "c3", "1ode", "1od
  * @param {*} params 
  * 
  * reminds me of subsets
+ * 
+ * do it iterately as well https://medium.com/@yilingliu1994/leetcode-320-generalized-abbreviation-python-backtracking-way-5fddd4a9a90f
  */
 function generate(word) {
   const out = []
