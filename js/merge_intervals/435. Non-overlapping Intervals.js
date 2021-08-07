@@ -42,7 +42,7 @@ var eraseOverlapIntervals = function (intervals) {
 
   for (const [_start, _end] of intervals) {
     if (_start >= end) {
-      // we have overlap
+      // no overlap set the current end to the global end
       end = _end
     } else {
       count += 1
