@@ -68,6 +68,7 @@ var calculate = function (s) {
     } else if (s[i] === '-') {
       sign = -1
     } else if (s[i] === '(') {
+      console.log(out, sign)
       // push what ever out value we have now
       stack.push(out)
       // add to sign as well
@@ -77,6 +78,7 @@ var calculate = function (s) {
       // reset sign to positiive
       sign = 1
     } else if (s[i] === ')') {
+      // first pop will be the sign which will turn it negative if needed
       out = out * stack.pop() + stack.pop()
     }
   }
@@ -84,8 +86,10 @@ var calculate = function (s) {
   return out
 };
 
-// console.log(calculate('80 + 5 - (3 + 2)'))
+console.log(calculate('80 + 5 - (3 + 2)'))
 
-test('should equal 80', () => {
-  expect(calculate('80 + 5 - (3 + 2)')).toBe(80)
-})
+if (typeof test === 'function') {
+  test('should equal 80', () => {
+    expect(calculate('80 + 5 - (3 + 2)')).toBe(80)
+  })
+}
