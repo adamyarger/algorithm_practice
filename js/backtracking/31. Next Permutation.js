@@ -29,6 +29,7 @@ Output: [1]
  * @param {number[]} nums
  * @return {void} Do not return anything, modify nums in-place instead.
  * 
+ * source: https://www.nayuki.io/page/next-lexicographical-permutation-algorithm
  * 1.) find the longest non increaing suffix (left most spot where i+1 > i)
  * 2.) this should give us the pivot element i
  * 3.) find right most item that is larger than the pivot i (dont include i)
