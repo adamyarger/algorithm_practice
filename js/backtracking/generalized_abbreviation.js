@@ -28,34 +28,30 @@ Output: "code", "cod1", "co1e", "co2", "c1de", "c1d1", "c2e", "c3", "1ode", "1od
  */
 function generate(word) {
   const out = []
-  backtrack(word, [], 0, 0, out)
+  backtrack(word, '', 0, 0, out)
   return out
 }
 
-function backtrack(word, cur, start, count, out) {
+function backtrack(word, cur, index, count, out) {
   // base case
-  if (start === word.length) {
+  if (index === word.length) {
     if (count !== 0) {
-      cur.push(count)
+      cur += count
     }
-    out.push(cur.join(''))
+    out.push(cur)
     return
   }
 
   // why backtrack called 2 times?
   // this one adds a number then other one a letter
   // this is like choosing left and right in a tree -> similar to letter case permutations
-  backtrack(word, cur.slice(), start + 1, count + 1, out)
+  backtrack(word, cur.slice(), index + 1, count + 1, out)
 
-  if (count !== 0) {
-    cur.push(count)
-  }
+  let newWord = cur + (count ? count : '') + word[index]
 
-  let newWord = cur.slice()
-  newWord.push(word[start])
-
-  // add to start -> move towards base case
-  backtrack(word, newWord, start + 1, 0, out)
+  // add to index -> move towards base case
+  backtrack(word, newWord, index + 1, 0, out)
 }
 
 console.log(generate('word'))
+console.log(generate('ab'))
