@@ -64,8 +64,6 @@ var circularArrayLoop = function (nums) {
       slow = findNextIndex(nums, isForward, slow)
       fast = findNextIndex(nums, isForward, fast)
 
-      // console.log(fast)
-
       if (fast !== -1) {
         // if we havent broke the rule move fast forward more
         fast = findNextIndex(nums, isForward, fast)
@@ -75,7 +73,7 @@ var circularArrayLoop = function (nums) {
       if (slow === -1 || fast === -1 || fast === slow) break
     }
 
-    if (slow !== -1 && slow === fast) return true
+    if (slow !== -1 && fast !== -1 && slow === fast) return true
   }
 
   return false
