@@ -27,17 +27,26 @@ Output: 1
  * 
  */
 var numTrees = function (n) {
-  return dfs(1, n)
+  const memo = {}
+  return dfs(memo, n)
 };
 
-function dfs(lo, hi) {
-  if (lo >= hi) return 1
+function dfs(memo, n) {
+  // return 1 for multiplication
+  if (n <= 1) return 1
 
   let total = 0
 
-  for (let i = lo; i <= hi; i++) {
-    total += dfs(lo, i - 1) * dfs(i + 1, hi)
+  if (memo[n]) return memo[n]
+
+  // i is the root val, this shifts what nodes are allowed on the left and right side
+  for (let i = 1; i <= n; i++) {
+    // i = 3 means all nodes fit on left side (3-1) = 2
+    // 3-3=1
+    total += dfs(memo, i - 1) * dfs(memo, n - i)
   }
+
+  memo[n] = total
 
   return total
 }
