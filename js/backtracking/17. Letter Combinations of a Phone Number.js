@@ -42,20 +42,26 @@ var letterCombinations = function (digits) {
   }
 
   const out = []
-  // index based backtracking
-  function dfs(i, cur) {
-    if (i === digits.length) {
-      out.push(cur)
+
+  function dfs(digits, str) {
+    if (digits.length === 0) {
+      out.push(str)
       return
     }
 
-    // loop through string 'abc'
-    for (const char of map[digits[i]]) {
-      dfs(i + 1, cur + char)
+    // loop through 'abc'
+    // grab the first number and get its corrisponding letters
+    // of each dfs we take away that number as an option, because the 
+    // previous dfs is looping through it so it will be all used up
+
+    // first level is for abc which will always be the first ltters
+    // then we take away those as options and keep appending to either a b or c
+    for (const char of map[digits[0]]) {
+      dfs(digits.substr(1), str + char)
     }
   }
 
-  dfs(0, '')
+  dfs(digits, '')
   return out
 };
 
