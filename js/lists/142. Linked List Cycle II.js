@@ -48,6 +48,8 @@ var detectCycle = function (head) {
   let slow = head
   let fast = head
 
+  // when in doubt do while fast.next.next or whatever item is trying to go the furtheest
+  // we want to avoid our fast pointing to nothing
   while (fast && fast.next && fast.next.next) {
     fast = fast.next.next
     slow = slow.next
