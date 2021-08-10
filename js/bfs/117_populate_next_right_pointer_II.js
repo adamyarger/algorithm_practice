@@ -78,19 +78,17 @@ var connect = function (root) {
 
 
 var connect = function (root) {
-  const queue = [root]
-
-  while (queue.length) {
+  if (!root) return root
+  const q = [root]
+  while (q.length) {
     let last = null
-    let arr = queue.slice()
-    arr.forEach(item => {
-      const node = queue.shift()
+    q.slice().forEach((item, index) => {
+      const node = q.shift()
       if (last) last.next = node
-      if (node && node.left) queue.push(node.left)
-      if (node && node.right) queue.push(node.right)
+      if (node.left) q.push(node.left)
+      if (node.right) q.push(node.right)
       last = node
     })
   }
-
   return root
 };
