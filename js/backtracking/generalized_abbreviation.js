@@ -45,7 +45,7 @@ function backtrack(word, cur, index, count, out) {
   // why backtrack called 2 times?
   // this one adds a number then other one a letter
   // this is like choosing left and right in a tree -> similar to letter case permutations
-  backtrack(word, cur.slice(), index + 1, count + 1, out)
+  backtrack(word, cur, index + 1, count + 1, out)
 
   let newWord = cur + (count ? count : '') + word[index]
 
