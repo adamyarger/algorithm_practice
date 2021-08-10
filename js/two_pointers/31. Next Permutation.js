@@ -41,43 +41,41 @@ var nextPermutation = function (nums) {
 
   for (let i = nums.length - 1; i >= 0; i--) {
     if (nums[i] < nums[i + 1]) {
-      // we want the smallest larger number
       const large = nextLarge(i)
-      swap(i, large)
+      swap(large, i)
       reverse(i + 1)
       return nums
     }
   }
 
-  // if we make it this far then reverse to get the lowest
-  nums.reverse()
+  return nums.reverse()
 
-  function swap(i, j) {
-    [nums[i], nums[j]] = [nums[j], nums[i]]
-  }
-
-  function reverse(index) {
-    let start = index
-    let end = nums.length - 1
-
-    while (start < end) {
-      swap(start, end)
-      start++
-      end--
-    }
+  function swap(a, b) {
+    [nums[a], nums[b]] = [nums[b], nums[a]]
   }
 
   function nextLarge(index) {
-    // we want to modify the right most elements first so the first one we find thats bigger
-    // starting at the right is the one we swap
+    // we can return the first since we already know the array sorted 
+    // in descending order so the first found will be the smallest
     for (let i = nums.length - 1; i > index; i--) {
       if (nums[i] > nums[index]) return i
     }
   }
+
+  function reverse(index) {
+    let left = index
+    let right = nums.length - 1
+    while (left < right) {
+      swap(left, right)
+      left++
+      right--
+    }
+  }
 };
 
-// console.log(nextPermutation([1, 2, 3]))
+console.log(nextPermutation([1, 2, 3]))
+console.log(nextPermutation([1, 3, 2]))
 
-// console.log(nextPermutation([1, 3, 2]))
+// console.log(nextPermutation([1, 1, 5, 2, 3]))
 
-console.log(nextPermutation([0, 1, 2, 5, 3, 3, 0]))
+// console.log(nextPermutation([0, 1, 2, 5, 3, 3, 0]))
