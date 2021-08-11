@@ -18,7 +18,10 @@ var nextGreatestLetter = function (letters, target) {
   while (lo < hi) {
     let mid = Math.floor((hi + lo) / 2)
 
+    // why <= on this one?
+    // because we want the next biggest, so even if it is equal we still want to move mid up by 1
     if (letters[mid] <= target) {
+      // move lo up past mid to search the right half
       lo = mid + 1
     } else {
       hi = mid
