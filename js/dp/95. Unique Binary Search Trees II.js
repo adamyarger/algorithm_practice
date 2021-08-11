@@ -26,4 +26,36 @@ function TreeNode(val, left, right) {
  * @return {TreeNode[]}
  */
 var generateTrees = function (n) {
+  if (n == 0) return [];
+  return find(1, n)
 };
+
+function find(start, end) {
+  const out = []
+
+  if (start > end) {
+    out.push(null)
+    return out
+  }
+
+  if (start === end) {
+    out.push(new TreeNode(start))
+    return out
+  }
+
+  for (let i = start; i <= end; i++) {
+    const left = find(start, i - 1)
+    const right = find(i + 1, end)
+
+    for (const l of left) {
+      for (const r of right) {
+        const root = new TreeNode(i)
+        root.left = l
+        root.right = r
+        out.push(root)
+      }
+    }
+  }
+
+  return out
+}
