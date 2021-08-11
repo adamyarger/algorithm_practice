@@ -43,6 +43,7 @@ function dfs(memo, n) {
   for (let i = 1; i <= n; i++) {
     // i = 3 means all nodes fit on left side (3-1) = 2
     // 3-3=1
+    // left * right acts like a nested for loop since its n**2
     total += dfs(memo, i - 1) * dfs(memo, n - i)
   }
 
