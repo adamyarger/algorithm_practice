@@ -24,15 +24,21 @@ function TreeNode(val, left, right) {
 /**
  * @param {number} n
  * @return {TreeNode[]}
+ * 
+ * need each possible permutation of a BST
+ * 
+ * means we half to try each node as root
  */
 var generateTrees = function (n) {
   if (n == 0) return [];
+  // start at 1 so we have a positive number
   return find(1, n)
 };
 
 function find(start, end) {
   const out = []
 
+  // we used every node: base case
   if (start > end) {
     out.push(null)
     return out
@@ -44,7 +50,10 @@ function find(start, end) {
   }
 
   for (let i = start; i <= end; i++) {
+    // if start is one (1, 0)
+    // no nodes can go on the left so this hits first base case pushes null
     const left = find(start, i - 1)
+    // (2, 3)
     const right = find(i + 1, end)
 
     for (const l of left) {
@@ -59,3 +68,5 @@ function find(start, end) {
 
   return out
 }
+
+console.log(generateTrees(3))
