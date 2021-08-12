@@ -20,6 +20,7 @@ var nextGreatestLetter = function (letters, target) {
 
     // why <= on this one?
     // because we want the next biggest, so even if it is equal we still want to move mid up by 1
+    // we cant search for exact since there could be repeats so we keep moving till were on the last index
     if (letters[mid] <= target) {
       // move lo up past mid to search the right half
       lo = mid + 1
