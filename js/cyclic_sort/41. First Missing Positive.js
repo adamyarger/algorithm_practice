@@ -41,6 +41,8 @@ var firstMissingPositive = function (nums) {
     const val = nums[i]
     // check for numbers that fit the start of the array indexs + 1
     // is it above 0 and within the range of indexes and not already in the correct position
+    // MISSED checking that its bigger than 0
+    // looking for val thats out of place but within index range
     if (val > 0 && val <= nums.length && nums[val - 1] !== val) {
       // swap, just like the rest of cyclic sort
       nums[i] = nums[val - 1]
