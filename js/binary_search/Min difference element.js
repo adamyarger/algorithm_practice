@@ -33,6 +33,9 @@ function search(nums, key) {
   if (key > nums[hi]) return nums[hi]
 
   // binary search
+  // this only works if we do a while <=
+  // since running it 1 more time on equals will make the lo the hi and the hi the lo
+  // this gives us 2 items closest to compare against one another
   while (lo <= hi) {
     const mid = Math.floor((hi + lo) / 2)
 
