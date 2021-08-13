@@ -29,24 +29,20 @@ function search(nums) {
   let lo = 0
   let hi = nums.length - 1
 
-  if (nums[hi] > nums[hi - 1]) return nums[hi]
-  if (nums[lo] > nums[lo + 1]) return nums[lo]
-
-  while (lo <= hi) {
+  // only use < then we get a result no matter what as the final index
+  while (lo < hi) {
     const mid = Math.floor((hi + lo) / 2)
 
-    // which way is increasing? move towards the increasing side
-    if (nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1]) {
-      return nums[mid]
-    } else if (nums[mid + 1] > nums[mid]) {
-      // search right
+    // only care about increasing side
+    if (nums[mid] < nums[mid + 1]) {
       lo = mid + 1
     } else {
-      hi = mid - 1
+      // could be at the top so dont exclude the cirrent mid
+      hi = mid
     }
   }
 
-  return -1
+  return nums[lo]
 }
 
 console.log(search([1, 3, 8, 12, 4, 2]))
