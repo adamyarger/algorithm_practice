@@ -44,30 +44,21 @@ var search = function (nums, target) {
   let hi = nums.length - 1
 
   while (lo <= hi) {
-    // while (lo < hi && nums[lo] === nums[hi]) {
-    //   lo++
-    //   hi--
-    // }
-
-    while (lo < hi && nums[lo] === nums[lo + 1]) {
-      lo++
-    }
-
-    while (lo < hi && nums[hi] === nums[hi - 1]) {
-      hi--
-    }
-
     const mid = Math.floor((hi + lo) / 2)
 
     if (nums[mid] === target) {
       return true
     }
 
-    console.log(lo, hi)
-
     // rotated just means 2 seperate sorted arrays appended to eachother
     // check which way its rotated
-    if (nums[lo] <= nums[mid]) { // left side is normal sorted order
+
+    // only need to move hi down till we have a difference
+    // if we change the variable on one side it takes care of the other
+    // no need for 2 while loops
+    if (nums[mid] === nums[hi]) {
+      hi--
+    } else if (nums[lo] <= nums[mid]) { // left side is normal sorted order
       // check if its in range now
       if (target >= nums[lo] && target < nums[mid]) {
         hi = mid - 1
