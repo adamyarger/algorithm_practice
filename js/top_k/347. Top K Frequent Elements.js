@@ -33,23 +33,37 @@ import { HoMinHeap } from '../utils/MinHeap.js'
  * n log n woul be the complexity
  */
 var topKFrequent = function (nums, k) {
-  const heap = new HoMinHeap((child, parent) => child[0] < parent[0])
+  const heap = new HoMinHeap((lt, gt) => lt[1] < gt[1])
   const map = {}
-
-  heap.push([3, 3])
-  heap.push([2, 3])
-  heap.push([1, 3])
-  heap.push([4, 3])
-
-  console.log(heap.items)
 
   nums.forEach(item => {
     map[item] = map[item] ? map[item] + 1 : 1
+  })
 
-    if (heap.size < k) {
-      // how to combine ke and count in min heap
+  for (const [key, val] of Object.entries(map)) {
+    console.log(key, val, heap.peek())
+
+    if (heap.size < k || val > heap.peek()[1]) {
+
+
+
+      if (heap.size === k) {
+        heap.pop()
+      }
+      heap.push([key, val])
     }
+  }
+
+  console.log('--------')
+  console.log(map)
+  console.log(heap.items)
+
+  return Array(k).fill(null).map(item => {
+    return parseInt(heap.pop()[0])
   })
 };
 
-console.log(topKFrequent([1, 1, 1, 2, 2, 3], 2))
+// console.log(topKFrequent([1, 1, 1, 2, 2, 3], 2))
+
+console.log(topKFrequent([4, 1, -1, 2, -1, 2, 3], 2))
+
