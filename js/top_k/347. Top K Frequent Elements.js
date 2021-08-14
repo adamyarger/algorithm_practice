@@ -41,29 +41,22 @@ var topKFrequent = function (nums, k) {
   })
 
   for (const [key, val] of Object.entries(map)) {
-    console.log(key, val, heap.peek())
-
-    if (heap.size < k || val > heap.peek()[1]) {
-
-
-
-      if (heap.size === k) {
-        heap.pop()
-      }
-      heap.push([key, val])
+    heap.push([key, val])
+    if (heap.size > k) {
+      heap.pop()
     }
   }
-
-  console.log('--------')
-  console.log(map)
-  console.log(heap.items)
 
   return Array(k).fill(null).map(item => {
     return parseInt(heap.pop()[0])
   })
 };
 
-// console.log(topKFrequent([1, 1, 1, 2, 2, 3], 2))
+console.log(topKFrequent([1, 1, 1, 2, 2, 3], 2))
 
 console.log(topKFrequent([4, 1, -1, 2, -1, 2, 3], 2))
 
+
+// bucket sort
+
+// quick select
