@@ -10,3 +10,4 @@
   - .allSettled
 - Bonus
   - Promisify: turn callbacks into promises
+  - Promise unwrapping by example
