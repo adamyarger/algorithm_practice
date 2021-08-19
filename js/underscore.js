@@ -1,3 +1,5 @@
+import assert from 'assert'
+
 // https://gist.github.com/alexhawkins/18c85450ff8ea9f3781d
 // https://eloquentjavascript.net/05_higher_order.html
 // implment common high order functions
@@ -134,6 +136,26 @@ _.pluck = function (collection, target) {
 // var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
 // console.log(_.pluck(stooges, 'name'))
 // => ["moe", "larry", "curly"]
+
+// REDUCE (should skip first iteration if no default acculmulator)
+_.reduce = function (arr, fn, start) {
+  let _start = start
+
+  for (let i = 0; i < arr.length; i++) {
+    _start = _start ? fn(_start, arr[i]) : arr[i]
+  }
+
+  return _start
+}
+
+{
+  const foo = _.reduce([1, 2, 3], (acc, val) => {
+    return acc + val
+  })
+
+  console.log(foo)
+}
+
 
 /*********INVOKE*********/
 /*********REDUCE**********/
