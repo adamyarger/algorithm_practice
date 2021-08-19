@@ -1,0 +1,12 @@
+# Todo
+- Primitive functions
+  - Promises from scratch
+  - .resolve
+  - .reject
+- Combinator Functions
+  - .all
+  - .race
+  - .any
+  - .allSettled
+- Bonus
+  - Promisify: turn callbacks into promises
