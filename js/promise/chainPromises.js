@@ -132,9 +132,9 @@ const prom1 = new Prom()
 // console.log(promise.resolve(prom1) === prom1)
 
 // console.log(prom1)
-prom1.resolve()
 
-promise.resolve(prom1).then(res => {
+
+promise.resolve(prom1.resolve()).then(res => {
   console.log(res, 'fire')
 }).catch(err => {
   console.log(err)
