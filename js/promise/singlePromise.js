@@ -5,17 +5,6 @@ class Prom {
   _fulfillmentTasks = []
   _promiseResult = undefined
 
-  // constructor(action) {
-  //   console.log(action)
-
-  //   // action is a callback function that gets passed in
-  //   // the function take a resolve and reject function
-
-  //   // why use bind???
-  //   // whats the edge case???
-  //   action(this.resolve.bind(this), this.reject.bind(this))
-  // }
-
   // resolve calls the callbacks
   resolve(value) {
     // if its not in pending return this which acts like ignoring it
