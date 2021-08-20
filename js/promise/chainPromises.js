@@ -129,16 +129,31 @@ function isThenable(value) {
 const promise = new Prom()
 const prom1 = new Prom()
 
-// console.log(promise.resolve(prom1) === prom1)
+function foo() {
+  setTimeout(() => {
+    return promise.resolve('foo done')
+  }, 100);
+}
 
-// console.log(prom1)
+function bar() {
+  return prom1.resolve('bar done')
+}
 
-
-promise.resolve(prom1.resolve()).then(res => {
-  console.log(res, 'fire')
-}).catch(err => {
-  console.log(err)
+promise.then(res => {
+  console.log(res)
+  return bar()
+}).then(res => {
+  console.log(res)
 })
+
+foo()
+
+
+// promise.resolve(prom1.resolve()).then(res => {
+//   console.log(res, 'fire')
+// }).catch(err => {
+//   console.log(err)
+// })
 
 /**
  * resolve returns the promises itself the promise with a fulfilled state and the result set
