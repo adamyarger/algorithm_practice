@@ -30,7 +30,7 @@ class Prom {
   clearAndEnqueueTasks(tasks) {
     this.rejectedtasks = undefined
     this.fulfilledTasks = undefined
-    // whats this do??? why double microtasks???
+    // each task is passed to microqueue
     tasks.map(queueMicrotask)
   }
 
@@ -43,19 +43,24 @@ class Prom {
     // forward fulfillments if you skip a reject
     const fulfillTask = () => {
       if (typeof onFulfill === 'function') {
-        const returned = onFulFill(this.result)
-        resultPromise(returned)
+        const returned = onFulfill(this.result)
+        resultPromise.resolve(returned)
       } else {
         // resolve the new promise. why??? is this how forwarding works?
         resultPromise.resolve(this.result)
       }
     }
 
+    // if we pass no error callback to then
+    // we need to forward it to the next one
+    // this way catch can handle multiple errors
     const rejectTask = () => {
-      if (typeof reject === 'function') {
+      if (typeof onReject === 'function') {
         const returned = onReject(this.result)
         resultPromise.resolve(returned)
       } else {
+        // if nothing is their to handle then bubble it down
+        // set the new promise to a rejected state
         resultPromise.reject(this.result)
       }
     }
@@ -92,9 +97,22 @@ class Prom {
 
 const promise = new Prom()
 
-Prom.resolve(42)
-  .then('dude')
-  .then('nice')
+/**
+ * resolve returns the promises itself the promise with a fulfilled state and the result set
+ * - .then hold both fulfilled and rejected callbacks
+ */
+
+promise.reject('ERROR')
+  .then(res => {
+    console.log(res)
+    return 'dude'
+  })
+  .then(res => console.log(res, 'DUDE'))
   .catch(err => {
     console.log(err)
+    return 'dude'
+  }).then(res => {
+    console.log(res)
   })
+
+promise.reject()
