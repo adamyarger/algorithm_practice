@@ -85,6 +85,11 @@ class Prom {
         console.log(err)
       })
     }
+
+    console.log(1)
+    setTimeout(() => {
+      console.log(2)
+    })
   }
 
   dude()
