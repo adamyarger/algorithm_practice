@@ -1,4 +1,5 @@
 /**
+ * https://github.com/rauschma/toy-promise/blob/master/toy-promise4_exceptions.js
  * return new promise in then
  * the return value from a then should be fed in as the next promises argument
  */
