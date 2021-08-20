@@ -15,21 +15,41 @@ class Prom {
   alreadyResolved = false
 
   resolve(value) {
-    // ignore if not pending
-    if (this.state !== 'pending') return this
-    // set state and result, result needs to be passed to next promise ans arg
-    this.state = 'fulfilled'
-    this.result = value
-    this.clearAndEnqueueTasks(this.fulfilledTasks)
+    if (this.alreadyResolved) return this
+    this.alreadyResolved = true
+
+    //check if resolved with a promise
+    if (isThenable(value)) {
+      // whats this do??? pass it forward
+      value.then(
+        result => this.doFulfill(result),
+        error => this.doReject(error)
+      )
+    } else {
+      // do it the old way if value is NOT a promise or thenable
+      this.doFulfill(value)
+    }
+
     return this
   }
 
+  doFulfill(value) {
+    this.state = 'fulfilled'
+    this.result = value
+    this.clearAndEnqueueTasks(this.fulfilledTasks)
+  }
+
   reject(error) {
-    if (this.state !== 'pending') return this
+    if (this.alreadyResolved) return this
+    this.alreadyResolved = true
+    this.doReject(error)
+    return this
+  }
+
+  doReject(error) {
     this.state = 'rejected'
     this.result = error
     this.clearAndEnqueueTasks(this.rejectedtasks)
-    return this
   }
 
   clearAndEnqueueTasks(tasks) {
@@ -107,23 +127,34 @@ function isThenable(value) {
 
 
 const promise = new Prom()
+const prom1 = new Prom()
+
+// console.log(promise.resolve(prom1) === prom1)
+
+// console.log(prom1)
+prom1.resolve()
+
+promise.resolve(prom1).then(res => {
+  console.log(res, 'fire')
+}).catch(err => {
+  console.log(err)
+})
 
 /**
  * resolve returns the promises itself the promise with a fulfilled state and the result set
  * - .then hold both fulfilled and rejected callbacks
  */
 
-promise.reject('ERROR')
-  .then(res => {
-    console.log(res)
-    return 'dude'
-  })
-  .then(res => console.log(res, 'DUDE'))
-  .catch(err => {
-    console.log(err)
-    return 'dude'
-  }).then(res => {
-    console.log(res)
-  })
+// promise.reject('ERROR')
+//   .then(res => {
+//     console.log(res)
+//     return 'dude'
+//   })
+//   .then(res => console.log(res, 'DUDE'))
+//   .catch(err => {
+//     console.log(err)
+//     return 'dude'
+//   }).then(res => {
+//     console.log(res)
+//   })
 
-promise.reject()
