@@ -20,7 +20,10 @@ class Prom {
 
     //check if resolved with a promise
     if (isThenable(value)) {
+      console.log('call', value)
       // whats this do??? pass it forward
+      // since were not returning the promise thats passed in we need to adopt its state
+      // why so we need to adopt its state?
       value.then(
         result => this.doFulfill(result),
         error => this.doReject(error)
