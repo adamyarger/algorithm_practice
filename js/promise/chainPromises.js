@@ -32,6 +32,7 @@ class Prom {
       // whats this do??? pass it forward
       // since were not returning the promise thats passed in we need to adopt its state
       // why so we need to adopt its state?
+      // we adopt the state so we can flatten the promise, make sure the promise is settled.
       value.then(
         result => this.doFulfill(result),
         error => this.doReject(error)
