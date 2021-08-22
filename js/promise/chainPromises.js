@@ -14,13 +14,21 @@ class Prom {
   fulfilledTasks = []
   alreadyResolved = false
 
+  constructor(action) {
+    if (typeof action !== 'function') return
+
+    // state will be pending
+    // we pass the executor function the internal resolve and reject functions which can mutate the promises state
+    // this is a closure
+    action(this.resolve, this.reject)
+  }
+
   resolve(value) {
     if (this.alreadyResolved) return this
     this.alreadyResolved = true
 
     //check if resolved with a promise
     if (isThenable(value)) {
-      console.log('call', value)
       // whats this do??? pass it forward
       // since were not returning the promise thats passed in we need to adopt its state
       // why so we need to adopt its state?
@@ -129,14 +137,18 @@ function isThenable(value) {
 }
 
 
-const promise = new Prom()
-const prom1 = new Prom()
-
-function foo() {
+const promise = new Prom((resolve, reject) => {
   setTimeout(() => {
     return promise.resolve('foo done')
   }, 100);
-}
+})
+const prom1 = new Prom()
+
+// function foo() {
+//   setTimeout(() => {
+//     return promise.resolve('foo done')
+//   }, 100);
+// }
 
 function bar() {
   return prom1.resolve('bar done')
@@ -149,7 +161,7 @@ promise.then(res => {
   console.log(res)
 })
 
-foo()
+// foo()
 
 
 // promise.resolve(prom1.resolve()).then(res => {

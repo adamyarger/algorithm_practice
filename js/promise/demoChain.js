@@ -44,6 +44,17 @@
     }, 100);
   })
 
+  const promise2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log(resolve(promise) === promise)
+    }, 100);
+  })
+
+  promise2.then(res => {
+    console.log('did it', res)
+  })
+
+
   /**
    * - the second .then will be skipped if its in a rejected state
    * - .then will always return a NEW promise, its argument will be your return value
@@ -88,18 +99,20 @@
   //   })
 
 
-  promise.then(res => {
-    console.log(0)
-    Promise.resolve('1').then(res => {
-      console.log(res)
-      Promise.resolve('2').then(res => {
-        console.log(res)
-        Promise.resolve('3').then(res => {
-          console.log(res)
-        })
-      })
-    })
-  }).then(res => {
-    console.log(4)
-  })
+  // promise.then(res => {
+  //   console.log(0)
+  //   Promise.resolve('1').then(res => {
+  //     console.log(res)
+  //     Promise.resolve('2').then(res => {
+  //       console.log(res)
+  //       Promise.resolve('3').then(res => {
+  //         console.log(res)
+  //       })
+  //     })
+  //   })
+  // }).then(res => {
+  //   console.log(4)
+  // })
+
+
 }
