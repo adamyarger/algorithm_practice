@@ -20,7 +20,7 @@ class Prom {
     // state will be pending
     // we pass the executor function the internal resolve and reject functions which can mutate the promises state
     // this is a closure
-    action(this.resolve, this.reject)
+    action(this.resolve.bind(this), this.reject.bind(this))
   }
 
   resolve(value) {
