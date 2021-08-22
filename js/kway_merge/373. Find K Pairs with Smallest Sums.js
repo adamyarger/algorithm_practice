@@ -24,6 +24,7 @@ Output: [[1,3],[2,3]]
 Explanation: All possible pairs are returned from the sequence: [1,3],[2,3]
  */
 
+import { MinPriorityQueue } from '@datastructures-js/priority-queue'
 /**
  * @param {number[]} nums1
  * @param {number[]} nums2
@@ -39,21 +40,34 @@ Explanation: All possible pairs are returned from the sequence: [1,3],[2,3]
  * fill in forst k pairs is all we need since its already in sorted order
  */
 var kSmallestPairs = function (nums1, nums2, k) {
-  const heap = new MinPriorityQueue({ priority: obj => obj.pair[0] + obj.pair[1] })
-  const obj = {
-    pair: [1, 2]
-  }
+  if (!nums1.length || !nums2.length) return out
 
-  // keep adding to heap as long as nums eixst and under k amount
-  for (let i = 0; i < nums1.length; i++) {
-    for (let j = 0; j < nums2.length; j++) {
-      // heap.enqueue
+  const visited = new Set()
+  const heap = new MinPriorityQueue({ priority: obj => obj.sum })
+  const out = []
+
+  heap.enqueue({ sum: nums1[0] + nums2[0], i: 0, j: 0 })
+  visited.add([0, 0].join('-'))
+
+  while (out.length < k && heap.size()) {
+    const val = heap.dequeue().element
+    out.push([nums1[val.i], nums2[val.j]])
+
+    if (val.i + 1 < nums1.length && !visited.has([val.i + 1, val.j].join('-'))) {
+      heap.enqueue({ sum: nums1[val.i + 1] + nums2[val.j], i: val.i + 1, j: val.j })
+      visited.add([val.i + 1, val.j].join('-'))
+    }
+
+    if (val.j + 1 < nums2.length && !visited.has([val.i, val.j + 1].join('-'))) {
+      heap.enqueue({ sum: nums1[val.i] + nums2[val.j + 1], i: val.i, j: val.j + 1 })
+      visited.add([val.i, val.j + 1].join('-'))
     }
   }
 
+  return out
 };
 
-// console.log(kSmallestPairs([1, 7, 11], [2, 4, 6], 3))
+console.log(kSmallestPairs([1, 7, 11], [2, 4, 6], 3))
 
 console.log(kSmallestPairs([1, 1, 2], [1, 2, 3], 10))
 
