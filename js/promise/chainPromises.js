@@ -20,10 +20,10 @@ class Prom {
     // state will be pending
     // we pass the executor function the internal resolve and reject functions which can mutate the promises state
     // this is a closure
-    action(this.resolve.bind(this), this.reject.bind(this))
+    action(this._resolve.bind(this), this.reject.bind(this))
   }
 
-  resolve(value) {
+  _resolve(value) {
     if (this.alreadyResolved) return this
     this.alreadyResolved = true
 
@@ -81,10 +81,10 @@ class Prom {
     const fulfillTask = () => {
       if (typeof onFulfill === 'function') {
         const returned = onFulfill(this.result)
-        resultPromise.resolve(returned)
+        resultPromise._resolve(returned)
       } else {
         // resolve the new promise. why??? is this how forwarding works?
-        resultPromise.resolve(this.result)
+        resultPromise._resolve(this.result)
       }
     }
 
@@ -94,7 +94,7 @@ class Prom {
     const rejectTask = () => {
       if (typeof onReject === 'function') {
         const returned = onReject(this.result)
-        resultPromise.resolve(returned)
+        resultPromise._resolve(returned)
       } else {
         // if nothing is their to handle then bubble it down
         // set the new promise to a rejected state
@@ -129,6 +129,14 @@ class Prom {
     return this.then(null, onRejected)
   }
 
+  static resolve(val) {
+    if (val instanceof Prom) {
+      return val
+    }
+
+    return new Promise(resolve => resolve(val))
+  }
+
 }
 
 function isThenable(value) {
@@ -140,32 +148,33 @@ function isThenable(value) {
 
 const promise = new Prom((resolve, reject) => {
   setTimeout(() => {
-    return promise.resolve('foo done')
+    return promise._resolve('foo done')
   }, 100);
 })
 const prom1 = new Prom()
 
+console.log(Prom.resolve(promise) === promise)
+
 // function foo() {
 //   setTimeout(() => {
-//     return promise.resolve('foo done')
+//     return promise._resolve('foo done')
 //   }, 100);
 // }
 
 function bar() {
-  return prom1.resolve('bar done')
+  return prom1._resolve('bar done')
 }
 
-promise.then(res => {
-  console.log(res)
-  return bar()
-}).then(res => {
-  console.log(res)
-})
-
-// foo()
+// promise.then(res => {
+//   console.log(res)
+//   return bar()
+// }).then(res => {
+//   console.log(res)
+// })
 
 
-// promise.resolve(prom1.resolve()).then(res => {
+
+// promise._resolve(prom1._resolve()).then(res => {
 //   console.log(res, 'fire')
 // }).catch(err => {
 //   console.log(err)
