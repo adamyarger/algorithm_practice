@@ -20,10 +20,10 @@ class Prom {
     // state will be pending
     // we pass the executor function the internal resolve and reject functions which can mutate the promises state
     // this is a closure
-    action(this._resolve.bind(this), this.reject.bind(this))
+    action(this.resolve.bind(this), this.reject.bind(this))
   }
 
-  _resolve(value) {
+  resolve(value) {
     if (this.alreadyResolved) return this
     this.alreadyResolved = true
 
@@ -80,11 +80,10 @@ class Prom {
     // forward fulfillments if you skip a reject
     const fulfillTask = () => {
       if (typeof onFulfill === 'function') {
-        const returned = onFulfill(this.result)
-        resultPromise._resolve(returned)
+        this.runReactionSafely(resultPromise, onFulfill)
       } else {
         // resolve the new promise. why??? is this how forwarding works?
-        resultPromise._resolve(this.result)
+        resultPromise.resolve(this.result)
       }
     }
 
@@ -93,8 +92,7 @@ class Prom {
     // this way catch can handle multiple errors
     const rejectTask = () => {
       if (typeof onReject === 'function') {
-        const returned = onReject(this.result)
-        resultPromise._resolve(returned)
+        this.runReactionSafely(resultPromise, onReject)
       } else {
         // if nothing is their to handle then bubble it down
         // set the new promise to a rejected state
@@ -124,6 +122,15 @@ class Prom {
     return resultPromise
   }
 
+  runReactionSafely(resultPromise, reaction) {
+    try {
+      const returned = reaction(this.result)
+      resultPromise.resolve(returned)
+    } catch (error) {
+      resultPromise.reject(error)
+    }
+  }
+
   catch(onRejected) {
     // nide helper method, reuse functionality in .then
     return this.then(null, onRejected)
@@ -148,33 +155,36 @@ function isThenable(value) {
 
 const promise = new Prom((resolve, reject) => {
   setTimeout(() => {
-    return promise._resolve('foo done')
+    return promise.resolve('foo done')
   }, 100);
 })
 const prom1 = new Prom()
 
 console.log(Prom.resolve(promise) === promise)
 
-// function foo() {
-//   setTimeout(() => {
-//     return promise._resolve('foo done')
-//   }, 100);
-// }
-
-function bar() {
-  return prom1._resolve('bar done')
+function foo() {
+  setTimeout(() => {
+    return promise.resolve('foo done')
+  }, 100);
 }
 
-// promise.then(res => {
-//   console.log(res)
-//   return bar()
-// }).then(res => {
-//   console.log(res)
-// })
+function bar() {
+  return prom1.resolve('bar done')
+}
+
+promise.then(res => {
+  console.log(res)
+  throw new Error('dude')
+  return bar()
+}).then(res => {
+  console.log(res)
+}).catch(err => {
+  console.log('hello error')
+})
 
 
 
-// promise._resolve(prom1._resolve()).then(res => {
+// promise.resolve(prom1.resolve()).then(res => {
 //   console.log(res, 'fire')
 // }).catch(err => {
 //   console.log(err)
