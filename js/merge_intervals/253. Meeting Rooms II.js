@@ -31,6 +31,10 @@ Explanation: We will need one room for [2,3] and [3,5], and another room for [2,
 Here is a visual representation of Example 4:
 
 https://github.com/Cokeeeeman/leetcode-solutions/blob/master/greedy/253.-meeting-rooms-ii.md
+
+KET INSIGHT:
+always push
+pop when no overlap
  */
 
 import MinHeap from '../utils/MinHeap.js'
