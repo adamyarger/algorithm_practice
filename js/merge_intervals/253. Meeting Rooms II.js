@@ -35,6 +35,8 @@ https://github.com/Cokeeeeman/leetcode-solutions/blob/master/greedy/253.-meeting
 KET INSIGHT:
 always push
 pop when no overlap
+
+heap keeps track of which room end next
  */
 
 import MinHeap from '../utils/MinHeap.js'
