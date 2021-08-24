@@ -7,7 +7,7 @@
       dont know the first 2 args yet, so you add plceholders
  */
 
-function curry(fn) {
+function icurry(fn) {
   return function curried(...args) {
     // dont call the memoized function if the arguments includes a placeholder since its not a valid value
     if (args.length >= fn.length && !args.includes(curry.placeholder)) {
@@ -26,12 +26,23 @@ function curry(fn) {
   }
 }
 
+function curry(fn) {
+  return function curried(...args) {
+    return args.length >= fn.length && !args.includes(curry.placeholder)
+      ? fn(...args)
+      : (...args2) => curried(
+        ...args.map(a => a === curry.placeholder ? args2.shift() : a),
+        ...args2
+      )
+  }
+}
+
 curry.placeholder = Symbol('_')
 
 const _ = curry.placeholder
 
 function sum(a, b, c) {
-  return a + b + c
+  return `${a}_${b}_${c}`
 }
 
 const curriedSum = curry(sum)
