@@ -56,6 +56,7 @@ function sequence(funcs) {
   // wrap each function in a promise
   const promiseFns = funcs.map(promisify)
 
+  // input is starting input like in reduce
   return function (cb, input) {
     // wrap the data in a promise. why???
     let promise = Promise.resolve(input)
@@ -63,9 +64,13 @@ function sequence(funcs) {
     // we can chain promises now that their wrapped and the initial input is also a promise
     promiseFns.forEach(fn => {
       // what happens when the value is a promise in .then? we resolve it. aka flatten it
+      // each fn is a promise which then will unwrap
+      // .then also returns a promise reassining promise acts like chaining and waiting for the return value
       promise = promise.then(fn)
     })
 
+    // after going through all promises were left with the final one
+    // which we use for the final callback
     promise.then(data => {
       cb(undefined, data)
     }).catch(cb)
@@ -73,10 +78,12 @@ function sequence(funcs) {
 }
 
 // take in one of the piped async functions
+// why do we need to return a function that returns a promise? why not just return a promise?
 function promisify(cb) {
   return function (input) {
     return new Promise((resolve, reject) => {
       // cb is async, it has setTimeout so the resolve and reject need to happen inside
+      // cb is async times
       cb((err, data) => {
         if (err) {
           reject(err)
