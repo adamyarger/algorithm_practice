@@ -23,6 +23,68 @@ class Prom {
     action(this.resolve.bind(this), this.reject.bind(this))
   }
 
+  runReactionSafely(resultPromise, reaction) {
+    // this is what allows us to return promises in .then
+    try {
+      const returned = reaction(this.result)
+      resultPromise.resolve(returned)
+    } catch (error) {
+      resultPromise.reject(error)
+    }
+  }
+
+  then(onFulfill, onReject) {
+    const resultPromise = new Prom()
+
+    // add reject and fulfill microtasks
+    // on fulFill and onRject act more like events
+
+    // forward fulfillments if you skip a reject
+    const fulfillTask = () => {
+      if (typeof onFulfill === 'function') {
+        // same as resultPromise.resolve(onFulfill(this.result))
+        this.runReactionSafely(resultPromise, onFulfill)
+      } else {
+        // resolve the new promise. why??? is this how forwarding works?
+        resultPromise.resolve(this.result)
+      }
+    }
+
+    // if we pass no error callback to then
+    // we need to forward it to the next one
+    // this way catch can handle multiple errors
+    const rejectTask = () => {
+      if (typeof onReject === 'function') {
+        this.runReactionSafely(resultPromise, onReject)
+      } else {
+        // if nothing is their to handle then bubble it down
+        // set the new promise to a rejected state
+        resultPromise.reject(this.result)
+      }
+    }
+
+    switch (this.state) {
+      case 'pending':
+        // queue both tasks we dont know which one wins
+        this.fulfilledTasks.push(fulfillTask)
+        this.rejectedtasks.push(rejectTask)
+        break;
+      case 'fulfilled':
+        // fulfill right away with a microtasks, no need to add to queue
+        queueMicrotask(fulfillTask)
+        break
+      case 'rejected':
+        queueMicrotask(rejectTask)
+        break
+      default:
+        throw new Error()
+    }
+
+    // return fresh new promise, returning the current promise doesnt 
+    // work since its fulfilled and its state is immutable
+    return resultPromise
+  }
+
   resolve(value) {
     if (this.alreadyResolved) return this
     this.alreadyResolved = true
@@ -71,66 +133,6 @@ class Prom {
     tasks.map(queueMicrotask)
   }
 
-  then(onFulfill, onReject) {
-    const resultPromise = new Prom()
-
-    // add reject and fulfill microtasks
-    // on fulFill and onRject act more like events
-
-    // forward fulfillments if you skip a reject
-    const fulfillTask = () => {
-      if (typeof onFulfill === 'function') {
-        this.runReactionSafely(resultPromise, onFulfill)
-      } else {
-        // resolve the new promise. why??? is this how forwarding works?
-        resultPromise.resolve(this.result)
-      }
-    }
-
-    // if we pass no error callback to then
-    // we need to forward it to the next one
-    // this way catch can handle multiple errors
-    const rejectTask = () => {
-      if (typeof onReject === 'function') {
-        this.runReactionSafely(resultPromise, onReject)
-      } else {
-        // if nothing is their to handle then bubble it down
-        // set the new promise to a rejected state
-        resultPromise.reject(this.result)
-      }
-    }
-
-    switch (this.state) {
-      case 'pending':
-        // queue both tasks we dont know which one wins
-        this.fulfilledTasks.push(fulfillTask)
-        this.rejectedtasks.push(rejectTask)
-        break;
-      case 'fulfilled':
-        // fulfill right away with a microtasks, no need to add to queue
-        queueMicrotask(fulfillTask)
-        break
-      case 'rejected':
-        queueMicrotask(rejectTask)
-        break
-      default:
-        throw new Error()
-    }
-
-    // return fresh new promise, returning the current promise doesnt 
-    // work since its fulfilled and its state is immutable
-    return resultPromise
-  }
-
-  runReactionSafely(resultPromise, reaction) {
-    try {
-      const returned = reaction(this.result)
-      resultPromise.resolve(returned)
-    } catch (error) {
-      resultPromise.reject(error)
-    }
-  }
-
   catch(onRejected) {
     // nide helper method, reuse functionality in .then
     return this.then(null, onRejected)
@@ -155,29 +157,25 @@ function isThenable(value) {
 
 const promise = new Prom((resolve, reject) => {
   setTimeout(() => {
-    return promise.resolve('foo done')
+    resolve('foo done')
   }, 100);
 })
 const prom1 = new Prom()
 
-console.log(Prom.resolve(promise) === promise)
-
-function foo() {
-  setTimeout(() => {
-    return promise.resolve('foo done')
-  }, 100);
-}
+// console.log(Prom.resolve(promise) === promise)
 
 function bar() {
-  return prom1.resolve('bar done')
+  return Prom.resolve('bar done')
 }
 
+// .then is for registering callbacks NOT firing them
 promise.then(res => {
   console.log(res)
-  throw new Error('dude')
   return bar()
 }).then(res => {
-  console.log(res)
+  console.log(res, 'hit')
+}).then(res => {
+  throw new Error('errorororor')
 }).catch(err => {
   console.log('hello error')
 })
