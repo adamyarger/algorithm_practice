@@ -44,9 +44,10 @@ var findMedianSortedArrays = function (nums1, nums2) {
   const nums = []
   let left = 0
   let right = 0
+  let mid = len % 2 ? Math.floor(len / 2) : len / 2
 
   // can cut this time in half by stopping once left is >= half size
-  while (nums.length < len) {
+  while (nums.length <= mid) {
     if (right >= nums2.length || nums1[left] < nums2[right]) {
       nums.push(nums1[left])
       left += 1
@@ -57,8 +58,9 @@ var findMedianSortedArrays = function (nums1, nums2) {
   }
 
   return len % 2
-    ? nums[Math.floor(len / 2)]
-    : (nums[len / 2 - 1] + nums[len / 2]) / 2
+    ? nums[nums.length - 1]
+    : (nums[nums.length - 1] + nums[nums.length - 2]) / 2
 };
 
 console.log(findMedianSortedArrays([1, 2], [3, 4]))
+console.log(findMedianSortedArrays([1], [3]))
