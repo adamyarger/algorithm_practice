@@ -91,10 +91,8 @@ class Prom {
 
     //check if resolved with a promise
     if (isThenable(value)) {
-      // whats this do??? pass it forward
-      // since were not returning the promise thats passed in we need to adopt its state
-      // why so we need to adopt its state?
-      // we adopt the state so we can flatten the promise, make sure the promise is settled.
+      // by passing in the callbacks from this current promise. 
+      //other promises lower down can set the state of the current promise to their resolved value
       value.then(
         result => this.doFulfill(result),
         error => this.doReject(error)
