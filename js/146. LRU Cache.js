@@ -31,6 +31,8 @@ lRUCache.get(3);    // return 3
 lRUCache.get(4);    // return 4
  */
 
+//https://leetcode.com/problems/lru-cache/discuss/617415/JavaScript-2-Solutions-(ES6-Map-vs-Doubly-linked-list)
+
 class ListNode {
   constructor(key, val) {
     this.val = val
