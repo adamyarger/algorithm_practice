@@ -13,7 +13,11 @@ var myNew = (constructor, ...args) => {
   // were passing in obj which will now be this
   // so when this.name = is called it references the obj and creates and assign a new property
   let response = constructor.apply(obj, args)
-  return response || obj
+
+  // only return an object, if its a primitive return the object we cerated
+  return typeof response === 'object' && response !== null
+    ? response
+    : obj
 }
 
 function Foo(name) {
