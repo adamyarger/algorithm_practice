@@ -115,3 +115,26 @@
 
 
 // new
+function Robot() { }
+
+Robot.prototype.fire = function () {
+  console.log('fire away')
+}
+
+function IronMan() {
+  // call parent constructor
+  Robot.call(this)
+}
+
+// inheritence set
+// but IronMan.constructor still points to Function() {}
+IronMan.prototype = new Robot()
+
+// fix prototype point. whats that means???
+// this pointed to Robot before, but it should point to IronMan now
+// why do this???
+IronMan.prototype.constructor = IronMan
+
+let mark1 = new IronMan()
+
+mark1.fire()
