@@ -133,6 +133,7 @@ IronMan.prototype = new Robot()
 // fix prototype point. whats that means???
 // this pointed to Robot before, but it should point to IronMan now
 // why do this???
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
 IronMan.prototype.constructor = IronMan
 
 let mark1 = new IronMan()
