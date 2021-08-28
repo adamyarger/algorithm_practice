@@ -8,11 +8,19 @@ Function.prototype.mycall = function (thisArg, ...args) {
   thisArg = Object(thisArg)
 
   // we ned a unique property. WHY???
+  // this is just used as a unique name
   let func = Symbol()
 
-  // WHY???
+  // thisArg is an object, we create a unique attribute on it and assign this
+  // set an uniquely named attribute to the speak function (this === speak)
   thisArg[func] = this
 
+  // what is this? in a prototype so this is the function before .mycall
+  // remember this is always the value before .functionName
+  console.log('thisArg', this)
+
+  // speak has been temporarli added to the obj2 object so this will rfer to obj2
+  // this is whats meant by borrowing the object context
   let res = thisArg[func](...args)
 
   delete thisArg[func]
