@@ -139,3 +139,34 @@ IronMan.prototype.constructor = IronMan
 let mark1 = new IronMan()
 
 mark1.fire()
+
+
+
+
+
+
+// bad inheritence
+function Animal() {
+  this.offspring = [];
+}
+
+Animal.prototype.makeBaby = function () {
+  var baby = new Animal();
+  // push will go up the prototype chain and push to the protypes array
+  this.offspring.push(baby);
+  return baby;
+};
+
+//create Cat as a sub-class of Animal
+function Cat() {
+}
+
+//Inherit from Animal
+Cat.prototype = new Animal();
+
+var puff = new Cat();
+puff.makeBaby();
+var colonel = new Cat();
+colonel.makeBaby();
+
+console.log(puff.offspring === colonel.offspring)
