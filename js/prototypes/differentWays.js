@@ -169,6 +169,10 @@ mark1.fire()
 
 console.log(mark1)
 
+for (let key in mark1) {
+  console.log(key, mark1[key])
+}
+
 
 
 
@@ -199,3 +203,4 @@ console.log(mark1)
 // colonel.makeBaby();
 
 // console.log(puff.offspring === colonel.offspring)
+
