@@ -48,17 +48,18 @@
 // we can also assign via the .prototype value
 
 {
-  let Point = function () {
-    this.x = 12
-    this.y = 10
+  function Point() {
+    this.x = 10
+    this.y = 12
   }
 
-  // .prottype points to the default constructor function which is a part of the default Object object
-  Point.prototype = {
-    z: 30
+  function Point3D() {
+    this.z = 23
   }
 
-  let point3D = new Point()
+  Point3D.prototype = new Point()
+
+  let point3D = new Point3D
 
   console.log(
     point3D.x,
@@ -113,9 +114,10 @@
   )
 }
 
-
 // new
-function Robot() { }
+function Robot() {
+  this.cool = true
+}
 
 Robot.prototype.fire = function () {
   console.log('fire away')
@@ -123,17 +125,41 @@ Robot.prototype.fire = function () {
 
 function IronMan() {
   // call parent constructor
+  this.name = 'Iron Man'
+
+  /**
+   * this = {
+   *   name: Iron Man
+   * }
+   * 
+   * Robot is the function we want this to adopt
+   * 
+   * when fired the following hapepns
+   * 
+   * this = {
+   *   name: iron man,
+   *   [Symbol]: Robot() {}
+   * }
+   * 
+   * then robot gets fired
+   * and robots constructor does this
+   * 
+   * this.cool = true
+   */
   Robot.call(this)
 }
 
-// inheritence set
-// but IronMan.constructor still points to Function() {}
+// the top part adopts Robots state
+// now we need to adopt its prototypes
+// assign ironmans prototype to robot
 IronMan.prototype = new Robot()
 
 // fix prototype point. whats that means???
 // this pointed to Robot before, but it should point to IronMan now
 // why do this???
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
+
+// reset constructor to point to the function IronMan itself, this is a reference
 IronMan.prototype.constructor = IronMan
 
 let mark1 = new IronMan()
@@ -146,27 +172,27 @@ mark1.fire()
 
 
 // bad inheritence
-function Animal() {
-  this.offspring = [];
-}
+// function Animal() {
+//   this.offspring = [];
+// }
 
-Animal.prototype.makeBaby = function () {
-  var baby = new Animal();
-  // push will go up the prototype chain and push to the protypes array
-  this.offspring.push(baby);
-  return baby;
-};
+// Animal.prototype.makeBaby = function () {
+//   var baby = new Animal();
+//   // push will go up the prototype chain and push to the protypes array
+//   this.offspring.push(baby);
+//   return baby;
+// };
 
-//create Cat as a sub-class of Animal
-function Cat() {
-}
+// //create Cat as a sub-class of Animal
+// function Cat() {
+// }
 
-//Inherit from Animal
-Cat.prototype = new Animal();
+// //Inherit from Animal
+// Cat.prototype = new Animal();
 
-var puff = new Cat();
-puff.makeBaby();
-var colonel = new Cat();
-colonel.makeBaby();
+// var puff = new Cat();
+// puff.makeBaby();
+// var colonel = new Cat();
+// colonel.makeBaby();
 
-console.log(puff.offspring === colonel.offspring)
+// console.log(puff.offspring === colonel.offspring)
