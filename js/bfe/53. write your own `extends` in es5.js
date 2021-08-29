@@ -45,17 +45,28 @@ https://bigfrontend.dev/problem/write-your-own-extends-in-es5/discuss
 
 const myExtends = (SuperType, SubType) => {
   function Child(...args) {
-    // apply will asiign or create new attributes on the object it creates
+    /**
+     * this = {}
+     * 
+     * grab both Supertype and sub type and add there atriutes
+     * this.name = name
+     * etc
+     * 
+     * this is meant for copying over attrbutes
+     */
     SuperType.apply(this, args)
     SubType.apply(this, args)
 
-    // why???
+    // now set the prototype (this) is the returned object from new
+    // set the prototype of the new object created with new
     Object.setPrototypeOf(this, SubType.prototype)
   }
 
-  // WHY???
+  // set the subtypes prototype to supertypes prototype
   Object.setPrototypeOf(SubType.prototype, SuperType.prototype)
+  // set Child functions prototype to Super type
   Object.setPrototypeOf(Child, SuperType)
+
   return Child
 }
 
