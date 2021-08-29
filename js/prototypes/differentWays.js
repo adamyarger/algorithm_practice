@@ -160,11 +160,14 @@ IronMan.prototype = new Robot()
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
 
 // reset constructor to point to the function IronMan itself, this is a reference
+// if we dont add constructor here it wont exist. It will then go up the prototype chain and grab Robot.prototype.constructor
 IronMan.prototype.constructor = IronMan
 
 let mark1 = new IronMan()
 
 mark1.fire()
+
+console.log(mark1)
 
 
 
