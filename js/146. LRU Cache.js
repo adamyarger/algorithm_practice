@@ -46,39 +46,40 @@ class LinkedList {
   constructor() {
     this.head = null
     this.tail = null
+    this.length = 0
   }
 
-  insert(node) {
-    // make sure the node is clean
-    node.next = null
-    node.prev = null
+  push(key, val) {
+    const node = new ListNode(key, val)
     if (!this.head) {
       this.head = node
+      this.tail = node
     } else {
-      // add to the end
       this.tail.next = node
       node.prev = this.tail
+      this.tail = node
     }
-    // set new tail
-    this.tail = node
+    this.length += 1
+    return node
   }
 
-  delete(node) {
-    if (node.prev) {
-      node.prev.next = node.next
-    } else {
+  remove(node) {
+    if (!node.next && !node.prev) {
+      this.head = null
+      this.tail = null
+    } else if (!node.prev) { // head
       this.head = node.next
-    }
-
-    if (node.next) {
-      node.next.prev = node.prev
-    } else {
+      this.head.prev = null
+    } else if (!node.next) { // tail
       this.tail = node.prev
+      this.tail.next = null
+    } else {
+      const prev = node.prev
+      const next = node.next
+      prev.next = next
+      next.prev = prev
     }
-
-    // clean out the node
-    node.next = null
-    node.prev = null
+    this.length -= 1
   }
 }
 
@@ -92,29 +93,23 @@ class LinkedList {
  */
 var LRUCache = function (capacity) {
   this.list = new LinkedList()
-  this.dict = {}
+  this.map = {}
   this.capacity = capacity
 };
-
-LRUCache.prototype.insert = function (key, val) {
-  const node = new ListNode(key, val)
-  this.list.insert(node)
-  this.dict[key] = node
-}
 
 /** 
  * @param {number} key
  * @return {number}
  */
 LRUCache.prototype.get = function (key) {
-  if (key in this.dict) {
-    const val = this.dict[key].val
-    // delete it so we can move its position to the front
-    this.list.delete(this.dict[key])
-    this.insert(key, val)
-    return val
-  }
-  return -1
+  if (!this.map[key]) return -1
+  // move to front if exists
+  // return value
+  const val = this.map[key].val
+  this.list.remove(this.map[key])
+  // this creates a new node. is that best?
+  this.map[key] = this.list.push(key, val)
+  return val
 };
 
 /** 
@@ -123,17 +118,14 @@ LRUCache.prototype.get = function (key) {
  * @return {void}
  */
 LRUCache.prototype.put = function (key, value) {
-  if (key in this.dict) {
-    // find the node to delete it before adding it back in at the front
-    this.list.delete(this.dict[key])
-  } else if (Object.keys(this.dict).length === this.capacity) {
-    // delete the head since its the oldest
-    // remove from dict
-    delete this.dict[this.list.head.key]
-    // remove from list
-    this.list.delete(this.list.head)
+  if (this.map[key]) {
+    this.list.remove(this.map[key])
+  } else if (this.list.length === this.capacity) {
+    const head = this.list.head
+    delete this.map[head.key]
+    this.list.remove(head)
   }
-  this.insert(key, value)
+  this.map[key] = this.list.push(key, value)
 };
 
 /**
@@ -145,11 +137,11 @@ LRUCache.prototype.put = function (key, value) {
 
 const cache = new LRUCache(2);
 cache.put(1, 1); // cache is {1=1}
-console.log(cache.dict)
+console.log(cache.map)
 cache.put(2, 2); // cache is {1=1, 2=2}
 cache.get(1);    // return 1
 cache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-console.log(cache.dict)
+console.log(cache.map)
 cache.get(2);    // returns -1 (not found)
 cache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
 cache.get(1);    // return -1 (not found)
