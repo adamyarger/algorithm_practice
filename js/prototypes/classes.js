@@ -32,13 +32,16 @@ const me = new Dude()
   let Person = (function () {
     'use strict'
 
-    const Person = function (name) {
+    // const so we cant overwrite a class name
+    // e.g. Person = Berson
+    const Person = function (first, last) {
       // new.target can be used to detect if the new keyword was used
       if (typeof new.target === undefined) {
         throw new Error('constructor must be called with new')
       }
 
-      this.name = name
+      this.first = first
+      this.last = last
     }
 
     Object.defineProperty(Person.prototype, 'sayName', {
@@ -55,9 +58,21 @@ const me = new Dude()
       configurable: true
     })
 
+    // getter setter
+    Object.defineProperty(Person.prototype, 'fullName', {
+      enumerable: false,
+      get: function () {
+        return `${this.first} ${this.last}`
+      },
+      set: function (name) {
+        [this.first, this.last] = name.split(' ')
+      }
+    })
+
     return Person
   })()
 
-  const me = new Person('adam')
+  const me = new Person('adam', 'yarger')
+  me.fullName = 'Jorge Young'
   console.log(me)
 }
