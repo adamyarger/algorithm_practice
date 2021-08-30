@@ -88,3 +88,20 @@ function SubType(name) {
 SubType.prototype.subMethod = function () { }
 SubType.prototype.method = function () { }
 SubType.staticSub = 'staticSub'
+
+
+// OUTCOME
+
+// Child { name: undefined, forSuper: Array(2), from: "sub", forSub: Array(2) }
+//   forSub: (2)[3, 4]
+//   forSuper: (2)[1, 2]
+//   from: "sub"
+//   name: undefined
+//   [[Prototype]]: SuperType
+//     method: ƒ()
+//     subMethod: ƒ()
+//     constructor: ƒ SubType(name)
+//     [[Prototype]]: Object
+//       method: ƒ()
+//       superMethod: ƒ()
+//       constructor: ƒ SuperType(name)
