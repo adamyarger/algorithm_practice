@@ -40,3 +40,38 @@
   console.log(obj instanceof Foo)
 }
 
+{
+  let collection = {
+    0: 'dude',
+    1: 'wheres my car',
+    length: 2,
+    // allows object that looks like an array to be concated
+    [Symbol.isConcatSpreadable]: true
+  }
+
+  // concat works with both arrays and values
+  // it does this because `Symbol.isConcatSpreadable` allows arrays to be split apart into individual arguments
+  let messages = ['Hey'].concat(collection)
+
+  console.log(messages)
+}
+
+{
+  /**
+   * Symbol.match, replace, search, split
+   * allows for overwritting Regex object
+   * 
+   * the main bebefit of this is doing more programatic regex matches
+   * while still using the native functions
+   */
+
+  let hasLength10 = {
+    [Symbol.match]: function (value) {
+      return value.length === 10 ? [value] : null
+    }
+  }
+
+  let msg = 'Hello John'
+
+  console.log(msg.match(hasLength10))
+}
