@@ -61,3 +61,16 @@
   // if we use WekSet it wont
   // console.log(document.querySelector('.one'))
 }
+
+{
+  // Map
+
+  // you can initialize Map with array tuple like ['name', 'value']
+  // the reason it does this instea of an object is becuase objects keys
+  // do not allow onjects, but arrays do
+
+  let obj = { a: 2 }
+  const map = new Map([[obj, 'dude']])
+
+  console.log(map)
+}
