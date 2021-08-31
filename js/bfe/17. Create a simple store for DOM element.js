@@ -3,6 +3,9 @@ class NodeStore {
   constructor() {
     this.keys = []
     this.vals = []
+
+    // could use tuple like array [[key, val]]
+    // then store it in a dict with symbol key
   }
 
   set(node, value) {
