@@ -105,3 +105,32 @@ SubType.staticSub = 'staticSub'
 //       method: ƒ()
 //       superMethod: ƒ()
 //       constructor: ƒ SuperType(name)
+
+
+// do this in class to compare
+
+class Parent {
+  constructor() {
+    this.p = 'dude'
+  }
+
+  order() {
+    console.log(this.p)
+  }
+}
+
+
+class Child extends Parent {
+  constructor() {
+    super()
+    this.c = 42
+  }
+
+  say() {
+    console.log(this.c)
+  }
+}
+
+let clazz = new Child()
+
+console.log(clazz)
