@@ -76,3 +76,30 @@ const me = new Dude()
   me.fullName = 'Jorge Young'
   console.log(me)
 }
+
+{
+  function a() {
+    b()
+
+    function b() {
+      console.log(dude)
+
+      {
+        let ok = 34
+        {
+          let good = 42
+          {
+            console.log(ok)
+            {
+              console.log(good)
+            }
+          }
+        }
+      }
+    }
+
+    var dude = 'dude'
+  }
+
+  a()
+}
