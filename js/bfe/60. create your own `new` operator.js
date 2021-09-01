@@ -31,16 +31,26 @@ console.log(foo)
 function BigFrontEndOther(name) {
   this.name = name
 
+  this.fn = () => console.log(this)
+
+  this.fn2 = function () {
+    console.log(this)
+  }
+
   // return this implicityly happens
   // were chainging it here. does this.name get completely ignored now?
-  return {
-    a: 1
-  }
+  // return {
+  //   a: 1
+  // }
 }
 
 const obj = myNew(BigFrontEndOther, 'dev')
-console.log(obj)
+// console.log(obj)
+obj.fn()
+obj.fn2()
+
+console.log('-----')
 // expect(obj).toEqual({ a: 1 })
 
 const obj2 = new BigFrontEndOther('dev')
-console.log(obj2)
+// console.log(obj2)
