@@ -74,3 +74,40 @@
 
   console.log(map)
 }
+
+{
+  function Person(params) {
+    let _id = 0
+    // this is a closure and will hold values across different instances
+    // even when that instance is deleted, thats a memory leak
+    const data = {}
+
+    function Person() {
+      this.name = 'dude'
+    }
+
+    Person.prototype.setData = function (id, value) {
+      if (!data[_id]) {
+        id += 1
+      }
+
+      data[id] = value
+    }
+  }
+
+  function Pep() {
+    const data = new WeakMap()
+
+    function Pep() {
+      // keep a reference the instance which will be garbage collected if delete aka weakmap
+    }
+
+    Pep.prototype.setData = function (key, value) {
+      // this will be the instances object
+      data.set(this, {
+        key,
+        value
+      })
+    }
+  }
+}
