@@ -50,15 +50,37 @@
   function* createIterator(items) {
     for (let i = 0; i < items.length; i++) {
       // for loop stops each time the yield statement is called
+      // treat yield like you would return
       yield items[i]
     }
   }
 
   let iterator = createIterator([1, 2, 3])
 
+  // when next is called, the for loop picks back up again
+  // generators break the functions model of run to completion
   console.log(iterator.next())
   console.log(iterator.next())
   console.log(iterator.next())
   // 4th one is out of bounds so undefined is returned
   console.log(iterator.next())
+}
+
+
+/**
+ * ITERABLE
+ * aka make an object work in for ... of
+ */
+
+{
+  function isIterable(object) {
+    return typeof object[Symbol.iterator] === 'function'
+  }
+
+  console.log(isIterable([1, 2, 3]))
+
+  // weakmap and weakset have no iterable
+
+  let arr = [1, 2, 3]
+  console.log(arr[Symbol.iterator])
 }
