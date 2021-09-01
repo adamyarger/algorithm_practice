@@ -101,5 +101,98 @@ const me = new Dude()
     var dude = 'dude'
   }
 
-  a()
+  // a()
+}
+
+
+function SuperType(name) {
+  this.name = name
+  this.forSuper = [1, 2]
+  this.from = 'super'
+}
+SuperType.prototype.superMethod = function () { }
+SuperType.prototype.method = function () { }
+SuperType.staticSuper = 'staticSuper'
+
+function SubType(name) {
+  this.name = name
+  this.forSub = [3, 4]
+  this.from = 'sub'
+}
+
+SubType.prototype.subMethod = function () { }
+SubType.prototype.method = function () { }
+SubType.staticSub = 'staticSub'
+
+const myExtends = (SuperType, SubType) => {
+  function Child(...args) {
+    // copy properties
+    SuperType.apply(this, args)
+    SubType.apply(this, args)
+
+    // handle new prototype
+    // Object.setPrototypeOf(this, SubType.prototype)
+    this.__proto__ = SubType.prototype
+  }
+
+  // subtype inherits from supertype
+  // Object.setPrototypeOf(SubType.prototype, SuperType.prototype)
+  SubType.prototype.__proto__ = SuperType.prototype
+
+  // child inheits from sub type
+  Child.prototype.__proto__ = SubType.prototype
+
+  // why????
+  // this is for static functions, so we can fire supers static functions
+  Object.setPrototypeOf(Child, SuperType)
+  // Child.__proto__ = SuperType
+
+  return Child
+}
+
+let extended = myExtends(SuperType, SubType)
+
+var foo = new extended()
+
+console.log(foo)
+
+// constructor allows us to accesss static methods
+// when extending a class we must call super since the super
+// constructor is whats used to crate the this object
+{
+  class Super {
+    constructor() {
+      this.superName = 'dude'
+    }
+
+    speak() {
+      console.log(this.superName)
+    }
+
+    static superStat() {
+      console.log('super stat')
+    }
+  }
+
+
+  class Sub extends Super {
+    constructor() {
+      super()
+      this.subName = 'dude'
+    }
+
+    speak() {
+      console.log(this.subName)
+    }
+
+    static subStat() {
+      console.log('sub stat')
+    }
+  }
+
+  let child = new Sub()
+  console.log(child)
+  // as soon as were in the constructor, we can follow its prototype chain
+  // which will lead to its static functions to the chain
+  child.constructor.superStat()
 }
