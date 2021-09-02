@@ -14,34 +14,20 @@ function req(url) {
   return fetch(url)
 }
 
-// function runGenerator(g) {
-//   // take in a generator callback
-//   // is there a way to detect a genrator type?
-//   let it = g()
-//   let ret
-
-//   (function iterate(val) {
-//     ret = it.next()
-
-//     if (!ret.done) {
-//       if (isThenable(ret.value)) {
-//         ret.value.then(iterate)
-//       } else {
-//         // avoid sync recursion
-//         setTimeout(() => {
-//           iterate(ret.value)
-//         }, 0);
-//       }
-//     }
-//   })()
-// }
-
 function runGenerator(g) {
+  // call the generaator function to get an iterable in return
   const it = g();
+
+  // define named function and iife it, need the name for recursion
   (function next(value) {
+    // call to next gets our first yield. value will be a promise
     const ret = it.next(value)
+
+    // only keep calling if its not done
     if (!ret.done) {
+      // make sure its a promise
       if (isThenable(ret.value)) {
+        // get the value from iterator, and pass on fulfilled callback with arg as recursive function
         ret.value.then(next)
       } else {
         // allow returned cahced result while staying async
