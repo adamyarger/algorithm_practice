@@ -250,3 +250,36 @@
   console.log(iterator.next());           // "{ value: true, done: false }"
   console.log(iterator.next());           // "{ value: undefined, done: true }"
 }
+
+
+{
+  // iterator class (for of loop)
+
+  class Queue {
+    constructor(items = []) {
+      this.items = items
+    }
+
+    [Symbol.iterator]() {
+      let i = 0
+
+      return {
+        next: () => {
+          let done = (i >= this.items.length)
+          let value = !done ? this.items[i++] : undefined
+
+          return {
+            done,
+            value
+          }
+        }
+      }
+    }
+  }
+
+  const q = new Queue([9, 8, 7])
+
+  for (let i of q) {
+    console.log(i)
+  }
+}
