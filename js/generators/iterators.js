@@ -255,6 +255,18 @@
 {
   // iterator class (for of loop)
 
+  class Gen {
+    constructor(items = []) {
+      this.items = items
+    }
+
+    *[Symbol.iterator]() {
+      for (let i = 0; i < this.items.length; i++) {
+        yield this.items[i]
+      }
+    }
+  }
+
   class Queue {
     constructor(items = []) {
       this.items = items
@@ -280,6 +292,12 @@
   const q = new Queue([9, 8, 7])
 
   for (let i of q) {
+    console.log(i)
+  }
+
+  console.log('----gen---')
+  const g = new Gen([3, 4, 5])
+  for (let i of g) {
     console.log(i)
   }
 }
