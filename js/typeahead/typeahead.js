@@ -8,10 +8,28 @@
  * - create a recent cache (LRU)
  */
 
-class Typeahead extends HTMLDivElement {
+class TypeAhead extends HTMLElement {
   #BASE = 'http://universities.hipolabs.com/search?name=montana'
 
   constructor() {
-    super()
+    // Always call super first in constructor
+    super();
+
+    // Create a shadow root
+    // open means we can acess the shadow dom from the outside
+    const shadow = this.attachShadow({ mode: 'open' });
+
+    // add elements like normal
+    const wrapper = document.createElement('div')
+    wrapper.setAttribute('class', 'typeahead')
+
+    wrapper.textContent = 'HELLO'
+
+
+    // attach
+    shadow.appendChild(wrapper)
   }
+
 }
+
+customElements.define('type-ahead', TypeAhead)
