@@ -78,8 +78,83 @@
 
   // adding a property still works
   proxy.name = "proxy";
-  console.log(proxy.name);            // "proxy"
+  // console.log(proxy.name);            // "proxy"
 
   // nonexistent properties throw an error
   // console.log(proxy.nme);             // throws error
+}
+
+{
+  let target = {
+    name: 'target',
+    value: 42
+  }
+
+  let proxy = new Proxy(target, {
+    deleteProperty(trapTarget, key) {
+      if (key === 'value') {
+        return false
+      } else {
+        return Reflect.deleteProperty(trapTarget, key)
+      }
+    }
+  })
+
+  // cant delete non configurable properties
+  Object.defineProperty(target, 'name', { configurable: false })
+
+  // console.log('value' in target)
+
+  let result1 = delete proxy.value
+
+  // console.log(result1) // false, unsuccefully deleted
+}
+
+{
+  // validate function arguments
+  function sum(...args) {
+    return args.reduce((acc, val) => acc + val, 0)
+  }
+
+  let sumProxy = new Proxy(sum, {
+    apply: function (trapTarget, thisArg, argumentList) {
+      argumentList.forEach(item => {
+        if (!Number.isInteger(item)) {
+          throw new TypeError(' All arguments must be numbers')
+        }
+      })
+      return Reflect.apply(trapTarget, thisArg, argumentList)
+    },
+    construct: function (trapTarget, thisArg, argumentList) {
+      throw new TypeError('new operator not allowed')
+    }
+  })
+
+  // console.log(sumProxy(1, 2, 3, 4))
+
+  // console.log(sumProxy(1, '3', 3, 4)) // error
+
+  // new sumProxy(1, 2, 3) //error
+}
+
+{
+  // make class callable with out new keyword
+  // each function has [[call]] and [[constructor]]
+  // we could do the opposoite and make es5 constuctors act like classes by restrcting with proxies
+
+  class Person {
+    constructor(name) {
+      this.name = name
+    }
+  }
+
+  let PersonProxy = new Proxy(Person, {
+    apply: function (trapTarget, thisArg, argumentList) {
+      return new trapTarget(...argumentList)
+    }
+  })
+
+  let me = PersonProxy('Adam')
+
+  console.log(me)
 }
