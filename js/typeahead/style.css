@@ -1,0 +1,9 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.container {
+    display: grid;
+}
+
+/* create a copy of bootstrap grid with css grid */
