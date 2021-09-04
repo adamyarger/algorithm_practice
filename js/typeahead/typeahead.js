@@ -21,18 +21,24 @@
    */
   function debounce(fn, wait) {
     let timer = null
-    let _args
 
     return function (...args) {
-      if (timer) {
-        _args = args
-      }
-
       // keep resetting the timer
       clearTimeout(timer)
       timer = setTimeout(() => {
-        fn(..._args)
+        fn(...args)
       }, wait);
+    }
+  }
+
+  function request(req, opts) {
+    // create your own qs parser
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    return {
+      abort: () => controller.abort(),
+      ready: fetch(req, { ...opts, signal })
     }
   }
 
@@ -135,6 +141,7 @@
     }
 
     searchDebounce() {
+      let current
       // debounce this
       // need to cache target since event object gets reused for each new dom event
       return debounce((event, target) => {
@@ -143,13 +150,30 @@
           return
         }
 
-        this.search(target.value)
+        if (current) {
+          current.abort()
+        }
+
+        current = this.search(target.value);
+
+        current.ready
           .then(res => res.json())
           .then(data => {
             this.items = data
             this.renderItems(this.items)
-          })
-      }, 500)
+            current = null
+          }).catch(error => {
+            if (error.name === 'AbortError') {
+              console.log('aborted')
+            } else {
+              throw new Error(error)
+            }
+          });
+      }, 50)
+    }
+
+    search(value) {
+      return request(`${this.#BASE}?name=${value}`)
     }
 
     // it would be nice to observe state change then update
@@ -206,11 +230,6 @@
 
     attributeChangedCallback(name, oldValue, newValue) {
       console.log('el updated')
-    }
-
-    search(value) {
-      // create your own qs parser
-      return fetch(`${this.#BASE}?name=${value}`)
     }
   }
 
