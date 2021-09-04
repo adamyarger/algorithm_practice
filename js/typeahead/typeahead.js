@@ -9,14 +9,29 @@
  */
 
 (function () {
+  /**
+   * 
+   * @param {*} fn 
+   * @param {*} wait 
+   * @returns 
+   * 
+   * the event object gets reused across the dom since its single threaded
+   * we need to pass in a seocn darg to cache the target
+   * how do synthetic dom events work?
+   */
   function debounce(fn, wait) {
     let timer = null
+    let _args
 
     return function (...args) {
+      if (timer) {
+        _args = args
+      }
+
       // keep resetting the timer
       clearTimeout(timer)
       timer = setTimeout(() => {
-        fn(...args)
+        fn(..._args)
       }, wait);
     }
   }
@@ -54,12 +69,11 @@
       console.log('connected')
 
       // wrong event being passed. WHY?
-      const listener = debounce(function (event) {
-        console.log(event.target.value)
-        // console.log(event.target)
-        // this.search(event.target.value)
-        //   .then(res => res.json())
-        //   .then(data => console.log(data))
+      const listener = debounce((event, target) => {
+        console.log(target.value)
+        this.search(target.value)
+          .then(res => res.json())
+          .then(data => console.log(data))
       }, 500)
 
       console.log(listener)
@@ -69,7 +83,10 @@
       }
 
       // debounce this
-      this.input.addEventListener('keyup', listener)
+      // need to cache target since event object gets reused for each new dom event
+      this.input.addEventListener('keyup', event => {
+        listener(event, event.target)
+      })
     }
 
     search(value) {
