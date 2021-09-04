@@ -12,17 +12,26 @@
 <body>
     <div class="container">
         <h1>Typeahead</h1>
-        <type-ahead value="minnesota"></type-ahead>
+
+        <div class="typeahead-container">
+            <type-ahead value="minnesota"></type-ahead>
+        </div>
+
+        <div class="selected-data">
+
+        </div>
     </div>
 </body>
 <script src="typeahead.js"></script>
 
-<template id="dropdown-template">
-    <div class="dropdown">
-        <div class="dropdown-item">
+<script>
+    (function () {
+        const ta = document.querySelector('type-ahead')
 
-        </div>
-    </div>
-</template>
+        ta.addEventListener('select', event => {
+            document.querySelector('.selected-data').textContent = JSON.stringify(event.target.selected)
+        })
+    })()
+</script>
 
 </html>

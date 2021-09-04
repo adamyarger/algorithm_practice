@@ -49,10 +49,11 @@
       return dropdown
     }
 
-    static createDropdownItem(value = '') {
+    static createDropdownItem(obj, index) {
       const item = document.createElement('div')
       item.setAttribute('class', 'dropdown-item')
-      item.textContent = value
+      item.setAttribute('data-id', index)
+      item.textContent = obj.name
       return item
     }
 
@@ -95,6 +96,7 @@
       // Always call super first in constructor
       super();
       this.items = []
+      this.value = null
 
       // Create a shadow root
       // open means we can acess the shadow dom from the outside
@@ -121,8 +123,21 @@
     connectedCallback() {
       console.log('connected')
 
-      // wrong event being passed. WHY?
-      const listener = debounce((event, target) => {
+      // debounce needs to memoize timers, so it should be initiallzed once on mounted
+      const search = this.searchDebounce()
+      this.input.addEventListener('keyup', event => {
+        search(event, event.target)
+      })
+
+      // do event capture of child
+      // need id for which child
+      this.dropdown.addEventListener('mouseup', this.selectItem.bind(this))
+    }
+
+    searchDebounce() {
+      // debounce this
+      // need to cache target since event object gets reused for each new dom event
+      return debounce((event, target) => {
         if (!target.value) {
           this.dropdown.innerHTML = ''
           return
@@ -135,20 +150,50 @@
             this.renderItems(this.items)
           })
       }, 500)
-
-      // debounce this
-      // need to cache target since event object gets reused for each new dom event
-      this.input.addEventListener('keyup', event => {
-        listener(event, event.target)
-      })
     }
 
     // it would be nice to observe state change then update
     renderItems(items) {
       this.dropdown.innerHTML = ''
-      items.forEach(item => {
-        this.dropdown.appendChild(TypeAhead.createDropdownItem(item.name))
+      this.dropdown.style.display = ''
+      items.forEach((item, index) => {
+        this.dropdown.appendChild(TypeAhead.createDropdownItem(item, index))
       })
+    }
+
+    selectItem(event) {
+      /**
+       * onselect set the value to the name
+       * hide the dropdown
+       * emit an event
+       * test that event works by listening on html page
+       * displat selected object below after
+       * 
+       * this === element from event
+       */
+
+      this.value = parseInt(event.target.getAttribute('data-id'))
+
+      // fill in text
+      this.input.value = this.selected.name
+
+      // close dropdown
+      this.dropdown.style.display = 'none'
+
+      // emit event
+      const select = new Event('select')
+      this.dispatchEvent(select)
+    }
+
+    get selected() {
+      if (!this.value) return null
+      return this.items[this.value]
+    }
+
+    highlightItem() {
+      /**
+       * highlight the match sequence so far
+       */
     }
 
     disconnectedCallback() {
