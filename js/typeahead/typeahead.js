@@ -56,6 +56,39 @@
       return item
     }
 
+    static createStyles() {
+      const styles = `
+        .typeahead {
+          width: 100%
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 6px 12px;
+        }
+
+        .dropdown {
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, 
+                      rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+          width: 100%;
+          border-radius: 4px;
+          background: #fff;
+        }
+
+        .dropdown-item {
+          padding: 6px 12px;
+          cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+          background-color: #EDF2F7;
+        }
+      `
+      const el = document.createElement('style')
+      el.innerHTML = styles
+      return el
+    }
+
     constructor() {
       // Always call super first in constructor
       super();
@@ -78,6 +111,7 @@
 
 
       // attach
+      shadow.appendChild(TypeAhead.createStyles())
       shadow.appendChild(wrapper)
     }
 
