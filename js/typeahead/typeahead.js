@@ -45,6 +45,7 @@
   class TypeAhead extends HTMLElement {
     #BASE = 'http://universities.hipolabs.com/search'
 
+    // can we observe value on an input?
     static get observedAttributes() {
 
     }
