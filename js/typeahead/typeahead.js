@@ -39,9 +39,27 @@
   class TypeAhead extends HTMLElement {
     #BASE = 'http://universities.hipolabs.com/search'
 
+    static get observedAttributes() {
+
+    }
+
+    static createDropdown() {
+      const dropdown = document.createElement('div')
+      dropdown.setAttribute('class', 'dropdown')
+      return dropdown
+    }
+
+    static createDropdownItem(value = '') {
+      const item = document.createElement('div')
+      item.setAttribute('class', 'dropdown-item')
+      item.textContent = value
+      return item
+    }
+
     constructor() {
       // Always call super first in constructor
       super();
+      this.items = []
 
       // Create a shadow root
       // open means we can acess the shadow dom from the outside
@@ -55,9 +73,8 @@
       this.input.setAttribute('class', 'form-control')
       wrapper.appendChild(this.input)
 
-      const dropdown = document.createElement('div')
-      dropdown.setAttribute('class', 'dropdown')
-      wrapper.appendChild(dropdown)
+      this.dropdown = TypeAhead.createDropdown()
+      wrapper.appendChild(this.dropdown)
 
 
       // attach
@@ -70,23 +87,44 @@
 
       // wrong event being passed. WHY?
       const listener = debounce((event, target) => {
-        console.log(target.value)
+        if (!target.value) {
+          this.dropdown.innerHTML = ''
+          return
+        }
+
         this.search(target.value)
           .then(res => res.json())
-          .then(data => console.log(data))
+          .then(data => {
+            this.items = data
+            this.renderItems(this.items)
+          })
       }, 500)
-
-      console.log(listener)
-
-      const other = event => {
-        console.log(event.target.value)
-      }
 
       // debounce this
       // need to cache target since event object gets reused for each new dom event
       this.input.addEventListener('keyup', event => {
         listener(event, event.target)
       })
+    }
+
+    // it would be nice to observe state change then update
+    renderItems(items) {
+      this.dropdown.innerHTML = ''
+      items.forEach(item => {
+        this.dropdown.appendChild(TypeAhead.createDropdownItem(item.name))
+      })
+    }
+
+    disconnectedCallback() {
+      console.log('el disconnected')
+    }
+
+    adoptedCallback() {
+      console.log('el adopted')
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      console.log('el updated')
     }
 
     search(value) {

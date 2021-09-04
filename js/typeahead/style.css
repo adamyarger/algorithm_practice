@@ -1,9 +1,21 @@
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: #f6f6f6;
 }
 
 .container {
-    display: grid;
+    margin-top: 100px;
+    width: 760px;
+    margin: 0 auto;
 }
 
 /* create a copy of bootstrap grid with css grid */
+
+.typeahead-container {
+    max-width: 350px;
+}
+
+/* doesnt change component inner div style */
+.form-control {
+    width: 100%;
+}
