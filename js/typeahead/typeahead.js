@@ -73,6 +73,8 @@
           width: 100%;
           border-radius: 4px;
           background: #fff;
+          max-height: 300px;
+          overflow: auto;
         }
 
         .dropdown-item {
