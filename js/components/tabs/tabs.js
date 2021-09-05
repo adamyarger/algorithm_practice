@@ -9,14 +9,21 @@
       :host {
         display: flex;
         flex-wrap: wrap;
+        flex-direction: column;
       }
 
-      ::slotted(howto-panel) {
+      ::slotted(v-panel) {
         flex-basis: 100%;
       }
     </style>
-    <slot name="tab"></slot>
-    <slot name="panel"></slot>
+    
+    <div class="tabs-container">
+      <slot name="tab"></slot>
+    </div>
+
+    <div class="panels-container">
+      <slot name="panel"></slot>
+    </div>
   `
 
   customElements.define('v-tabs', class VTabs extends HTMLElement {
@@ -110,7 +117,6 @@
 
     _panelForTab(tab) {
       const panelId = tab.getAttribute('aria-controls')
-      console.log(panelId)
       return this.querySelector(`#${panelId}`)
     }
 
