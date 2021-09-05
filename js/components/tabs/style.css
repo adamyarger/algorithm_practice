@@ -1,0 +1,15 @@
+v-tab {
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 4px 4px 0 0;
+}
+
+v-panel {
+    padding: 20px;
+    background-color: antiquewhite;
+}
+
+/* [selected] is for the prop existsing on a component */
+v-tab[selected] {
+    background-color: aqua;
+}
