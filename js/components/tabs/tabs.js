@@ -40,7 +40,10 @@
       this._panelSlot = this.shadowRoot.querySelector('slot[name=panel]')
 
 
-      // slot change goes here
+      // listen for slot changes
+      // needs to update linkage when it happens
+      this._tabSlot.addEventListener('slotchange', this._onSlotChange.bind(this))
+      this._panelSlot.addEventListener('slotchange', this._onSlotChange.bind(this))
     }
 
     connectedCallback() {
@@ -55,6 +58,10 @@
 
     disconnectedCallback() {
       this.removeEventListener('click', this._onClick)
+    }
+
+    _onSlotChange() {
+      this._linkPanels()
     }
 
     // link the panels and tab together
@@ -130,6 +137,13 @@
   let tabCounter = 0
 
   customElements.define('v-tab', class VTab extends HTMLElement {
+
+
+    // register which attributes you want to watch for changes in
+    static get observedAttributes() {
+      return ['selected']
+    }
+
     constructor() {
       super()
     }
@@ -145,15 +159,25 @@
       this.setAttribute('tabindex', -1)
 
       // why??? is it just reading the prop value?
-      // this._upgradeProperty('selected')
+      this._upgradeProperty('selected')
     }
 
     _upgradeProperty(prop) {
-
+      if (this.hasOwnProperty(prop)) {
+        let value = this[prop];
+        delete this[prop];
+        this[prop] = value;
+      }
     }
 
-    attrbuteChangedCallback() {
+    // callback for attribute changes, only ones you declared above
+    // we want to keep attributes in sync with properties
+    attributeChangedCallback() {
+      const value = this.hasAttribute('selected')
 
+      // when a selected change happens we want to update the aria labels
+      this.setAttribute('aria-selected', value)
+      this.setAttribute('tabindex', value ? 0 : -1)
     }
 
     set selected(value) {
