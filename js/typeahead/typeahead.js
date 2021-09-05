@@ -47,7 +47,7 @@
 
     // can we observe value on an input?
     static get observedAttributes() {
-
+      return ['value']
     }
 
     static createDropdown() {
@@ -103,7 +103,7 @@
       // Always call super first in constructor
       super();
       this.items = []
-      this.value = null
+      // this.value = null
 
       // Create a shadow root
       // open means we can acess the shadow dom from the outside
@@ -126,9 +126,19 @@
       shadow.appendChild(wrapper)
     }
 
+    get value() {
+      return this.getAttribute('value')
+    }
+
+    set value(val) {
+      this.setAttribute('value', val)
+    }
+
     // need lifecycle hooks
     connectedCallback() {
-      console.log('connected')
+      // how do we bind values to inputs? == attributeChangedCallback
+      console.log(this.value)
+      this.input.value = this.value
 
       // debounce needs to memoize timers, so it should be initiallzed once on mounted
       const search = this.searchDebounce()
@@ -231,6 +241,9 @@
 
     attributeChangedCallback(name, oldValue, newValue) {
       console.log('el updated')
+      if (name === 'value') {
+        console.log(oldValue, newValue)
+      }
     }
   }
 
