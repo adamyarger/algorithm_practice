@@ -37,11 +37,67 @@
     }
 
     connectedCallback() {
+      this.addEventListener('click', this._onClick)
 
+      // use microqueue to wait till child components have been registed with custom components
+      Promise.all([
+        customElements.whenDefined('v-tab'),
+        customElements.whenDefined('v-panel')
+      ]).then(_ => this._linkPanels())
     }
 
     disconnectedCallback() {
+      this.removeEventListener('click', this._onClick)
+    }
 
+    // link the panels and tab together
+    // use aria for caue and effect relationship
+    _linkPanels() {
+      const tabs = this._allTabs()
+
+      // add the aria labels
+      tabs.forEach(tab => {
+        // somewhat tightly coupled: panel and tab must 
+        // be next to eachother in the correct order
+        const panel = tab.nextElementSibling
+
+        if (panel.tagName.toLowerCase() !== 'v-panel') {
+          console.error(`Tab #${tab.id} should be a sibling of panel`)
+          return
+        }
+
+        tab.setAttribute('aria-controls', panel.id)
+        panel.setAttribute('aria-labelledby', tab.id)
+      })
+
+      // grab the selected tab or grab the first one
+      const selectedTab = tabs.find(tab => tab.selected) || tabs[0]
+
+      // forces resetting tabs so only one is selected
+      this._selectTab(selectedTab)
+    }
+
+    reset() {
+      const tabs = this._allTabs()
+      const panels = this._allPanels()
+
+      // reset their attrubtes
+      tabs.forEach(tab => tab.selected = false)
+      panels.forEach(panel => panel.hidden = true)
+    }
+
+    _selectTab(newTab) {
+      this.reset()
+      // we have the tab, but we need the panel as well to display
+      const newPanel = this._panelForTab(newTab)
+
+      if (!newPanel) {
+        throw new Error(`No panel for tab id ${newTab.id}`)
+      }
+
+      newTab.selected = true
+      newPanel.hidden = false
+      newTab.focus()
     }
 
     _allPanels() {
@@ -52,8 +108,15 @@
       return Array.from(this.querySelectorAll('v-tab'))
     }
 
-    _onClick(event) {
+    _panelForTab(tab) {
+      const panelId = tab.getAttribute('aria-controls')
+      console.log(panelId)
+      return this.querySelector(`#${panelId}`)
+    }
 
+    _onClick(event) {
+      if (event.target.getAttribute('role') !== 'tab') return
+      this._selectTab(event.target)
     }
   })
 
@@ -112,7 +175,7 @@
       this.setAttribute('role', 'tabpanel')
 
       if (!this.id) {
-        this.id = `v-panel-gen-${panelCounter}`
+        this.id = `v-panel-gen-${panelCounter++}`
       }
     }
   })
