@@ -85,9 +85,6 @@
     }
 
     connectedCallback() {
-      // handle initial open state
-      // this._toggleOpen()
-
       this.closeButton.addEventListener('click', this._close.bind(this))
     }
 
@@ -102,7 +99,6 @@
 
     attributeChangedCallback() {
       // for side effects
-      console.log('open')
       this._toggleOpen()
     }
 
@@ -120,10 +116,22 @@
 
     _addBackdrop() {
       this.body.appendChild(backdropTemp.content.cloneNode(true))
+      this.backdrop = document.querySelector('.backdrop')
+      this.backdrop.addEventListener('click', this.backdropClose.bind(this))
+    }
+
+    backdropClose(event) {
+      // target == element that triggered event
+      // currentTarget == element that listener is attached to
+      if (event.target === event.currentTarget) {
+        this._close()
+      }
     }
 
     _removeBackdrop() {
       this.body.querySelector('.backdrop').remove()
+      this.backdrop.removeEventListener('click', this.backdropClose.bind(this))
+      this.backdrop = null
     }
 
     get open() {
