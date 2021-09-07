@@ -18,8 +18,23 @@
             <pin-input-field></pin-input-field>
             <pin-input-field></pin-input-field>
         </pin-input>
+
+        <button class="submit">
+            Submit
+        </button>
     </div>
 </body>
 <script src="input.js"></script>
+
+<script>
+    (function () {
+        const pin = document.querySelector('pin-input')
+        const submit = document.querySelector('.submit')
+
+        submit.addEventListener('click', event => {
+            console.log(pin.value, pin.isValid)
+        })
+    })()
+</script>
 
 </html>

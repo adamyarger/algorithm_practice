@@ -55,6 +55,12 @@
               el.previousElementSibling.input.focus()
             }
           }
+
+          this.value = this._allInputs().reduce((acc, el) => {
+            return acc + (el.value || '')
+          }, '')
+
+          console.log(this.value)
         }
       })
 
@@ -88,6 +94,10 @@
     set value(val) {
       this.setAttribute('value', val)
     }
+
+    get isValid() {
+      return this.value.length === this._allInputs().length
+    }
   })
 
   function createInput(attrs = {}) {
@@ -97,6 +107,13 @@
     }
     return input
   }
+
+
+
+
+
+
+
 
   // used for ids
   let fieldsCount = 0
