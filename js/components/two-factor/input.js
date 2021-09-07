@@ -111,7 +111,10 @@
 
       this.attachShadow({ mode: 'open' })
 
-      this.shadowRoot.appendChild(createInput({ id: `pin-field-${fieldsCount}` }))
+      this.shadowRoot.appendChild(createInput({
+        id: `pin-field-${fieldsCount}`,
+        pattern: '^[0-9]{0,1}$'
+      }))
       fieldsCount += 1
 
       this.input = this.shadowRoot.querySelector('input')
@@ -131,6 +134,14 @@
     }
 
     _onInput(event) {
+      const reg = new RegExp(event.target.pattern)
+
+      if (!reg.test(event.target.value)) {
+        event.preventDefault()
+        event.target.value = event.target.value.slice(0, 1)
+        return
+      }
+
       this.value = event.target.value
       this.onInput(this.value, this)
     }
