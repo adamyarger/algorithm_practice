@@ -23,3 +23,9 @@
 - could we create a base input component for 2way binding?
     - use a setter method that take care of it
     - aka like vuex only set with a specfic method
+
+
+- listen to active pages input
+- if value enbale next
+- if not val disable
+-
