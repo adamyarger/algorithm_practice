@@ -80,6 +80,7 @@
       console.log(this.nextBtn, this.backBtn)
       this.nextBtn.addEventListener('click', this.onNext.bind(this))
       this.backBtn.addEventListener('click', this.onBack.bind(this))
+      this.submitBtn.addEventListener('click', this.onSubmit.bind(this))
       this.updateButtonVisibility()
 
       this.name.addEventListener('input', this.onInput.bind(this))
@@ -109,6 +110,22 @@
     disconnectedCallback() {
       this.nextBtn.removeEventListener('click', this.onNext.bind(this))
       this.backBtn.removeEventListener('click', this.onBack.bind(this))
+      this.submitBtn.removeEventListener('click', this.onSubmit.bind(this))
+
+      this.name.removeEventListener('input', this.onInput.bind(this))
+      this.email.removeEventListener('input', this.onInput.bind(this))
+      this.dob.removeEventListener('input', this.onInput.bind(this))
+      this.password.removeEventListener('input', this.onInput.bind(this))
+    }
+
+    onSubmit() {
+      const out = {}
+
+      for (const [key, val] of this.form) {
+        out[key.name] = val
+      }
+
+      return out
     }
 
     onNext(event) {
