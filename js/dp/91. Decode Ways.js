@@ -54,9 +54,23 @@ Explanation: "06" cannot be mapped to "F" because of the leading zero ("6" is di
  * - 2 different recursive calls try 1 try 2
  */
 var numDecodings = function (s) {
-
+  const memo = []
+  return dfs(s, 0, memo)
 };
 
-function dfs(s, start, end) {
+function dfs(s, i, memo) {
+  // base case
+  // handle leading 0
+  // handle memo
+  if (s[i] === '0') return 0
+  if (s.length - 1 <= i) return 1
+  if (memo[i]) return memo[i]
 
+  let res = dfs(s, i + 1, memo)
+  if (s[i + 1] && s[i] + s[i + 1] <= 26) {
+    res += dfs(s, i + 2, memo)
+  }
+
+  memo[i] = res
+  return res
 }
