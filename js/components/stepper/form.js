@@ -10,28 +10,28 @@
         <v-stepper-item active>
           <div class="form-control">
             <label for="name">Name</label>
-            <input type="text" id="name">
+            <input type="text" id="name" name="name" data-bind>
           </div>
         </v-stepper-item>
 
         <v-stepper-item>
           <div class="form-control">
             <label for="email">Email</label>
-            <input type="text" id="email">
+            <input type="text" id="email" name="email" data-bind>
           </div>
         </v-stepper-item>
 
         <v-stepper-item>
           <div class="form-control">
             <label for="dob">Date of Birth</label>
-            <input type="text" id="dob">
+            <input type="text" id="dob" name="dob" data-bind>
           </div>
         </v-stepper-item>
 
         <v-stepper-item>
           <div class="form-control">
             <label for="password">Password</label>
-            <input type="password" id="password">
+            <input type="password" id="password" name="password" data-bind>
           </div>
         </v-stepper-item>
       </v-stepper>
@@ -83,10 +83,27 @@
       this.updateButtonVisibility()
 
       this.name.addEventListener('input', this.onInput.bind(this))
+      this.email.addEventListener('input', this.onInput.bind(this))
+      this.dob.addEventListener('input', this.onInput.bind(this))
+      this.password.addEventListener('input', this.onInput.bind(this))
+
+      this.updateNextBtnState()
     }
 
     onInput(event) {
       this.form.set(event.target, event.target.value)
+      this.updateNextBtnState()
+    }
+
+    updateNextBtnState() {
+      const button = this.stepper.isLast ? this.submitBtn : this.nextBtn
+      const target = this.stepper.active.querySelector('[data-bind]')
+
+      if (target.value) {
+        button.removeAttribute('disabled')
+      } else {
+        button.setAttribute('disabled', 'true')
+      }
     }
 
     disconnectedCallback() {
@@ -97,11 +114,13 @@
     onNext(event) {
       this.stepper.next()
       this.updateButtonVisibility()
+      this.updateNextBtnState()
     }
 
     onBack(event) {
       this.stepper.back()
       this.updateButtonVisibility()
+      this.updateNextBtnState()
     }
 
     updateButtonVisibility() {
