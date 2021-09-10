@@ -42,18 +42,50 @@
     }
   }
 
+  const template = document.createElement('template')
+  template.innerHTML = `
+    <style>
+      .typeahead {
+        width: 100%
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 6px 12px;
+      }
+
+      .dropdown {
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+                    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+        width: 100%;
+        border-radius: 4px;
+        background: #fff;
+        max-height: 300px;
+        overflow: auto;
+      }
+
+      .dropdown-item {
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+
+      .dropdown-item:hover {
+        background-color: #EDF2F7;
+      }
+    </style>
+
+    <div class="typeahead">
+      <input type="text" class="form-control">
+      <div class="dropdown"></div>
+    </div>
+  `
+
   class TypeAhead extends HTMLElement {
     #BASE = 'http://universities.hipolabs.com/search'
 
     // can we observe value on an input?
     static get observedAttributes() {
       return ['value']
-    }
-
-    static createDropdown() {
-      const dropdown = document.createElement('div')
-      dropdown.setAttribute('class', 'dropdown')
-      return dropdown
     }
 
     static createDropdownItem(obj, index) {
@@ -64,66 +96,16 @@
       return item
     }
 
-    static createStyles() {
-      const styles = `
-        .typeahead {
-          width: 100%
-        }
-
-        .form-control {
-          width: 100%;
-          padding: 6px 12px;
-        }
-
-        .dropdown {
-          box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, 
-                      rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-          width: 100%;
-          border-radius: 4px;
-          background: #fff;
-          max-height: 300px;
-          overflow: auto;
-        }
-
-        .dropdown-item {
-          padding: 6px 12px;
-          cursor: pointer;
-        }
-
-        .dropdown-item:hover {
-          background-color: #EDF2F7;
-        }
-      `
-      const el = document.createElement('style')
-      el.innerHTML = styles
-      return el
-    }
-
     constructor() {
       // Always call super first in constructor
       super();
       this.items = []
-      // this.value = null
 
-      // Create a shadow root
-      // open means we can acess the shadow dom from the outside
-      const shadow = this.attachShadow({ mode: 'open' });
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.appendChild(template.content.cloneNode(true))
 
-      // add elements like normal
-      const wrapper = document.createElement('div')
-      wrapper.setAttribute('class', 'typeahead')
-
-      this.input = document.createElement('input')
-      this.input.setAttribute('class', 'form-control')
-      wrapper.appendChild(this.input)
-
-      this.dropdown = TypeAhead.createDropdown()
-      wrapper.appendChild(this.dropdown)
-
-
-      // attach
-      shadow.appendChild(TypeAhead.createStyles())
-      shadow.appendChild(wrapper)
+      this.input = this.shadowRoot.querySelector('input')
+      this.dropdown = this.shadowRoot.querySelector('.dropdown')
     }
 
     get value() {
@@ -136,8 +118,6 @@
 
     // need lifecycle hooks
     connectedCallback() {
-      // how do we bind values to inputs? == attributeChangedCallback
-      console.log(this.value)
       this.input.value = this.value
 
       // debounce needs to memoize timers, so it should be initiallzed once on mounted
