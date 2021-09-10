@@ -34,6 +34,7 @@
   function request(req, opts) {
     // create your own qs parser
     const controller = new AbortController()
+    // signal is how to register an abort controller
     const signal = controller.signal
 
     return {
