@@ -11,30 +11,23 @@
  
  */
 var isValidSudoku = function (board) {
-  for (let row = 0; row < board.length; row++) {
+  for (let i = 0; i < board.length; i++) {
+    // create sets
+    // this will happen 9 times (9 sqaures, cols, and rows)
     const rows = new Set()
     const cols = new Set()
     const boxes = new Set()
+    console.log('------')
 
-    for (let col = 0; col < board[0].length; col++) {
-      let _row = board[row][col]
-      let _col = board[col][row]
-      let _box = board[3 * Math.floor(row / 3) + Math.floor(col / 3)][3 * (row % 3) + (col % 3)]
+    for (let j = 0; j < board[0].length; j++) {
+      let row = board[i][j]
+      let col = board[j][i]
 
-      if (_row != '.') {
-        if (rows.has(_row)) return false
-        rows.add(_row)
-      }
+      let vert = 3 * Math.floor(i / 3) + Math.floor(j / 3)
+      let hor = 3 * (i % 3) + (j % 3)
+      let boxes
 
-      if (_col != '.') {
-        if (cols.has(_col)) return false
-        cols.add(_col)
-      }
-
-      if (_box != '.') {
-        if (boxes.has(_box)) return false
-        boxes.add(_box)
-      }
+      console.log(box_row, box_col, board[vert][hor])
     }
   }
 
