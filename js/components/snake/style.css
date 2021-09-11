@@ -1,0 +1,16 @@
+.container {
+    max-width: 760px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+/* .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+}
+
+.cell {
+    border: 1px solid #333;
+    width: 50px;
+    height: 50px;
+} */
