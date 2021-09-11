@@ -138,6 +138,8 @@
         return true
       }
 
+      // handle snake coliding with self
+
       return false
     }
 
