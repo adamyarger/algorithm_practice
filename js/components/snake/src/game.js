@@ -58,7 +58,8 @@
 
       this.snake = [2, 1, 0]
       this.index = 0
-      this.direction = 1
+      this.direction = 'right'
+      this.directionVal = 1
       this.intervalTime = 300
     }
 
@@ -71,26 +72,27 @@
     }
 
     onKeyDown(event) {
+      // shoud NOT be able to do oppsoite command
       console.log(event)
       switch (event.keyCode) {
         case KEYS.left:
-          console.log('left')
-          this.direction = -1
+          this.direction = 'left'
+          this.directionVal = -1
           break;
         case KEYS.up:
-          console.log('up')
-          this.direction = -1
-          this.direction -= SIZE - 1
+          this.direction = 'up'
+          this.directionVal = -1
+          this.directionVal -= SIZE - 1
           break;
         case KEYS.right:
-          console.log('right')
-          this.direction = 1
+          this.direction = 'right'
+          this.directionVal = 1
           break;
         case KEYS.down:
-          console.log('down')
+          this.direction = 'down'
           // for ward 1 like normal, then down by adding size - 1
-          this.direction = 1
-          this.direction += SIZE - 1
+          this.directionVal = 1
+          this.directionVal += SIZE - 1
           break;
         default:
           break;
@@ -106,13 +108,43 @@
     moveOutcome() {
       // check for running into borders
       // chekc if apple eaten
-      this.move()
+      console.log(this.snake)
+      if (!this.isOutOfBounds()) {
+        this.move()
+      } else {
+        clearInterval(this.interval)
+      }
+
+    }
+
+    isOutOfBounds() {
+      // find edges. if part of snale is past edge throw game
+      const head = this.snake[0]
+      const size = SIZE
+      // size will be added when gogin down, so check if its bigger than the last cell
+      if (head + size >= size * size && this.direction === 'down') {
+        return true
+      }
+
+      if (head - size < 0 && this.direction === 'up') {
+        return true
+      }
+
+      if (head % size === size - 1 && this.direction === 'right') {
+        return true
+      }
+
+      if (head % size === 0 && this.direction === 'left') {
+        return true
+      }
+
+      return false
     }
 
     move() {
       let tail = this.snake.pop()
       this.cells[tail].classList.remove('active')
-      this.snake.unshift(this.snake[0] + this.direction)
+      this.snake.unshift(this.snake[0] + this.directionVal)
 
       this.cells[this.snake[0]].classList.add('active')
     }
