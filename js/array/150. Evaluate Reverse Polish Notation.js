@@ -12,9 +12,7 @@ var evalRPN = function (tokens) {
 
       switch (char) {
         case '/':
-          let val = left / right
-          val = val < 0 ? Math.ceil(val) : Math.floor(val)
-          stack.push(val)
+          stack.push(Math.trunc(left / right))
           break;
         case '*':
           stack.push(left * right)
