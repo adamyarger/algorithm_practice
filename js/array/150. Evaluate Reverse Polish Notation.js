@@ -3,40 +3,29 @@
 var evalRPN = function (tokens) {
   const stack = []
 
-  for (let i = 0; i < tokens.length; i++) {
-    console.log(stack, tokens[i])
-
-    if (Number.isInteger(parseInt(tokens[i]))) {
-      stack.push(parseInt(tokens[i]))
-    } else if (tokens[i] === '/') {
-      // push sum to stack, then no speacial cases
+  for (const char of tokens) {
+    if (Number.isInteger(parseInt(char))) {
+      stack.push(parseInt(char))
+    } else {
       const right = stack.pop()
       const left = stack.pop()
-      let val = left / right
-      if (val < 0) {
-        val = Math.ceil(val)
-      } else {
-        val = Math.floor(val)
+
+      switch (char) {
+        case '/':
+          let val = left / right
+          val = val < 0 ? Math.ceil(val) : Math.floor(val)
+          stack.push(val)
+          break;
+        case '*':
+          stack.push(left * right)
+          break;
+        case '+':
+          stack.push(left + right)
+          break;
+        case '-':
+          stack.push(left - right)
+          break;
       }
-      stack.push(val)
-
-    } else if (tokens[i] === '*') {
-
-      const right = stack.pop()
-      const left = stack.pop()
-      stack.push(left * right)
-
-    } else if (tokens[i] === '+') {
-
-      const right = stack.pop()
-      const left = stack.pop()
-      stack.push(left + right)
-
-    } else if (tokens[i] === '-') {
-
-      const right = stack.pop()
-      const left = stack.pop()
-      stack.push(left - right)
     }
   }
 
