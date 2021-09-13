@@ -12,25 +12,27 @@
     <form class="form" method="post">
       <div class="form-control">
         <label for="name">Name</label>
-        <input class="input" type="text" name="name" required>
+        <input id="name" class="input" type="text" name="name" required>
       </div>
 
       <div class="form-control">
         <label for="email">Email</label>
-        <input class="input" type="email" name="email" required>
+        <input id="email" class="input" type="email" name="email" required>
       </div>
 
       <div class="form-control">
         <label for="password">Password</label>
-        <input class="input" type="password" name="password" required>
+        <input id="password" class="input" type="password" name="password" required>
       </div>
 
       <div class="form-control">
         <label for="confirm">Confirm Password</label>
-        <input class="input" type="password" name="confirm" required>
+        <input id="confirm" class="input" type="password" name="confirm" required>
       </div>
 
-      <input type="submit" value="Submit">
+      <button type="submit" id="submit">
+        Submit
+      </button>
     </form>
 
     <ul class="errors">
@@ -43,7 +45,7 @@
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
       this.form = this.shadowRoot.querySelector('form')
-      this.submitBtn = this.shadowRoot.querySelector('[type="submit"]')
+      this.submitBtn = this.shadowRoot.querySelector('#submit')
       this.errorsEl = this.shadowRoot.querySelector('.errors')
       this.inputs = Array.from(this.shadowRoot.querySelectorAll('.input'))
 
@@ -85,6 +87,12 @@
 
 
       this.submitBtn.addEventListener('click', this.onSubmit.bind(this))
+
+      this.form.addEventListener('change', this.onFormChange.bind(this))
+    }
+
+    onFormChange(event) {
+      console.log(event)
     }
 
     onSubmit(event) {
