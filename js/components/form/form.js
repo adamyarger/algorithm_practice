@@ -4,8 +4,41 @@
   const template = document.createElement('template')
   template.innerHTML = `
     <style>
+      :host {
+        font-family: Helvetica;
+      }
+
       .errors {
         color: red;
+      }
+
+      .form-control {
+        margin-bottom: 16px;
+      }
+
+      .form-control label {
+        display: block;
+        padding-bottom: 6px;
+      }
+
+      .form-control input {
+        padding: 6px 12px;
+        border-radius: 3px;
+        border: 1px solid #d6d6d6;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        background-color: blue;
+        color: white;
+        cursor: pointer;
+        border-radius: 3px;
+        margin-top: 16px;
+      }
+
+      .btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
       }
     </style>
 
@@ -30,7 +63,7 @@
         <input id="confirm" class="input" type="password" name="confirm" required>
       </div>
 
-      <button type="submit" id="submit" disabled>
+      <button type="submit" id="submit" class="btn primary" disabled>
         Submit
       </button>
     </form>
