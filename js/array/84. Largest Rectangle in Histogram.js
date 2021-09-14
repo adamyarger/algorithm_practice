@@ -4,6 +4,7 @@
  * 
  * how can we use stacks
  * grow as big as possible
+ * https://leetcode.com/problems/largest-rectangle-in-histogram/discuss/1430546/Monotonique-Stack-Solution-Intuition-(Javascript)
  */
 var largestRectangleArea = function (heights) {
   // why??
