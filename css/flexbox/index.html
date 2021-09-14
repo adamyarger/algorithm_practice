@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main class="container">
+        <div class="row mb-16">
+            <div class="box red"></div>
+            <div class="box red"></div>
+            <div class="box red"></div>
+        </div>
+
+        <div class="row mb-16">
+            <div class="box blue" style="min-width: 50px"></div>
+            <div class="box red" style="flex-basis: 100%;">
+                skd csdkc klsdc lks cksd lkcs dklc lsd cskld kldsc lk
+            </div>
+        </div>
+
+        Same thing, but with flex-shrink. flex shrink is a proportion.
+        <div class="row mb-16">
+            <div class="box blue" style="flex-shrink: 0;"></div>
+            <div class="box red" style="flex-basis: 100%;">
+                skd csdkc klsdc lks cksd lkcs dklc lsd cskld kldsc lk
+            </div>
+        </div>
+
+        all together flex: grow shrink basis
+        <br> defalt --> flex: 0 1 auto;
+        <div class="row mb-16">
+            <div class="box blue" style="flex: 0 0 50px;"></div>
+            <div class="box red" style="flex: 1 1 100%;">
+                skd csdkc klsdc lks cksd lkcs dklc lsd cskld kldsc lk
+            </div>
+        </div>
+
+        <div class="row mb-16">
+            <div class="box red" style="flex-grow: 1;">grow 1</div>
+            <div class="box green" style="flex: 2 1 400px;">grow 2</div>
+            <div class="box red" style="flex-grow: 1;">grow 1</div>
+        </div>
+    </main>
+</body>
+
+</html>
