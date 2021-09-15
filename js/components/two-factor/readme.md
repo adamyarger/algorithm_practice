@@ -15,3 +15,13 @@
 
 # NOtes
 - got to 2 ways binding in 45 mins
+
+
+#
+- limit digits to 0-9 on key up
+- on input advance to next (focus tied to pininput field)
+- delete should go back
+- 
+
+
+# finished first phase in 40 mins
