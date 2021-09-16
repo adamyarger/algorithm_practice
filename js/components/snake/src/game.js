@@ -105,6 +105,14 @@
       })
     }
 
+    move() {
+      let tail = this.snake.pop()
+      this.cells[tail].classList.remove('active')
+      this.snake.unshift(this.snake[0] + this.directionVal)
+
+      this.cells[this.snake[0]].classList.add('active')
+    }
+
     moveOutcome() {
       // check for running into borders
       // chekc if apple eaten
@@ -114,7 +122,6 @@
       } else {
         clearInterval(this.interval)
       }
-
     }
 
     isOutOfBounds() {
@@ -141,14 +148,6 @@
       // handle snake coliding with self
 
       return false
-    }
-
-    move() {
-      let tail = this.snake.pop()
-      this.cells[tail].classList.remove('active')
-      this.snake.unshift(this.snake[0] + this.directionVal)
-
-      this.cells[this.snake[0]].classList.add('active')
     }
 
     disconnectedCallback() {

@@ -15,3 +15,13 @@ JUST make it work the first time. then refactor ii design
     - 2d arr or single arr with modulus?
 - init snake
 - how to turn?
+
+
+
+## notes 2
+- game sare different, they have a routine where
+  we update state on each new iteration (frame)
+- https://gameprogrammingpatterns.com/game-loop.html
+
+LOOP
+- process input -> update game -> render
