@@ -33,6 +33,9 @@
 
         submit.addEventListener('click', event => {
             console.log(pin.value, pin.isValid)
+            if (pin.isValid) {
+                console.log('valid')
+            }
         })
     })()
 </script>

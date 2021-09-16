@@ -25,10 +25,12 @@
 
       connectedCallback() {
         this.addEventListener('input', this.onInput.bind(this))
+        this.addEventListener('paste', this.onPaste.bind(this))
       }
 
       disconnectedCallback() {
         this.removeEventListener('input', this.onInput.bind(this))
+        this.removeEventListener('paste', this.onPaste.bind(this))
       }
 
       onInput(event) {
@@ -37,6 +39,11 @@
         } else {
           this.focusBack(event.target)
         }
+      }
+
+      onPaste(event) {
+        let paste = (event.clipboardData || window.clipboardData).getData('text')
+        this.value = paste
       }
 
       focusNext(input) {
@@ -55,12 +62,17 @@
         return Array.from(this.querySelectorAll('pin-input-field'))
       }
 
-      isValid() {
-        return this.allInputs.every(input => !!input.value)
+      get isValid() {
+        return this.allInputs().every(input => !!input.value)
       }
 
       get value() {
         return this.allInputs().reduce((acc, input) => acc + input.value, '')
+      }
+
+      set value(val) {
+        const parts = val.split('')
+        this.allInputs().forEach((input, index) => input.value = parts[index] || '')
       }
     })
   }
