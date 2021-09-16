@@ -1,0 +1,40 @@
+body {
+    padding: 16px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 1em;
+    grid-template-areas:
+    "small1 hero hero hero mid mid"
+    "small2 hero hero hero mid2 mid2"
+    "small3 small4 hero2 hero2 small5 small6"
+    "small7 small8 hero2 hero2 small9 small10"
+}
+
+.grid-item {
+    background-color: blueviolet;
+    border: 2px solid #333;
+    padding: 16px;
+    color: #fff;
+    border-radius: 4px;
+    min-height: 20vh;
+}
+
+.one {
+    grid-area: hero;
+}
+
+.two {
+    grid-area: hero2;
+}
+
+.three {
+    grid-area: mid;
+}
+
+.four {
+    grid-area: mid2;
+}
