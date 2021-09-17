@@ -4,12 +4,9 @@
     const template = document.createElement('template')
     template.innerHTML = `
     <style>
-      ::slotted(pin-input-field) {
-        margin-left: 8px;
-      }
-
       :host {
         display: flex;
+        gap: 0 8px;
       }
     </style>
 
