@@ -12,12 +12,14 @@
 <body>
     <div class="container">
         <h1>PIN</h1>
-        <pin-input>
-            <pin-input-field></pin-input-field>
-            <pin-input-field></pin-input-field>
-            <pin-input-field></pin-input-field>
-            <pin-input-field></pin-input-field>
-        </pin-input>
+        <form action="#" id="form" method="post">
+            <pin-input name="pin">
+                <pin-input-field></pin-input-field>
+                <pin-input-field></pin-input-field>
+                <pin-input-field></pin-input-field>
+                <pin-input-field></pin-input-field>
+            </pin-input>
+        </form>
 
         <button class="submit">
             Submit
@@ -36,6 +38,10 @@
             if (pin.isValid) {
                 console.log('valid')
             }
+
+            const form = document.querySelector('#form')
+            console.log(form.pin, form.pin.value)
+            window.form = form
         })
     })()
 </script>

@@ -16,11 +16,16 @@
     <slot></slot>
   `
     customElements.define('pin-input', class PinInput extends HTMLElement {
+      static formAssociated = true
+      static get observedAttributes() {
+        return ['value']
+      }
+
       constructor() {
         super()
         this.attachShadow({ mode: 'open' })
         this.shadowRoot.appendChild(template.content.cloneNode(true))
-        this.cur = null
+        this._internals = this.attachInternals()
       }
 
       connectedCallback() {
@@ -110,7 +115,7 @@
         if (!this.isValid(event.target.value)) {
           event.target.value = event.target.value.slice(0, 1)
         } else if (event.target.value.length === 1) {
-          new Event('input', {
+          new CustomEvent('input', {
             bubbles: true,
             details: {
               value: event.target.value
