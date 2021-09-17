@@ -8,6 +8,10 @@
         display: flex;
         gap: 0 8px;
       }
+
+      ::slotted(pin-input-field) {
+
+      }
     </style>
 
     <slot></slot>
@@ -86,8 +90,8 @@
       <style>
         .input {
           border-radius: 3px;
-          width: 38px;
-          height: 38px;
+          width: var(--pin-input-height, 38px);
+          height: var(--pin-input-height, 38px);
           text-align: center;
           font-size: 16px;
         }
