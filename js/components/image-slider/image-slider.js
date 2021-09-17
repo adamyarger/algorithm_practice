@@ -1,9 +1,13 @@
-(function main(params) {
+(function main() {
 
   {
     const template = document.createElement('template')
     template.innerHTML = `
       <style>
+        :host {
+          display: block;
+        }
+
         .carousel {
           display: flex;
           flex-direction: row;
@@ -38,13 +42,13 @@
         <slot></slot>
 
         <div class="carousel__left">
-          <button class="btn btn--left">
+          <button class="btn btn--left" id="btn-back">
             <
           </button>
         </div>
 
         <div class="carousel__right">
-          <button class="btn btn--right">
+          <button class="btn btn--right" id="btn-next">
             >
           </button>
         </div>
@@ -57,26 +61,85 @@
         this.attachShadow({ mode: 'open' })
         this.shadowRoot.appendChild(template.content.cloneNode(true))
 
-        this.nextBtn = this.shadowRoot.querySelector('.btn--right')
-        this.backBtn = this.shadowRoot.querySelector('.btn--left')
+        this.nextBtn = this.shadowRoot.querySelector('#btn-next')
+        this.backBtn = this.shadowRoot.querySelector('#btn-back')
       }
 
       connectedCallback() {
-        console.log(this.nextBtn)
         this.nextBtn.addEventListener('click', this.onNext.bind(this))
         this.backBtn.addEventListener('click', this.onBack.bind(this))
+        this.initActive()
+      }
+
+      disconnectedCallback() {
+        this.nextBtn.removeEventListener('click', this.onNext.bind(this))
+        this.backBtn.removeEventListener('click', this.onBack.bind(this))
+      }
+
+      initActive() {
+        const activeItem = this.getActiveItem()
+        if (activeItem) {
+          activeItem.active = true
+        } else {
+          this.getFirstItem().active = true
+        }
       }
 
       onNext(event) {
-        console.log(event, 'dude')
+        const next = this.getNextItem()
+        this.resetAllItems()
+        next.active = true
       }
 
       onBack(event) {
-
+        const prev = this.getPrevItem()
+        this.resetAllItems()
+        prev.active = true
       }
 
       allItems() {
         return Array.from(this.querySelectorAll('image-slider-item'))
+      }
+
+      resetAllItems() {
+        this.allItems().forEach(item => {
+          item.active = false
+        })
+      }
+
+      getActiveItem() {
+        return this.querySelector('image-slider-item[active]')
+      }
+
+      getNextItem() {
+        const last = this.getLastItem()
+        const active = this.getActiveItem()
+
+        if (last === active) {
+          return this.getFirstItem()
+        } else {
+          return active.nextElementSibling
+        }
+      }
+
+      getPrevItem() {
+        const first = this.getFirstItem()
+        const active = this.getActiveItem()
+
+        if (first === active) {
+          return this.getLastItem()
+        } else {
+          return active.previousElementSibling
+        }
+      }
+
+      getFirstItem() {
+        return this.allItems()[0]
+      }
+
+      getLastItem() {
+        const items = this.allItems()
+        return items[items.length - 1]
       }
     })
   }
@@ -89,7 +152,7 @@
           width: 100%;
         }
 
-        :host(.active) {
+        :host([active]) {
           display: block;
         }
 
@@ -113,14 +176,31 @@
       }
 
       connectedCallback() {
+        this.#upgradeProp('active')
+      }
 
+      #upgradeProp(prop) {
+        if (this.hasOwnProperty(prop)) {
+          const val = this[prop]
+          delete this[prop]
+          this[prop] = val
+        }
       }
 
       attributeChangedCallback(name, old, val) {
-        console.log(name)
+        console.log(name, old, val)
+      }
 
-        if (name === 'active') {
-          this.classList.add('active')
+      get active() {
+        return this.hasAttribute('active')
+      }
+
+      set active(val) {
+        const isActive = Boolean(val)
+        if (isActive) {
+          this.setAttribute('active', '')
+        } else {
+          this.removeAttribute('active')
         }
       }
     })

@@ -42,6 +42,7 @@
 
       // listen for slot changes
       // needs to update linkage when it happens
+      // only fires when the nodes change, not the attributes
       this._tabSlot.addEventListener('slotchange', this._onSlotChange.bind(this))
       this._panelSlot.addEventListener('slotchange', this._onSlotChange.bind(this))
     }
