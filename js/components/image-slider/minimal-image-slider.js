@@ -56,10 +56,6 @@
     `
 
     customElements.define('image-slider', class ImageSlider extends HTMLElement {
-      static get observedAttributes() {
-        return ['autoplay', 'interval']
-      }
-
       constructor() {
         super()
         this.attachShadow({ mode: 'open' })
