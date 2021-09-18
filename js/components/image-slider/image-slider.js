@@ -162,6 +162,7 @@
 
       setActiveItem(next, dot) {
         // FIX THIS. should be shared on all navigation
+        // should pass cur and next to all navigation function instead of brute force reset all
         const dots = this.shadowRoot.querySelectorAll('.carousel__dot')
         dots.forEach(dot => {
           dot.classList.remove('carousel__dot--active')
