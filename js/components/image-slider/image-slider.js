@@ -278,11 +278,11 @@
         }
 
         :host([active]) {
-          display: block;
         }
 
         :host {
           display: none;
+          transition: opacity 300ms ease-in;
         }
       </style>
 
@@ -316,7 +316,23 @@
       }
 
       attributeChangedCallback(name, old, val) {
-        // console.log(name, old, val)
+
+        if (name === 'active') {
+          if (this.active) {
+            this.fadeIn()
+          } else {
+            this.style.display = 'none'
+          }
+
+        }
+      }
+
+      fadeIn() {
+        this.style.opacity = 0
+        this.style.display = 'block'
+        requestAnimationFrame(() => {
+          this.style.opacity = 1
+        })
       }
 
       get active() {
