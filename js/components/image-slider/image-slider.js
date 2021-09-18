@@ -56,6 +56,8 @@
     `
 
     customElements.define('image-slider', class ImageSlider extends HTMLElement {
+      #activeInterval
+
       static get observedAttributes() {
         return ['autoplay', 'interval']
       }
@@ -73,11 +75,13 @@
         this.nextBtn.addEventListener('click', this.onNext.bind(this))
         this.backBtn.addEventListener('click', this.onBack.bind(this))
         this.initActive()
+        this.startInterval()
       }
 
       disconnectedCallback() {
         this.nextBtn.removeEventListener('click', this.onNext.bind(this))
         this.backBtn.removeEventListener('click', this.onBack.bind(this))
+        this.stopInterval()
       }
 
       initActive() {
@@ -89,16 +93,29 @@
         }
       }
 
+      startInterval() {
+        this.stopInterval()
+        if (this.autoplay) {
+          this.#activeInterval = setInterval(this.onNext.bind(this), this.interval);
+        }
+      }
+
+      stopInterval() {
+        clearInterval(this.#activeInterval)
+      }
+
       onNext() {
         const next = this.getNextItem()
         this.resetAllItems()
         next.active = true
+        this.startInterval()
       }
 
       onBack() {
         const prev = this.getPrevItem()
         this.resetAllItems()
         prev.active = true
+        this.startInterval()
       }
 
       allItems() {
@@ -144,6 +161,27 @@
       getLastItem() {
         const items = this.allItems()
         return items[items.length - 1]
+      }
+
+      get interval() {
+        return this.getAttribute('interval') || 3000
+      }
+
+      set interval(val) {
+        this.setAttribute('interval', val)
+      }
+
+      get autoplay() {
+        return this.hasAttribute('autoplay')
+      }
+
+      set autoplay(val) {
+        const isAutoplay = Boolean(val)
+        if (isAutoplay) {
+          this.setAttribute('autoplay', '')
+        } else {
+          this.removeAttribute('autoplay')
+        }
       }
     })
   }
