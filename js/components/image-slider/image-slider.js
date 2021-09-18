@@ -109,6 +109,7 @@
       }
 
       connectedCallback() {
+        this.initItems()
         this.initActive()
         this.startInterval()
         this.renderDots()
@@ -132,6 +133,12 @@
         }
       }
 
+      initItems() {
+        this.allItems().forEach((item, index) => {
+          item.index = index
+        })
+      }
+
       renderDots() {
         const items = this.allItems()
         this.dots.innerHTML = `
@@ -141,12 +148,6 @@
           )
         }).join('\n')}
         `
-      }
-
-      onDotClick(event) {
-        const data = event.target.dataset
-        const next = this.allItems()[data.itemId]
-        this.setActiveItem(next, event.target)
       }
 
       startInterval() {
@@ -160,33 +161,44 @@
         clearInterval(this.#activeInterval)
       }
 
-      setActiveItem(next, dot) {
-        // FIX THIS. should be shared on all navigation
-        // should pass cur and next to all navigation function instead of brute force reset all
-        // should activEindex be an attribute that drives everything?
-        const dots = this.shadowRoot.querySelectorAll('.carousel__dot')
-        dots.forEach(dot => {
-          dot.classList.remove('carousel__dot--active')
-        })
-        dot.classList.add('carousel__dot--active')
+      onDotClick(event) {
+        const data = event.target.dataset
+        const next = this.allItems()[data.itemId]
+        this.setActiveItem(next, data.itemId)
+      }
+
+      setActiveItem(item, index) {
+        this.resetDots()
+        this.setActiveDot(index)
 
         this.resetAllItems()
-        next.active = true
+        item.active = true
         this.startInterval()
+      }
+
+      setActiveDot(index) {
+        const dot = this.shadowRoot.querySelector(`.carousel__dot[data-item-id="${index}"]`)
+        dot.classList.add('carousel__dot--active')
+      }
+
+      resetDots() {
+        this.allDots().forEach(dot => {
+          dot.classList.remove('carousel__dot--active')
+        })
+      }
+
+      allDots() {
+        return Array.from(this.shadowRoot.querySelectorAll('.carousel__dot'))
       }
 
       onNext() {
         const next = this.getNextItem()
-        this.resetAllItems()
-        next.active = true
-        this.startInterval()
+        this.setActiveItem(next, next.index)
       }
 
       onBack() {
         const prev = this.getPrevItem()
-        this.resetAllItems()
-        prev.active = true
-        this.startInterval()
+        this.setActiveItem(prev, prev.index)
       }
 
       allItems() {
@@ -279,17 +291,20 @@
 
     customElements.define('image-slider-item', class ImageSliderItem extends HTMLElement {
       static get observedAttributes() {
-        return ['active']
+        return ['active', 'index']
       }
 
       constructor() {
         super()
         this.attachShadow({ mode: 'open' })
         this.shadowRoot.appendChild(template.content.cloneNode(true))
+
+        // onslotchange reinit everything
       }
 
       connectedCallback() {
         this.#upgradeProp('active')
+        this.#upgradeProp('index')
       }
 
       #upgradeProp(prop) {
@@ -301,7 +316,7 @@
       }
 
       attributeChangedCallback(name, old, val) {
-        console.log(name, old, val)
+        // console.log(name, old, val)
       }
 
       get active() {
@@ -315,6 +330,14 @@
         } else {
           this.removeAttribute('active')
         }
+      }
+
+      get index() {
+        return this.getAttribute('index')
+      }
+
+      set index(val) {
+        this.setAttribute('index', val)
       }
     })
   }
