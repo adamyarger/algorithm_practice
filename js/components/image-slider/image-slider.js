@@ -31,6 +31,27 @@
           right: 0;
         }
 
+        .carousel__dots {
+            position: absolute;
+            bottom: 16px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            gap: 0 8px;
+        }
+
+        .carousel__dot {
+          border: 2px solid #fff;
+          border-radius: 50%;
+          cursor: pointer;
+          height: 16px;
+          width: 16px;
+        }
+
+        .carousel__dot--active {
+          background: #fff;
+        }
+
         .btn {
           font-size: 24px;
           display: inline-block;
@@ -47,6 +68,11 @@
           </button>
         </div>
 
+        <div class="carousel__dots">
+          <div class="carousel__dot carousel__dot--active" data-item-id="0"></div>
+          <div class="carousel__dot" data-item-id="1"></div>
+        </div>
+
         <div class="carousel__right">
           <button class="btn btn--right" id="btn-next">
             &#9654;
@@ -54,6 +80,15 @@
         </div>
       </div>
     `
+
+    function dot({ id, active }) {
+      return `
+        <div
+          class="carousel__dot ${active && (`carousel__dot--active`)}"
+          data-item-id="${id}"
+        ></div>
+      `
+    }
 
     customElements.define('image-slider', class ImageSlider extends HTMLElement {
       #activeInterval
@@ -69,13 +104,17 @@
 
         this.nextBtn = this.shadowRoot.querySelector('#btn-next')
         this.backBtn = this.shadowRoot.querySelector('#btn-back')
+
+        this.dots = this.shadowRoot.querySelector('.carousel__dots')
       }
 
       connectedCallback() {
-        this.nextBtn.addEventListener('click', this.onNext.bind(this))
-        this.backBtn.addEventListener('click', this.onBack.bind(this))
         this.initActive()
         this.startInterval()
+        this.renderDots()
+        this.nextBtn.addEventListener('click', this.onNext.bind(this))
+        this.backBtn.addEventListener('click', this.onBack.bind(this))
+        this.dots.addEventListener('click', this.onDotClick.bind(this))
       }
 
       disconnectedCallback() {
@@ -93,6 +132,23 @@
         }
       }
 
+      renderDots() {
+        const items = this.allItems()
+        this.dots.innerHTML = `
+          ${items.map((_, index) => {
+          return (
+            dot({ id: index, active: index === 0 || '' })
+          )
+        }).join('\n')}
+        `
+      }
+
+      onDotClick(event) {
+        const data = event.target.dataset
+        const next = this.allItems()[data.itemId]
+        this.setActiveItem(next, event.target)
+      }
+
       startInterval() {
         this.stopInterval()
         if (this.autoplay) {
@@ -102,6 +158,19 @@
 
       stopInterval() {
         clearInterval(this.#activeInterval)
+      }
+
+      setActiveItem(next, dot) {
+        // FIX THIS. should be shared on all navigation
+        const dots = this.shadowRoot.querySelectorAll('.carousel__dot')
+        dots.forEach(dot => {
+          dot.classList.remove('carousel__dot--active')
+        })
+        dot.classList.add('carousel__dot--active')
+
+        this.resetAllItems()
+        next.active = true
+        this.startInterval()
       }
 
       onNext() {
