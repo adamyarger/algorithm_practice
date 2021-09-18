@@ -43,13 +43,13 @@
 
         <div class="carousel__left">
           <button class="btn btn--left" id="btn-back">
-            <
+            &#9664;
           </button>
         </div>
 
         <div class="carousel__right">
           <button class="btn btn--right" id="btn-next">
-            >
+            &#9654;
           </button>
         </div>
       </div>
