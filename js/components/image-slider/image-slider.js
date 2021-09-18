@@ -277,12 +277,9 @@
           width: 100%;
         }
 
-        :host([active]) {
-        }
-
         :host {
           display: none;
-          transition: opacity 300ms ease-in;
+          transition: opacity 250ms ease-in;
         }
       </style>
 
@@ -321,9 +318,9 @@
           if (this.active) {
             this.fadeIn()
           } else {
-            this.style.display = 'none'
+            this.style.display = ''
+            this.style.opacity = ''
           }
-
         }
       }
 
