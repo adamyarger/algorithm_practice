@@ -25,17 +25,17 @@
       <div class="star-container"></div>
     `
     customElements.define('star-input', class StarInput extends HTMLElement {
+      static formAssociated = true
+
       constructor() {
         super()
         this.attachShadow({ mode: 'open' })
         this.shadowRoot.appendChild(template.content.cloneNode(true))
-
+        this._internals = this.attachInternals()
         this.container = this.shadowRoot.querySelector('.star-container')
-        console.log(this.container)
       }
 
       connectedCallback() {
-        // on size or value change rerender
         this.renderStars()
         this.container.addEventListener('starHoverStart', this.onMouseEnter.bind(this))
         this.container.addEventListener('starClick', this.onClick.bind(this))

@@ -12,7 +12,9 @@
 <body>
     <div class="container">
         <form id="form">
-            <star-input size="5" value="3"></star-input>
+            <star-input size="5" value="3" name="rating"></star-input>
+
+            <button id="sumit" type="submit">Submit</button>
         </form>
     </div>
 
@@ -21,7 +23,10 @@
         (function () {
             const form = document.querySelector('#form')
 
-
+            form.addEventListener('submit', event => {
+                event.preventDefault()
+                console.log(form.rating)
+            })
         })()
     </script>
 </body>
