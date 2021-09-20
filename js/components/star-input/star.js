@@ -6,7 +6,12 @@
     function renderStars({ size, value }) {
       let html = ''
       for (let i = 0; i < size; i++) {
-        html += `<star-input-item ${value && i + 1 <= value ? 'active' : ''} value="${i + 1}"></star-input-item>`
+        const id = i + 1
+        html += `
+          <star-input-item 
+            ${value && id <= value ? 'active' : ''}
+            value="${id}">
+          </star-input-item>`
       }
       return html
     }
