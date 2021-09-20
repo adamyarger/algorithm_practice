@@ -19,9 +19,6 @@
     const template = document.createElement('template')
     template.innerHTML = `
       <style>
-        :host {
-        }
-
         .star-container {
           display: flex;
         }
@@ -102,7 +99,7 @@
     template.innerHTML = `
       <style>
         :host {
-          font-size: 24px;
+          font-size: var(--star-font-size, 24px);
         }
 
         .star {
