@@ -101,12 +101,11 @@ function dfs(coins, amount, memo) {
     let count = dfs(coins, amount - coins[i], memo)
 
     if (count < min) {
-      min = count
+      min = count + 1
     }
   }
-
-  // dont add the 1 till later else it messes it up
-  return memo[amount] = min === Infinity ? min : min + 1
+  memo[amount] = min
+  return memo[amount]
 }
 
 // console.log(coinChange([1, 2, 3], 11))

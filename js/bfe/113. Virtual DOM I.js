@@ -2,26 +2,58 @@
 /**
  * @param {HTMLElement} 
  * @return {object} object literal presentation
+ * 
+ * text node as child
+ * camelCase Properties
+ * children: string or array
+ * 
+ * types
+ * Node
  */
-function virtualize(element) {
-  const out = {
+function toEl(element) {
+  return {
     type: element.localName,
     props: {
-      children: element.childNodes.length ? [] : null
+      // extra attrs here
+      children: []
+    }
+  }
+}
+
+function toText(attr) {
+
+}
+
+function virtualize(element) {
+  const props = {}
+
+  console.log(element)
+  // return
+
+  if (element.attributes) {
+    for (let attr of element.attributes) {
+      // should be to camel case for all
+      const name = attr.name === 'class' ? 'className' : attr.name
+      props[name] = attr.value
     }
   }
 
-  // console.log(element.childNodes)
+  const children = []
 
-  for (const node of element.childNodes) {
-    if (Array.isArray(out.props.children)) {
-      out.props.children.push(virtualize(node))
+  for (let node of element.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      children.push(node.textContent)
     } else {
-      out.props.children = node.textContent
+      children.push(virtualize(node))
     }
   }
 
-  return out
+  props.children = children.length === 1 ? children[0] : children
+
+  return {
+    type: element.localName,
+    props,
+  }
 }
 
 
@@ -30,10 +62,27 @@ function virtualize(element) {
  * @return {HTMLElement} 
  */
 function render(obj) {
-  // your code here
+  if (typeof obj === 'string') {
+    return document.createTextNode(obj)
+  }
+  const { type, props: { children, ...attrs } } = obj
+  const node = document.createElement(type)
+
+  for (const [attr, val] of Object.entries(attrs)) {
+    node[attr] = val
+  }
+
+  const childrenArr = Array.isArray(children) ? children : [children]
+  for (const child of childrenArr) {
+    node.append(render(child))
+  }
+  return node
 }
 
 (function main() {
   const root = document.querySelector('#root')
-  console.log(virtualize(root))
+  const virtual = virtualize(root)
+
+  console.log(virtual)
+  console.log(render(virtual))
 })()
