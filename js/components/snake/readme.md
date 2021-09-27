@@ -29,6 +29,10 @@ LOOP
 
 
 - handle user inputs
+- handle apple spwan better
+  - make an array of all available cells
+  - then do rand to choose index of available cells
+
 
 NEXT ROUND
 - only do the hard parts over again
