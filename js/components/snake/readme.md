@@ -19,9 +19,19 @@ JUST make it work the first time. then refactor ii design
 
 
 ## notes 2
-- game sare different, they have a routine where
+- games are different, they have a routine where
   we update state on each new iteration (frame)
 - https://gameprogrammingpatterns.com/game-loop.html
 
 LOOP
 - process input -> update game -> render
+
+
+
+- handle user inputs
+
+NEXT ROUND
+- only do the hard parts over again
+- is out of bounds
+- cretae apple
+- update snake
