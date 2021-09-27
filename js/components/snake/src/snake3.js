@@ -71,7 +71,8 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     this.grid.innerHTML = buildGrid(BOARD_WIDTH, BOARD_HEIGHT)
     this.cells = Array.from(this.grid.querySelectorAll('.cell'))
 
-    this.snake = [2, 1, 0]
+    // this.snake = [2, 1, 0]
+    this.snake = [8, 7, 6, 5, 4, 3, 2, 1, 0]
     this.direction = DIRECTION.RIGHT
     this.directionVal = 1
     this.apple = this.createApple()
@@ -103,13 +104,9 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
       this.stopLoop()
       return
     }
-    // check user input changes
-    // update state
     const tail = this.tail
     window.requestAnimationFrame(() => this.move())
     this.eat(tail)
-    // render updates
-    // window.requestAnimationFrame(() => this.render())
   }
 
   move() {
@@ -119,18 +116,18 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     this.cells[this.snake[0]].classList.add('active')
   }
 
-  render() {
-    this.initSnake()
-  }
-
-  #getActiveCells() {
-    return Array.from(this.grid.querySelectorAll('.active'))
-  }
-
   onKeydown(event) {
-    console.log(event, event.key)
-    // calc new snake
-    this.updateSnake(event.key)
+    if (!this.isBlockedDirection(event.key)) {
+      this.updateSnake(event.key)
+    }
+  }
+
+  isBlockedDirection(key) {
+    if (this.direction === DIRECTION.RIGHT && key === KEYS.LEFT) return true
+    if (this.direction === DIRECTION.LEFT && key === KEYS.RIGHT) return true
+    if (this.direction === DIRECTION.UP && key === KEYS.DOWN) return true
+    if (this.direction === DIRECTION.DOWN && key === KEYS.UP) return true
+    return false
   }
 
   updateSnake(direction) {
@@ -180,13 +177,13 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
       return true
     }
 
-    // handle running into self
-
+    if (this.snake.filter(cell => cell === head).length === 2) {
+      return true
+    }
   }
 
   createApple() {
     const apple = this.randCell()
-    console.log(apple, this.cells.length)
     this.cells[apple].classList.add('apple')
     return apple
   }
@@ -208,7 +205,6 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
   }
 
   resetApple() {
-    console.log(this.apple)
     this.cells[this.apple].classList.remove('apple')
   }
 
