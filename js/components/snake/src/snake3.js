@@ -30,6 +30,7 @@ const template = document.createElement('template')
 template.innerHTML = `
   <style>
     .grid {
+      justify-content: center;
       display: grid;
       grid-template-columns: repeat(${BOARD_WIDTH}, ${CELL_WIDTH}px);
     }
@@ -47,8 +48,23 @@ template.innerHTML = `
     .cell.apple {
       background-color: red;
     }
+
+    .score {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+
+    .score__value {
+      padding-left: 1rem;
+      font-weight: bold;
+    }
   </style>
 
+  <div class="score">
+    Score: <span class="score__value">0</span>
+  </div>
   <div class="grid"></div>
 `
 
@@ -67,6 +83,8 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     this.attachShadow({ mode: 'open' })
     this.shadowRoot.appendChild(template.content.cloneNode(true))
 
+    this.score = 0
+    this.scoreEl = this.shadowRoot.querySelector('.score__value')
     this.grid = this.shadowRoot.querySelector('.grid')
     this.grid.innerHTML = buildGrid(BOARD_WIDTH, BOARD_HEIGHT)
     this.cells = Array.from(this.grid.querySelectorAll('.cell'))
@@ -212,7 +230,13 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     if (this.snake.includes(this.apple)) {
       this.grow(tail)
       this.apple = this.updateApple()
+      this.updateScore()
     }
+  }
+
+  updateScore() {
+    this.score += 1
+    this.scoreEl.innerHTML = this.score
   }
 
   grow(tail) {
