@@ -74,66 +74,64 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     this.snake = [2, 1, 0]
     this.direction = DIRECTION.RIGHT
     this.directionVal = 1
-    this.apple = this.#createApple()
+    this.apple = this.createApple()
   }
 
   connectedCallback() {
-    window.addEventListener('keyup', this.#onKeyup.bind(this))
+    window.addEventListener('keydown', this.onKeydown.bind(this))
 
-    this.#initSnake()
-    this.#startLoop()
+    this.initSnake()
+    this.startLoop()
   }
 
-  #initSnake() {
+  initSnake() {
     this.snake.forEach(item => {
       this.cells[item].classList.add('active')
     })
   }
 
-  #startLoop() {
-    this.interval = setInterval(this.#onLoop.bind(this), SPEED);
+  startLoop() {
+    this.interval = setInterval(this.onLoop.bind(this), SPEED);
   }
 
-  #stopLoop() {
+  stopLoop() {
     clearInterval(this.interval)
   }
 
-  #onLoop() {
-    console.log('loop')
-    if (this.#isOutBounds()) {
-      console.log('out of bounds')
-      this.#stopLoop()
+  onLoop() {
+    if (this.isOutBounds()) {
+      this.stopLoop()
       return
     }
     // check user input changes
     // update state
-    this.#move()
+    this.move()
     // render updates
-    this.#render()
+    window.requestAnimationFrame(() => this.render())
   }
 
-  #move() {
+  move() {
     const tail = this.snake.pop()
     this.cells[tail].classList.remove('active')
     this.snake.unshift(this.snake[0] + this.directionVal)
     this.cells[this.snake[0]].classList.add('active')
   }
 
-  #render() {
-    this.#initSnake()
+  render() {
+    this.initSnake()
   }
 
   #getActiveCells() {
     return Array.from(this.grid.querySelectorAll('.active'))
   }
 
-  #onKeyup(event) {
+  onKeydown(event) {
     console.log(event, event.key)
     // calc new snake
-    this.#updateSnake(event.key)
+    this.updateSnake(event.key)
   }
 
-  #updateSnake(direction) {
+  updateSnake(direction) {
     switch (direction) {
       case KEYS.UP:
         this.direction = DIRECTION.UP
@@ -161,7 +159,7 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
    * run this before the next update
    * check if current head is at the border and still going a direction
    */
-  #isOutBounds() {
+  isOutBounds() {
     const head = this.snake[0]
 
     if (this.direction === DIRECTION.RIGHT && head % BOARD_WIDTH === BOARD_WIDTH - 1) {
@@ -184,20 +182,20 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
 
   }
 
-  #createApple() {
-    const apple = this.#randCell()
+  createApple() {
+    const apple = this.randCell()
     console.log(apple, this.cells.length)
     this.cells[apple].classList.add('apple')
     return apple
   }
 
-  #updateApple() {
-    this.#resetApple()
-    const apple = this.#createApple()
+  updateApple() {
+    this.resetApple()
+    const apple = this.createApple()
     return apple
   }
 
-  #randCell() {
+  randCell() {
     // use floor since we have to -1 for array index anyways
     const rand = () => Math.floor(Math.random() * BOARD_WIDTH * BOARD_HEIGHT)
     let cell = rand()
@@ -207,8 +205,10 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     return cell
   }
 
-  #resetApple() {
+  resetApple() {
     console.log(this.apple)
     this.cells[this.apple].classList.remove('apple')
   }
+
+
 })
