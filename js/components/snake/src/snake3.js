@@ -105,9 +105,11 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     }
     // check user input changes
     // update state
-    this.move()
+    const tail = this.tail
+    window.requestAnimationFrame(() => this.move())
+    this.eat(tail)
     // render updates
-    window.requestAnimationFrame(() => this.render())
+    // window.requestAnimationFrame(() => this.render())
   }
 
   move() {
@@ -210,5 +212,18 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     this.cells[this.apple].classList.remove('apple')
   }
 
+  eat(tail) {
+    if (this.snake.includes(this.apple)) {
+      this.grow(tail)
+      this.apple = this.updateApple()
+    }
+  }
 
+  grow(tail) {
+    this.snake.push(tail)
+  }
+
+  get tail() {
+    return this.snake[this.snake.length - 1]
+  }
 })
