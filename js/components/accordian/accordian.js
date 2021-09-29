@@ -111,8 +111,10 @@
           <slot></slot>
         </div>
       </div>
-      
     `
+
+    let count = 0
+
     customElements.define('x-accordian-item', class XAccordianItem extends HTMLElement {
       static get observedAttributes() {
         return ['title', 'active']
@@ -125,23 +127,55 @@
       }
 
       connectedCallback() {
+        this.id = count += 1
+        this.setPanelId()
+        this.setAriaControls()
+        this.setButtonId()
+        this.setAriaLabel()
+      }
 
+      setPanelId() {
+        this.getPanelEl().id = `panel-${this.id}`
+      }
+
+      setButtonId() {
+        this.getButtonEl().id = `button-${this.id}`
       }
 
       setTitle() {
         this.getButtonEl().innerHTML = this.title
       }
 
+      attributeChangedCallback(name, old, val) {
+        if (name === 'title') {
+          this.setTitle()
+        } else if (name === 'active') {
+          this.setAriaExpanded()
+        }
+      }
+
+      setAriaExpanded() {
+        if (this.active) {
+          this.getButtonEl().setAttribute('aria-expanded', true)
+        } else {
+          this.getButtonEl().setAttribute('aria-expanded', false)
+        }
+      }
+
+      setAriaControls() {
+        this.getButtonEl().setAttribute('aria-controls', this.getPanelEl().id)
+      }
+
+      setAriaLabel() {
+        this.getPanelEl().setAttribute('aria-labelledby', this.getButtonEl().id)
+      }
+
       getButtonEl() {
         return this.shadowRoot.querySelector('.accordian-btn')
       }
 
-      attributeChangedCallback(name, old, val) {
-        if (name === 'title') {
-          this.setTitle()
-        }
-
-        // add aria-expanded and controls
+      getPanelEl() {
+        return this.shadowRoot.querySelector('.accordian-panel')
       }
 
       get title() {
