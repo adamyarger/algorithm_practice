@@ -34,6 +34,26 @@ function debounce(func, wait, immediate) {
   }
 };
 
+function _debounce(func, wait, option = { leading: false, trailing: true }) {
+  let timeId
+  return function bounce(...args) {
+    let invoked = false
+
+    if (!timeId && option.leading) {
+      func.call(this, ...args)
+      invoked = true
+    }
+
+    clearTimeout(timeId)
+    timeId = setTimeout(() => {
+      if (option.trailing && !invoked) {
+        func.call(this, ...args)
+      }
+      timeId = null
+    }, wait);
+  }
+}
+
 /**
  * 
  * STEPS
