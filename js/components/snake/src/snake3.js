@@ -152,11 +152,11 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
     switch (direction) {
       case KEYS.UP:
         this.direction = DIRECTION.UP
-        this.directionVal = -1 - (BOARD_HEIGHT - 1)
+        this.directionVal = -BOARD_HEIGHT
         break;
       case KEYS.DOWN:
         this.direction = DIRECTION.DOWN
-        this.directionVal = 1 + (BOARD_HEIGHT - 1)
+        this.directionVal = BOARD_HEIGHT
         break;
       case KEYS.LEFT:
         this.direction = DIRECTION.LEFT
