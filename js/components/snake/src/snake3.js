@@ -130,8 +130,8 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
   move() {
     const tail = this.snake.pop()
     this.cells[tail].classList.remove('active')
-    this.snake.unshift(this.snake[0] + this.directionVal)
-    this.cells[this.snake[0]].classList.add('active')
+    this.snake.unshift(this.head + this.directionVal)
+    this.cells[this.head].classList.add('active')
   }
 
   onKeydown(event) {
@@ -177,7 +177,7 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
    * check if current head is at the border and still going a direction
    */
   isOutBounds() {
-    const head = this.snake[0]
+    const head = this.head
 
     if (this.direction === DIRECTION.RIGHT && head % BOARD_WIDTH === BOARD_WIDTH - 1) {
       return true
@@ -245,5 +245,9 @@ customElements.define('snake-game', class SnakeGame extends HTMLElement {
 
   get tail() {
     return this.snake[this.snake.length - 1]
+  }
+
+  get head() {
+    return this.snake[0]
   }
 })
