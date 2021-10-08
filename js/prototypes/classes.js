@@ -101,7 +101,7 @@ const me = new Dude()
     var dude = 'dude'
   }
 
-  // a()
+  a()
 }
 
 
