@@ -25,3 +25,21 @@
 
 
 # finished first phase in 40 mins
+
+
+# 3
+
+- should be submitable in form (attatchAttributes)
+- attachInternals
+- only allow 0-9 check number on input
+- advance to next
+- delete go back
+- flex box with gap 38px height width center text 16px size
+
+
+
+### Thing i forgot
+- attacchAttributes
+- adopt value from input with getter and setter
+- no need for custom event, just listen for input
+- if you need custom event, emit it from the component

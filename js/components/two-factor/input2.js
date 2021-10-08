@@ -105,7 +105,6 @@
         this.attachShadow({ mode: 'open' })
         this.shadowRoot.appendChild(template.content.cloneNode(true))
         this.input = this.shadowRoot.querySelector('input')
-        this.parent = this.shadowRoot.getRootNode().host.parentNode
       }
 
       connectedCallback() {
@@ -128,10 +127,6 @@
       isValid(value) {
         const reg = new RegExp(PATTERN)
         return reg.test(value)
-      }
-
-      static get observedAttributes() {
-        return ['value']
       }
 
       get value() {
