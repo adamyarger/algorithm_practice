@@ -50,65 +50,50 @@ Output: [[1,1],[1,1]]
  * using  cell % 2 turns them into their proper values
  */
 var gameOfLife = function (board) {
-  // update for next iteration
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[0].length; col++) {
-      board[row][col] = bfs(board, row, col)
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      board[i][j] = build(board, i, j)
     }
   }
 
-  // translate back to 1's and 0's
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[0].length; col++) {
-      board[row][col] = Math.abs(board[row][col] % 2)
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      board[i][j] = Math.abs(board[i][j] % 2)
     }
   }
 };
 
-function bfs(board, row, col) {
-  let isDead = board[row][col] === 0
-  let liveCellCnt = 0
-  const moves = [
-    [row - 1, col - 1], // top-left
-    [row - 1, col], // top-mid
-    [row - 1, col + 1], // top-right
-    [row, col + 1], // right
-    [row + 1, col + 1], // bottom-right
-    [row + 1, col], // bottom-mid
-    [row + 1, col - 1], // bottom-left
-    [row, col - 1], // left
+function build(board, row, col) {
+  const neighbors = [
+    [row - 1, col - 1],
+    [row - 1, col],
+    [row - 1, col + 1],
+    [row, col + 1],
+    [row + 1, col + 1],
+    [row + 1, col],
+    [row + 1, col - 1],
+    [row, col - 1],
   ]
+  let isLive = board[row][col] === 1
 
-  // loops through moves for current cell
-  for (let i = 0; i < moves.length; i++) {
-    const [irow, icol] = moves[i]
+  let liveCnt = neighbors.filter(([row, col]) => {
+    return row >= 0
+      && col >= 0
+      && row < board.length
+      && col < board[0].length
+      && board[row][col] >= 1
+  }).length
 
-    // why >= 1??? means cell is alive now
-    if (isInBounds(board, irow, icol) && board[irow][icol] >= 1) {
-      liveCellCnt += 1
+  // return its next state
+  if (isLive) {
+    if (liveCnt < 2 || liveCnt > 3) {
+      return 2
     }
+  } else if (liveCnt === 3) {
+    return -1
   }
 
-  if (isDead) {
-    // dead to alive
-    if (liveCellCnt === 3) return -1
-
-    // dead to dead
-    return 0
-  } else {
-    // alive to dead
-    if (liveCellCnt < 2 || liveCellCnt > 3) return 2
-
-    // alive to alive
-    else if (liveCellCnt === 2 || liveCellCnt === 3) return 1
-  }
-}
-
-function isInBounds(board, row, col) {
-  return row >= 0
-    && col >= 0
-    && row < board.length
-    && col < board[0].length
+  return board[row][col]
 }
 
 var board = [[0, 1, 0], [0, 0, 1], [1, 1, 1], [0, 0, 0]]
