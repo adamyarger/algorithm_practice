@@ -7,10 +7,16 @@
   const mainTemp = document.createElement('template')
   mainTemp.innerHTML = `
     <style>
-    
+      .controls {
+        marign-top: 1rem;
+      }
     </style>
 
     <bar-chart></bar-chart>
+
+    <div class="controls">
+      <button id="fetch-btn">fetch</button>
+    </div>
   `
 
   customElements.define('data-fetch', class DataFetch extends HTMLElement {
@@ -20,20 +26,24 @@
       this.shadowRoot.appendChild(mainTemp.content.cloneNode(true))
       this.data = {}
       this.chart = this.shadowRoot.querySelector('bar-chart')
+      this.fetchBtn = this.shadowRoot.querySelector('#fetch-btn')
     }
 
     connectedCallback() {
+      this.fetchBtn.addEventListener('click', this.setBarChartData.bind(this))
+      this.setBarChartData()
+    }
+
+    setBarChartData() {
       this.getData().then(_ => {
         this.chart.setData(this.data)
       })
-      console.log(this.chart)
     }
 
     async getData() {
       const req = await fetch(URL)
       const text = await req.text()
       this.data = this.formatData(text)
-      console.log(this.data)
       return text
     }
 
@@ -53,6 +63,7 @@
 
 
   const BAR_WIDTH = 25
+  const HEIGHT = 400
   const barTemp = document.createElement('template')
   barTemp.innerHTML = `
     <style>
@@ -62,7 +73,7 @@
       }
 
       .bars {
-        height: 400px;
+        height: ${HEIGHT}px;
         display: grid;
         grid-template-columns: repeat(10, 1fr);
         column-gap: 10px;
@@ -76,6 +87,26 @@
         width: ${BAR_WIDTH}px;
         height: 300px;
         background-color: #333;
+        transition: opacity 200ms;
+        position: relative;
+      }
+
+      .bar:hover {
+        opacity: 0.8;
+      }
+
+      .bar:hover .tooltip {
+        display: inline-block;
+      }
+
+      .tooltip {
+        background: #fff;
+        border: 1px solid #333;
+        border-radius: 3px;
+        padding: 4px;
+        top: -30px;
+        position: absolute;
+        display: none;
       }
 
       .x-labels {
@@ -95,7 +126,7 @@
         display: flex;
         flex-direction: column-reverse;
         justify-content: space-between;
-        margin-bottom: 36px;
+        height: ${HEIGHT}px;
       }
     </style>
 
@@ -133,10 +164,13 @@
           <div class="bars">
             ${this.bars()}
           </div>
-
           <div class="x-labels">${this.xLabel()}</div>
         </div>
       `
+    }
+
+    tooltip() {
+      // make css based tooltip
     }
 
     bars() {
@@ -144,10 +178,23 @@
 
       for (const [key, val] of Object.entries(this.data)) {
         const percent = (val / this.max) * 100
-        html += `<div class="bar" data-id="${key}" style="height: ${percent}%;"></div>`
+        const color = this.genRandomColor()
+        html += `
+          <div
+            class="bar"
+            data-id="${key}"
+            style="height: ${percent}%; background: #${color};"
+          >
+            <span class="tooltip">${val}</span>
+          </div>
+        `
       }
 
       return html
+    }
+
+    genRandomColor() {
+      return Math.floor(Math.random() * (256 ** 3)).toString(16)
     }
 
     xLabel() {
@@ -169,8 +216,6 @@
     }
 
     yLabel() {
-      // go 10 above for top
-      // incrments of 10, if it round up
       const labels = this.calcYLabels()
       return `
         ${labels.map(label => `<div class="label">${label}</div>`).join('\n')}
