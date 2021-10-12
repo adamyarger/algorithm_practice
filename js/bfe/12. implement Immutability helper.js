@@ -42,6 +42,7 @@ function update(data, command) {
   const obj = Array.isArray(data) ? [...data] : { ...data }
   for (const key of Object.keys(command)) {
     // iterate both command and data
+    // we can just assig here since the default value is the return obj at the bottom aka the primitive value
     obj[key] = update(obj[key], command[key])
   }
 
