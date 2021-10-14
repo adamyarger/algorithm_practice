@@ -16,18 +16,26 @@ Example 2:
 
 Input: nums = [1,2,3,4,3]
 Output: [2,3,4,-1,4]
+
+start iterating backwards since the first couple will have nothing to point to, so they will be -1
+
+- go backwards
+- pop off stack until you find one that bigger else -1
+
  */
 var nextGreaterElements = function (nums) {
-  const out = []
+  const out = Array(nums.length).fill(0)
   const stack = []
 
   // iterate backwards
   for (let i = nums.length - 1; i >= 0; i--) {
     while (stack.length > 0 && stack[stack.length - 1] <= nums[i]) { // determine by height
+      // if the current id bigger than what in the stack, get rid of it. 
+      // It will never be chosen since cur will always be bigger and bfore.
       stack.pop() // short one go away while blocked
     }
-    const tall = stack.length === 0 ? -1 : stack[stack.length - 1]
-    out.push(tall)
+    out[i] = stack.length === 0 ? -1 : stack[stack.length - 1]
+    // make it available to future nums
     stack.push(nums[i])
   }
 
