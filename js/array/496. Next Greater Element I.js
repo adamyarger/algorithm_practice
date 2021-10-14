@@ -28,5 +28,38 @@ Explanation: The next greater element for each value of nums1 is as follows:
 
 
 var nextGreaterElement = function (nums1, nums2) {
+  const map = {}
+  const stack = []
 
-};
+  // create a map for each value in nums2 that points to its next biggest
+  for (let i = nums2.length - 1; i >= 0; i--) {
+    const num = nums2[i]
+
+    // normal monotonic stack popping
+    while (stack.length && stack[stack.length - 1] <= num) {
+      stack.pop()
+    }
+
+    // if nothing is in stack then has to be -1
+    if (stack.length === 0) {
+      map[num] = -1
+    } else {
+      // set map val to the value
+      map[num] = stack[stack.length - 1]
+    }
+
+    stack.push(num)
+  }
+
+  // extract the next biggest from the map
+  const out = []
+  for (const num of nums1) {
+    out.push(map[num])
+  }
+
+  return out
+}
+
+let nums1 = [4, 1, 2], nums2 = [1, 3, 4, 2]
+
+console.log(nextGreaterElement(nums1, nums2))

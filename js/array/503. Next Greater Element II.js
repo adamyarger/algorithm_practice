@@ -23,7 +23,7 @@ start iterating backwards since the first couple will have nothing to point to, 
 - pop off stack until you find one that bigger else -1
 
  */
-var nextGreaterElements = function (nums) {
+var noLoop = function (nums) {
   const out = Array(nums.length).fill(0)
   const stack = []
 
@@ -42,13 +42,29 @@ var nextGreaterElements = function (nums) {
   return out
 };
 
-console.log(nextGreaterElements([2, 1, 2, 4, 3])) // [4,2,4,-1,-1]
+console.log(noLoop([2, 1, 2, 4, 3])) // [4,2,4,-1,-1]
 
 
 
+// same as above expect we change the array size and use modulus
+var nextGreaterElements = function (nums) {
+  const stack = []
+  const out = Array(nums.length).fill(-1)
 
+  for (let i = 2 * nums.length - 1; i >= 0; i--) {
+    const num = nums[i % nums.length]
+    while (stack.length && stack[stack.length - 1] <= num) {
+      stack.pop()
+    }
+    const next = stack.length ? stack[stack.length - 1] : -1
+    out[i % nums.length] = next
+    stack.push(num)
+  }
 
+  return out
+}
 
+console.log(nextGreaterElements([1, 2, 1]))
 
 
 var brute = function (nums) {
