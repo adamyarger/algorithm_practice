@@ -13,9 +13,10 @@ var trap = function (height) {
 
   while (left < right) {
     lmax = Math.max(lmax, height[left])
-
+    console.log(lmax, height[left])
     // if left < lmax then were in a valley
     if (height[left] < lmax) {
+      console.log('hit')
       res += lmax - height[left]
     }
 
@@ -31,6 +32,6 @@ var trap = function (height) {
   return res
 };
 
-console.log(trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1])) //6
+// console.log(trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1])) //6
 
-console.log(trap([0, 0, 0, 2])) //0
+console.log(trap([5, 0, 0, 0])) //0
