@@ -42,6 +42,7 @@ var generateMatrix = function (n) {
     // just like robot grid
     // get the direction, then use up that direction in the while loop until you hit the end
     // looking fo rvalue 0 acts lik a boundary
+    console.log(i)
     i = i % 4
     row += dir[i][0]
     col += dir[i][1]
@@ -61,3 +62,7 @@ var generateMatrix = function (n) {
   }
   return grid
 };
+
+console.log(generateMatrix(3))
+
+
