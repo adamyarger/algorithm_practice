@@ -2,81 +2,67 @@
  * @param {number[][]} grid
  * @return {number}
  
- bfs
- think of it like a tree
- you can queue up you neigbors next
+ graph problem
+ each next to it either up down lef right is a neighbor node
  
- find starting nodes that are rotten
- 
+ - find the rotten oranges
+ - fill the queue with the rotton oranges
+ - use level order traverals to slice the levels rotten then pop off
+ - repeat and count if any live are left after return -1
  */
 var orangesRotting = function (grid) {
-  const start = findDead(grid, 0, 0)
-
-  const q = start.dead
-  if (!start.dead.length) {
-    if (start.alive.length) return -1
-    else return 0
-  }
+  let { rotten, alive } = findRotten(grid)
+  const q = [...rotten]
   let count = -1
+
+  if (!q.length && !alive) return 0
 
   while (q.length) {
     const level = q.slice()
-    level.forEach(_ => {
-      const [row, col] = q.shift()
 
-      const options = [
-        [row + 1, col],
+    level.forEach(node => {
+      const [row, col] = q.shift()
+      const dir = [
         [row - 1, col],
-        [row, col + 1],
+        [row + 1, col],
         [row, col - 1],
+        [row, col + 1],
       ]
 
-      options.forEach(([r, c]) => {
+      for (const [r, c] of dir) {
         if (inBounds(grid, r, c) && grid[r][c] === 1) {
-          q.push([r, c])
           grid[r][c] = 2
+          alive -= 1
+          q.push([r, c])
         }
-      })
+      }
     })
 
     count += 1
   }
 
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[0].length; j++) {
-      if (grid[i][j] === 1) {
-        return -1
-      }
-    }
-  }
-
-  return count
+  return alive > 0 ? -1 : count
 };
 
 function inBounds(grid, row, col) {
   return row >= 0 && col >= 0 && row < grid.length && col < grid[0].length
 }
 
-function findDead(grid, row, col) {
-  const out = {
-    dead: [],
-    alive: [],
-    none: []
-  }
+function findRotten(grid) {
+  let alive = 0
+  let rotten = []
 
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[0].length; j++) {
       const cell = grid[i][j]
 
-      if (cell === 2) {
-        out.dead.push([i, j])
-      } else if (cell === 1) {
-        out.alive.push([i, j])
-      } else {
-        out.none.push([i, j])
+      if (cell === 1) {
+        alive += 1
+      } else if (cell === 2) {
+        rotten.push([i, j])
       }
     }
   }
 
-  return out
+  return { rotten, alive }
 }
