@@ -1,6 +1,6 @@
 
 
-var addOperator = function (num, target) {
+var addOperators = function (num, target) {
   const out = []
 
   function backtrack(str, arr, sum, prev) {
@@ -41,6 +41,6 @@ var addOperator = function (num, target) {
 }
 
 
-console.log(addOperator('123', 6))
+console.log(addOperators('123', 6))
 
-console.log(addOperator('105', 5))
+console.log(addOperators('105', 5))
